@@ -167,7 +167,8 @@ details .in{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
 .vs .rock{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
 .kv{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:.9rem}
 .kv span:nth-child(odd){color:var(--muted);font-size:.8rem}
-.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));counter-reset:s}
+.steps{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr));counter-reset:s}
+@media (max-width:700px){ .steps{grid-template-columns:1fr} }
 .steps .card{position:relative;padding-top:34px}
 .steps .card::before{counter-increment:s;content:counter(s);position:absolute;top:12px;left:16px;font-family:var(--f-mono);font-size:.78rem;color:var(--gold)}
 .funnel{display:flex;flex-direction:column;gap:8px}
@@ -285,6 +286,172 @@ details .in{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
 
 footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
+
+/* ---- v3: formas fijas, niveles, saltos, buscador, creador ---- */
+.shape{border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;border:1px solid var(--line);background:var(--card)}
+.shape .sl{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.shape h4{margin:0;font-family:var(--f-display);font-size:1.3rem;font-weight:600}
+.shape.def{background:var(--card);border-style:solid}
+.shape.def.rockc{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.shape.test{background:var(--gold-soft);border-color:var(--gold)}
+.shape.test .sl{color:var(--gold)}
+.shape.ej{background:var(--ok-soft);border-color:transparent}
+.shape.ej .sl{color:var(--ok)}
+.shape.err{background:var(--bad-soft);border-color:transparent}
+.shape.err .sl{color:var(--bad)}
+.shape .tw{background:var(--card)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.legendgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.legendgrid .shape{padding:10px 12px}
+.minisay{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:.78rem}
+.minisay span{padding:4px 6px;border-radius:5px}
+.minisay .n1{background:var(--bad-soft);color:var(--bad)} .minisay .y1{background:var(--ok-soft);color:var(--ok)}
+
+.lv{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:.72rem;font-weight:500;letter-spacing:.03em;padding:2px 8px;border-radius:5px;white-space:nowrap;vertical-align:middle}
+.lv.e{background:var(--brand);color:var(--brand-ink)}
+.lv.d{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold)}
+.lv.i{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+table.levels th[scope="row"]{background:var(--tint);text-transform:none;letter-spacing:0;font-size:.82rem;color:var(--ink);white-space:nowrap}
+table tbody th[scope="row"]{background:var(--tint);text-transform:none;letter-spacing:0;font-size:.82rem;color:var(--ink)}
+.qtest{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.cascade{display:flex;flex-direction:column;gap:10px;padding-left:14px;border-left:2px dashed var(--line)}
+.cs{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative;min-width:0}
+.cs::before{content:"";position:absolute;left:-15px;top:20px;width:13px;height:2px;background:var(--line)}
+.cs.proj{border-style:dashed;background:transparent}
+.cs.proj .sl{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cs.e{border-color:var(--brand);box-shadow:inset 3px 0 0 var(--brand);margin-left:12px}
+.cs-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-left:36px}
+.cs.d{margin-left:12px;border-color:var(--gold)}
+.cs.free{margin-top:8px}
+@media (max-width:520px){ .cs-row{margin-left:16px} }
+
+.jumps{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--navh,48px));z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin-top:-16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+.jumps::-webkit-scrollbar{display:none}
+.jumps button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 12px;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.jumps button:hover,.jumps button.on{border-color:var(--gold);color:var(--ink);background:var(--gold-soft)}
+section.block,.panel [id]{scroll-margin-top:calc(var(--navh,48px) + 64px)}
+
+.gsearch{position:relative;flex:1 1 280px;max-width:420px;min-width:0}
+.gsearch input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--brand-ink);font:inherit}
+.gsearch input::placeholder{color:var(--brand-ink);opacity:.6}
+.gres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.18);z-index:30;max-height:60vh;overflow:auto;padding:6px}
+.gres button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:8px 10px;cursor:pointer}
+.gres button:hover,.gres button:focus-visible{background:var(--tint)}
+.gres .gt{font-weight:600;font-size:.92rem}
+.gres .gm{font-family:var(--f-mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.gres .none{padding:10px;color:var(--muted);font-size:.9rem}
+.flash{animation:flash 1.4s ease}
+@keyframes flash{0%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}
+
+.vagrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px}
+@media (max-width:400px){ .vagrid{grid-template-columns:1fr} }
+.va{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card)}
+.va .vl{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 0;text-align:center;border-radius:5px}
+.va.si .vl{background:var(--ok-soft);color:var(--ok)}
+.va.no .vl{background:var(--tint);color:var(--muted)}
+.va div{display:flex;flex-direction:column;gap:3px;font-size:.92rem;min-width:0}
+
+/* Creador */
+.loadrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.creator{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){ .creator{grid-template-columns:1fr} }
+.crsteps{display:flex;flex-direction:column;gap:14px}
+.crs{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px}
+.crh{display:flex;align-items:center;gap:12px}
+.crh .num{width:32px;height:32px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-family:var(--f-mono);font-size:.85rem;flex:none}
+.crs.done .crh .num{background:var(--ok)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld label{font-weight:600;font-size:.88rem}
+.fld input,.fld select,.fld textarea,.two select,.two input,.three input{width:100%;min-width:0;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.95rem}
+.fld textarea{resize:vertical}
+.hint2{font-size:.8rem;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media (max-width:520px){ .two,.three{grid-template-columns:1fr} }
+.radios{display:flex;flex-direction:column;gap:6px}
+.radios label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:.93rem;background:var(--bg)}
+.radios input{margin-top:4px;accent-color:var(--brand)}
+.crmsg{padding:10px 12px;border-radius:8px;font-size:.9rem}
+.crmsg.bad{background:var(--bad-soft)} .crmsg.ok{background:var(--ok-soft)}
+.lvtree{display:flex;flex-direction:column;gap:10px}
+.lvq{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.lvq .yn .btn{padding:7px 16px}
+.lvres{padding:12px;border-radius:8px;background:var(--gold-soft);border:1px solid var(--gold);display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+.lvpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lvpick .chip{padding:3px 6px}
+.lvpick .chip[aria-pressed="true"]{background:var(--gold-soft);border-color:var(--gold)}
+.review{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--navh,48px) + 12px);background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - var(--navh,48px) - 28px);overflow:auto}
+@media (max-width:860px){ .review{position:static;max-height:none} }
+.rvhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rvhead .sl{font-size:.72rem;letter-spacing:.1em;color:var(--gold)}
+.review .vt{font-family:var(--f-display);font-size:1.4rem}
+.rvlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.rvlist li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:.88rem;padding:7px 9px;border-radius:7px}
+.rvlist li .ic{font-family:var(--f-mono);font-weight:600;text-align:center}
+.rvlist li.ok{background:var(--ok-soft)} .rvlist li.ok .ic{color:var(--ok)}
+.rvlist li.warn{background:var(--warn-soft)} .rvlist li.warn .ic{color:var(--warn)}
+.rvlist li.bad{background:var(--bad-soft)} .rvlist li.bad .ic{color:var(--bad)}
+.rvlist li .fix{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.ficha{white-space:pre-wrap;font-family:var(--f-mono);font-size:.8rem;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;margin:0;user-select:all}
+.aibox{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.aiout{font-size:.9rem;display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px}
+.aiout ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+
+
+/* v4: árbol de niveles, creador de IDS */
+.ctree{display:flex;flex-direction:column;align-items:stretch;gap:0}
+.ctree .link{width:2px;height:16px;background:var(--line);margin-left:24px}
+.node{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.node .sl{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.node.proj{border-style:dashed;background:transparent}
+.node.e{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.node.d{border-color:var(--gold)}
+.node.i{border-style:solid}
+.node .lv{align-self:flex-start;white-space:normal}
+.kids{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;border-top:2px solid var(--line);padding-top:14px}
+.branch{display:flex;flex-direction:column;gap:8px}
+.branch .node.i{margin-left:14px;position:relative}
+.branch .node.i::before{content:"";position:absolute;left:-12px;top:0;bottom:50%;width:10px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-bottom-left-radius:6px}
+@media (max-width:820px){ .kids{grid-template-columns:1fr} }
+.lvcard b{font-size:1rem}
+.sr{position:absolute;left:-9999px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;cursor:pointer}
+.chk input{margin-top:4px;accent-color:var(--brand)}
+.radios.compact label{padding:6px 10px;font-size:.88rem}
+.whys{display:flex;flex-direction:column;gap:8px}
+.why1{display:flex;flex-direction:column;gap:4px;padding-left:12px;border-left:2px solid var(--gold)}
+.why1 label{font-weight:600;font-size:.86rem}
+.why1 input{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.95rem}
+.comps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.compbtn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer}
+.compbtn[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+
+
+/* v5: estado de la revisión */
+.status{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;padding:14px;border-radius:10px;border:1px solid var(--line);background:var(--tint)}
+.status .sic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:1.05rem;background:var(--card);color:var(--muted)}
+.status .stx{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:.9rem}
+.status .stx b{font-family:var(--f-display);font-size:1.3rem;font-weight:600;line-height:1.2}
+.status.bad{background:var(--bad-soft);border-color:var(--bad)} .status.bad .sic{background:var(--bad);color:var(--card)}
+.status.warn{background:var(--warn-soft);border-color:var(--warn)} .status.warn .sic{background:var(--warn);color:var(--card)}
+.status.ok{background:var(--ok-soft);border-color:var(--ok)} .status.ok .sic{background:var(--ok);color:var(--card)}
+.counts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.counts .c{font-family:var(--f-mono);font-size:.72rem;padding:2px 8px;border-radius:99px;background:var(--card)}
+.counts .c.bad{color:var(--bad)} .counts .c.warn{color:var(--warn)} .counts .c.ok{color:var(--ok)}
+.rvhelp summary{padding:9px 12px;font-size:.88rem}
+.rvhelp .lg{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start}
+.rvhelp .ic{font-family:var(--f-mono);font-weight:700;text-align:center}
+.rvhelp .ic.bad{color:var(--bad)} .rvhelp .ic.warn{color:var(--warn)} .rvhelp .ic.ok{color:var(--ok)}
+.rvg{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;border:0;background:none}
+.rvgh{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 0}
+.rvgh.bad{color:var(--bad)} .rvgh.warn{color:var(--warn)} .rvgh.ok{color:var(--ok);cursor:pointer;list-style:none}
+details.rvg>summary{padding:2px 0;display:block}
+details.rvg>summary::after{content:" +";color:var(--ok)} details.rvg[open]>summary::after{content:" –"}
+.rvlist li{grid-template-columns:22px 1fr auto!important;align-items:start}
+.stepgo{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:1px 8px;font-family:var(--f-mono);font-size:.68rem;cursor:pointer;white-space:nowrap}
+.stepgo:hover{border-color:var(--gold)}
+
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
 
 /* Impresión (y generación del PDF de chuletas) */
@@ -314,7 +481,9 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
       <h1>Guía EOS para el equipo</h1>
       <p class="sub">Dudas del lunes, respuestas en dos minutos. Elige la pestaña de tu duda.</p>
     </div>
-    <div class="legend"><span class="src t">Traction</span> viene del libro <span class="src p">Práctica</span> recomendación nuestra</div>
+    <div class="gsearch"><label for="gq" class="mono" style="position:absolute;left:-9999px">Buscar en la guía</label><input id="gq" type="search" placeholder="Buscar: Rock de departamento, titulares, IDS…" autocomplete="off"><div class="gres" id="gres" hidden></div></div>
+  </div>
+  <div class="top-in" style="margin-top:10px"><div class="legend"><span class="src t">Traction</span> viene del libro <span class="src p">Práctica</span> recomendación nuestra</div>
   </div>
 </header>
 
@@ -336,12 +505,30 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <h3>¿Tienes una duda concreta? Empieza aquí</h3>
     <div class="grid">
       <button class="card route" data-go="donde"><span class="q">"¿Esto es un Rock, un to-do o un issue?"</span><span class="go">¿Dónde va? →</span></button>
-      <button class="card route" data-go="ids"><span class="q">"¿Cómo planteo este IDS?"</span><span class="go">IDS →</span></button>
-      <button class="card route" data-go="rocks"><span class="q">"¿Este proyecto es un Rock?"</span><span class="go">Rocks →</span></button>
+      <button class="card route" data-go="ids"><span class="q">"¿Cómo funciona el IDS?"</span><span class="go">IDS →</span></button>
+      <button class="card route" data-go="creaids"><span class="q">"¿Cómo planteo este IDS paso a paso?"</span><span class="go">Crear un IDS →</span></button>
+      <button class="card route" data-go="rocks"><span class="q">"¿Este Rock es de empresa, de mi área o mío?"</span><span class="go">Rocks →</span></button>
+      <button class="card route" data-go="creador"><span class="q">"¿Cómo escribo mi Rock y está bien?"</span><span class="go">Crear un Rock →</span></button>
+      <button class="card route" data-go="l10"><span class="q">"¿Esto lo digo en titulares?"</span><span class="go">L10 →</span></button>
       <button class="card route" data-go="l10"><span class="q">"¿Qué digo en cada bloque de la L10?"</span><span class="go">L10 →</span></button>
       <button class="card route" data-go="roles"><span class="q">"¿Quién decide esto? ¿Quién se encarga?"</span><span class="go">Roles →</span></button>
       <button class="card route" data-go="diccionario"><span class="q">"¿Qué significa V/TO, GWC, Scorecard…?"</span><span class="go">Diccionario →</span></button>
     </div>
+  </section>
+
+
+  <section class="block">
+    <h3>¿Cómo se lee esta guía? Las formas</h3>
+    <p class="lead">Cada tipo de contenido tiene siempre la misma forma. Así lo encuentras sin leer el título.</p>
+    <div class="legendgrid">
+      <div class="shape def"><span class="sl">Qué es</span><span class="small">Definición</span></div>
+      <div class="shape test"><span class="sl">Test · regla</span><span class="small">Lo que te preguntas para decidir</span></div>
+      <div class="shape ej"><span class="sl">Ejemplo DZ</span><span class="small">Un caso nuestro</span></div>
+      <div class="shape err"><span class="sl">Error típico</span><span class="small">Lo que nos suele pasar</span></div>
+      <div class="shape def"><span class="sl">No decir / Decir</span><div class="minisay"><span class="n1">No decir</span><span class="y1">Decir</span></div></div>
+      <div class="shape def"><span class="sl">Va / No va</span><div class="minisay"><span class="y1">Va</span><span class="n1" style="background:var(--tint);color:var(--muted)">No va → dónde</span></div></div>
+    </div>
+    <div class="legend" style="gap:10px"><span class="small muted">Niveles de Rock:</span><span class="lv e">■ Empresa</span><span class="lv d">◆ Departamento</span><span class="lv i">○ Individual</span></div>
   </section>
 
   <section class="block">
@@ -395,7 +582,7 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
         <tr><td><b>Objetivo anual</b></td><td>12 meses</td><td>Número cumplido o no a 31/12</td><td>V/TO · 1-Year Plan</td><td>Tasa de cancelación por debajo de [X]%</td></tr>
         <tr><td><b>Rock</b></td><td>90 días</td><td>Sí o no el último día del trimestre</td><td>Rock Sheet · L10</td><td>Política de cancelación nueva publicada y aplicada desde [fecha]</td></tr>
         <tr><td><b>Proyecto</b></td><td>Lo que haga falta</td><td>No tiene un "hecho" claro: es un medio</td><td>Se trocea en Rocks</td><td>"Revisar las cancelaciones"</td></tr>
-        <tr><td><b>To-do</b></td><td>7 días</td><td>Hecho o no hecho en la L10</td><td>To-Do List de la L10</td><td>Rubén envía a Sara el coste de cancelaciones de 2026 antes del jueves</td></tr>
+        <tr><td><b>To-do</b></td><td>7 días</td><td>Hecho o no hecho en la L10</td><td>To-Do List de la L10</td><td>Rubén envía a Oliver el coste de cancelaciones de 2026 antes del jueves</td></tr>
         <tr><td><b>Issue</b></td><td>Hasta que se resuelve</td><td>IDS: acción, acuerdo o falta información</td><td>Issues List</td><td>Tres cancelaciones de última hora en la misma expedición</td></tr>
       </tbody>
     </table></div>
@@ -434,24 +621,138 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
 <div class="panel" id="p-rocks" data-tab="rocks" data-label="Rocks" hidden>
   <div class="key">
     <span class="lab">Idea clave</span>
-    <p>Un proyecto es un medio; un Rock es un resultado. De cada proyecto que importa este trimestre sacamos lo que tiene que estar hecho el último día, con un solo dueño, de forma que ese día podamos decir sí o no sin discutir.</p>
+    <p>Un proyecto es un medio; un Rock es un resultado a 90 días con un solo dueño, que el último día se puede responder con sí o no. Hay tres niveles: <span class="lv e">■ Empresa</span> <span class="lv d">◆ Departamento</span> <span class="lv i">○ Individual</span>. Lo que cambia entre ellos es quién lo decide, quién es el owner y en qué L10 se sigue.</p>
   </div>
+  <nav class="jumps" aria-label="Saltos rápidos"></nav>
 
-  <section class="block">
-    <h3>Proyecto frente a Rock</h3>
-    <div class="vs">
-      <div class="card"><h4>Proyecto</h4>
-        <div class="kv"><span>Qué es</span><span>Un conjunto de trabajo para conseguir algo</span><span>Duración</span><span>La que haga falta; a menudo varios trimestres</span><span>Cómo acaba</span><span>Difuso: "estamos con ello"</span><span>Ejemplo</span><span>Nueva web</span></div>
-        <span class="src p" style="align-self:flex-start">"Proyecto" no es término EOS</span>
-      </div>
-      <div class="card rock"><h4>Rock</h4>
-        <div class="kv"><span>Qué es</span><span>Una prioridad con un resultado concreto</span><span>Duración</span><span>90 días</span><span>Cómo acaba</span><span>Sí o no, sin discusión</span><span>Ejemplo</span><span>Nueva web publicada con reserva online funcionando antes del 31/03</span></div>
-        <span class="src t" style="align-self:flex-start">Traction</span>
-      </div>
+  <section class="block" id="rk-dudas" data-jump="Dudas típicas">
+    <h3>Dudas típicas sobre Rocks</h3>
+    <div class="grid g3">
+      <div class="shape test"><span class="sl">Duda</span><b>"Generación de demanda, ¿es un Rock?"</b><span class="small">No. Es un proyecto. De él salen uno o varios Rocks. <button class="linkbtn" data-jumpto="rk-ejemplo">Ver el ejemplo completo →</button></span></div>
+      <div class="shape test"><span class="sl">Duda</span><b>"¿Cada idea del brainstorming es un Rock?"</b><span class="small">No. Las ideas se juntan, se descartan o se aparcan. Quedan pocos Rocks; el resto son tácticas, Rocks del equipo o Parking. <button class="linkbtn" data-jumpto="rk-proceso">Ver proceso →</button></span></div>
+      <div class="shape test"><span class="sl">Duda</span><b>"Si no está entre los Rocks de empresa, ¿no es prioridad?"</b><span class="small">Puede ser un Rock de departamento o individual: la prioridad de un área o de una persona. <button class="linkbtn" data-jumpto="rk-niveles">Ver niveles →</button></span></div>
+      <div class="shape test"><span class="sl">Duda</span><b>"Si soy owner, ¿lo hago yo todo?"</b><span class="small">No. Eres responsable de que llegue en fecha. Puedes necesitar a una persona o a siete, con sus propios Rocks o con to-dos.</span></div>
+      <div class="shape test"><span class="sl">Duda</span><b>"Un Rock de un año"</b><span class="small">No existe. Algo de un año es un objetivo del 1-Year Plan o un proyecto; el Rock es lo que tiene que estar hecho en estos 90 días.</span></div>
+      <div class="shape test"><span class="sl">Duda</span><b>"¿Primero los títulos o primero desarrollarlos?"</b><span class="small">Primero el qué: elegir los Rocks y su owner. Después cada owner los escribe bien con el creador. <button class="linkbtn" data-jumpto="rk-proceso">Ver proceso →</button></span></div>
     </div>
   </section>
 
-  <section class="block">
+  <section class="block" id="rk-proyecto" data-jump="¿Proyecto o Rock?">
+    <h3>¿Esto es un proyecto o un Rock?</h3>
+    <div class="vs">
+      <div class="shape def"><span class="sl">Qué es · Proyecto</span><h4>Proyecto</h4>
+        <div class="kv"><span>Qué es</span><span>Un conjunto de trabajo para conseguir algo grande</span><span>Duración</span><span>La que haga falta; a menudo varios trimestres</span><span>Cómo acaba</span><span>Difuso: "estamos con ello"</span></div>
+        <span class="src p" style="align-self:flex-start">"Proyecto" no es término EOS</span>
+      </div>
+      <div class="shape def rockc"><span class="sl">Qué es · Rock</span><h4>Rock</h4>
+        <div class="kv"><span>Qué es</span><span>Una prioridad con un resultado concreto</span><span>Duración</span><span>90 días como máximo</span><span>Cómo acaba</span><span>Sí o no, sin discusión</span></div>
+        <span class="src t" style="align-self:flex-start">Traction</span>
+      </div>
+    </div>
+    <div class="shape ej"><span class="sl">Ejemplo DZ · ¿proyecto, Rock, idea o táctica?</span>
+      <div class="tw"><table>
+        <thead><tr><th>Lo que apuntamos</th><th>Qué es</th><th>El Rock que puede salir de ahí</th></tr></thead>
+        <tbody>
+          <tr><td>Generación de demanda</td><td><span class="pill">Proyecto</span></td><td>Dos nuevas vías de captación funcionando y con [X] leads cualificados antes del fin de trimestre</td></tr>
+          <tr><td>Nueva web</td><td><span class="pill">Proyecto</span></td><td>Nueva web publicada con reserva online funcionando antes del [fecha]</td></tr>
+          <tr><td>Levantar capital</td><td><span class="pill">Proyecto</span></td><td>Dossier para inversores terminado y presentado a [X] inversores antes del [fecha]</td></tr>
+          <tr><td>Publicar la próxima temporada antes del [fecha]</td><td><span class="pill ok">Ya es Rock</span></td><td>Todas las expediciones de la próxima temporada publicadas y reservables antes del [fecha]</td></tr>
+          <tr><td>Vídeo podcast propio</td><td><span class="pill">Idea</span></td><td>Táctica dentro de Generación de demanda: Rock individual de alguien del equipo, o al Parking</td></tr>
+          <tr><td>Campaña disruptiva en redes</td><td><span class="pill">Táctica</span></td><td>Es una forma de hacer un Rock, no un Rock</td></tr>
+          <tr><td>"Crecer en ventas todo el año"</td><td><span class="pill">Objetivo anual</span></td><td>Va al 1-Year Plan. El Rock es lo que hacemos este trimestre para moverlo</td></tr>
+          <tr><td>"Llamar a los clientes de la última salida"</td><td><span class="pill">To-do</span></td><td>Si cabe en una semana, no es un Rock</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="block" id="rk-niveles" data-jump="¿De qué nivel?">
+    <h3>¿Este Rock es de empresa, de mi área o mío?</h3>
+    <div class="grid g3">
+      <div class="shape def lvcard"><span class="lv e">■ Empresa</span><b>Lo que dirección se compromete a sacar este trimestre para toda DZ.</b><span class="small muted">Rinde cuentas en la L10 de dirección.</span></div>
+      <div class="shape def lvcard"><span class="lv d">◆ Departamento</span><b>Lo que un área se compromete a sacar este trimestre, trabajando como equipo.</b><span class="small muted">Rinde cuentas en la L10 del área.</span></div>
+      <div class="shape def lvcard"><span class="lv i">○ Individual</span><b>Lo que una persona se compromete a sacar este trimestre, ella sola.</b><span class="small muted">Rinde cuentas ante su responsable, en la L10 del área.</span></div>
+    </div>
+    <div class="shape test"><span class="sl">La pregunta que lo decide</span>
+      <p style="font-family:var(--f-display);font-size:1.25rem;line-height:1.3">¿Quién se compromete, y ante quién rinde cuentas?</p>
+      <ol class="qtest">
+        <li><b>¿Es una de las pocas prioridades de toda DZ, decidida en dirección?</b> Sí → <span class="lv e">■ Empresa</span></li>
+        <li><b>¿Hace falta el trabajo de varias personas de un área para sacarlo?</b> Sí → <span class="lv d">◆ Departamento</span> (con un solo owner)</li>
+        <li><b>¿Lo saca una persona, aunque pida ayuda puntual?</b> Sí → <span class="lv i">○ Individual</span></li>
+      </ol>
+      <p class="small">No a las tres: no es un Rock. Es un to-do, el trabajo normal del asiento o una idea para el Parking.</p>
+      <button class="btn pri" data-go="creador" style="align-self:flex-start">Crear un Rock paso a paso →</button>
+    </div>
+    <div class="tw"><table class="levels">
+      <thead><tr><th></th><th><span class="lv e">■ Empresa</span></th><th><span class="lv d">◆ Departamento</span></th><th><span class="lv i">○ Individual</span></th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Quién lo decide</th><td>Dirección, en la trimestral</td><td>El área en equipo, después de la trimestral</td><td>La persona con su responsable</td></tr>
+        <tr><th scope="row">Owner</th><td>Una persona de dirección</td><td>Una persona del área, normalmente su responsable</td><td>La propia persona</td></tr>
+        <tr><th scope="row">Quién trabaja en él</th><td>Varias áreas</td><td>Varias personas del área</td><td>Una persona</td></tr>
+        <tr><th scope="row">Cuántos</th><td>3-7. Al empezar con EOS, mejor 3-4</td><td>Pocos por área</td><td>Dirección: 3-7 en total, contando los de empresa que lleva. Resto: 1-3</td></tr>
+        <tr><th scope="row">Se sigue en</th><td>L10 de dirección</td><td>L10 del área</td><td>L10 del área</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted"><span class="src t">Traction</span> habla de Rocks de compañía y de que cada departamento fija los suyos en equipo, de modo que al final cada persona tiene sus Rocks: 3-7 en dirección, 1-3 el resto. <span class="src p">Práctica</span> Separar dentro del área entre Rock de departamento y Rock individual es nuestro, para que se vea quién lo sigue.</p>
+
+    <div class="shape ej"><span class="sl">Ejemplo DZ · seis Rocks clasificados</span>
+      <div class="tw"><table>
+        <thead><tr><th>Rock</th><th>Nivel</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td>Todas las expediciones de la próxima temporada publicadas y reservables antes del [fecha]</td><td><span class="lv e">■</span></td><td>Toda DZ depende de ello y lo decidió dirección. Trabajan Operaciones, Comercial y Marketing.</td></tr>
+          <tr><td>Previsión de tesorería a 13 semanas en el Scorecard desde [fecha]</td><td><span class="lv e">■</span></td><td>Si dirección la elige como prioridad de todos. Si solo la quiere Finanzas, sería ◆ o ○.</td></tr>
+          <tr><td>Operaciones: nuevo contrato de viaje en uso en todas las reservas antes del [fecha]</td><td><span class="lv d">◆</span></td><td>Es la prioridad del área y hace falta el equipo de Operaciones para implantarlo.</td></tr>
+          <tr><td>Comercial: guion y proceso de primera llamada en uso por todo el equipo antes del [fecha]</td><td><span class="lv d">◆</span></td><td>Lo tiene que adoptar todo el equipo comercial.</td></tr>
+          <tr><td>[Persona de Marketing]: [X] acuerdos de afiliación firmados antes del [fecha]</td><td><span class="lv i">○</span></td><td>Lo saca una persona. Responde ante su responsable.</td></tr>
+          <tr><td>[Persona de Finanzas]: conciliación bancaria automatizada y en uso antes del [fecha]</td><td><span class="lv i">○</span></td><td>Lo saca una persona para su propio asiento. No cuelga de ningún Rock de empresa, y vale.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="block" id="rk-ejemplo" data-jump="Ejemplo: de proyecto a Rocks">
+    <h3>De un proyecto a Rocks de los tres niveles: Generación de demanda</h3>
+    <p class="lead">Un Rock de empresa puede tener Rocks de departamento debajo, y estos, Rocks individuales. Así se reparte el trabajo sin perder un solo owner arriba.</p>
+    <div class="ctree">
+      <div class="node proj"><span class="sl">Proyecto · no es Rock</span><b>Generación de demanda</b></div>
+      <div class="link"></div>
+      <div class="node e"><span class="lv e">■ Empresa · owner: Rubén (Marketing y ventas)</span><b>Dos nuevas vías de captación funcionando y con [X] leads cualificados antes del fin de trimestre, al menos una que no sea publicidad de pago</b><span class="small muted">Se sigue en la L10 de dirección. El owner no lo hace solo: le ayudan tres áreas.</span></div>
+      <div class="link"></div>
+      <div class="kids">
+        <div class="branch">
+          <div class="node d"><span class="lv d">◆ Marketing</span><b>Programa de afiliación lanzado con [X] colaboradores activos antes del [fecha]</b><span class="small muted">Es la vía que no depende de publicidad de pago.</span></div>
+          <div class="node i"><span class="lv i">○ [Persona A de Marketing]</span><b>[X] acuerdos de afiliación firmados antes del [fecha]</b></div>
+          <div class="node i"><span class="lv i">○ [Persona B de Marketing]</span><b>Campaña en [canal de pago nuevo] lanzada con [X] € y leads medidos antes del [fecha]</b><span class="small muted">Ayuda directamente al Rock de empresa: es la otra vía.</span></div>
+        </div>
+        <div class="branch">
+          <div class="node d"><span class="lv d">◆ Ventas · [responsable de Ventas]</span><b>Leads de los canales nuevos atendidos en menos de [X] h, con proceso en uso, antes del [fecha]</b><span class="small muted">Si los leads llegan y nadie los atiende, la vía no funciona.</span></div>
+          <div class="node i"><span class="lv i">○ [Persona de Comercial]</span><b>Guion de primera llamada para leads de afiliados probado en [X] llamadas antes del [fecha]</b></div>
+        </div>
+        <div class="branch">
+          <div class="node d"><span class="lv d">◆ Operaciones · Oliver</span><b>Una salida del trimestre preparada para llevar a [X] creadores de contenido: plazas, briefing del líder y protocolo, antes del [fecha]</b><span class="small muted">Sin Rocks individuales debajo: Oliver lo saca con to-dos.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:10px">Y también: Rocks que no cuelgan de ninguno de empresa</h3>
+    <div class="grid g3">
+      <div class="node d"><span class="lv d">◆ Operaciones · Oliver</span><b>Nuevo contrato de viaje en uso en todas las reservas antes del [fecha]</b><span class="small muted">Sale de la Issues List del área, no de un Rock de empresa.</span></div>
+      <div class="node i"><span class="lv i">○ [Persona de Finanzas]</span><b>Conciliación bancaria automatizada y en uso antes del [fecha]</b><span class="small muted">Mejora su propio asiento.</span></div>
+      <div class="node i"><span class="lv i">○ [Persona de Comercial]</span><b>CRM sin fichas duplicadas y con regla de alta en uso antes del [fecha]</b><span class="small muted">Lo necesita el equipo, pero lo saca una persona.</span></div>
+    </div>
+    <div class="shape test"><span class="sl">Regla <span class="src p">Práctica</span></span>
+      <span class="small">Un Rock de departamento o individual puede ir por libre si empuja el 1-Year Plan o resuelve algo importante del área. Lo que no puede es quitarle tanta capacidad al equipo que los Rocks de empresa se queden sin gente. Si hay que elegir, ganan los de empresa.</span>
+    </div>
+  </section>
+
+  <section class="block" id="rk-crear" data-jump="Crear un Rock">
+    <div class="shape test" style="flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 260px"><span class="sl">Herramienta</span><b style="font-family:var(--f-display);font-size:1.3rem">Creador de Rocks</b><span class="small">Te lleva paso a paso: de dónde sale, qué tipo es, cómo escribirlo, y lo revisa.</span></div>
+      <button class="btn pri" data-go="creador">Abrir el creador →</button>
+    </div>
+  </section>
+
+  <section class="block" id="rk-entran" data-jump="Qué entra">
     <h3>¿Qué proyectos entran este trimestre? <span class="src p">Práctica</span></h3>
     <p class="lead">Pasa cada proyecto por tres filtros. Si cae en alguno, no se tira: se aparca en el <b>Parking</b> y se revisa en la próxima trimestral.</p>
     <div class="funnel">
@@ -460,14 +761,10 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
       <div class="f"><span class="pill">3</span><span><b>¿Tenemos capacidad y caja para hacerlo ahora?</b></span><span class="no">No → Parking</span></div>
       <div class="f" style="border-color:var(--gold);background:var(--gold-soft)"><span class="pill">✓</span><span><b>Pasa los tres: candidato a Rock.</b> Sacamos de él el resultado de 90 días.</span></div>
     </div>
-    <p class="small muted">Que los Rocks empujen el 1-Year Plan es Traction; los filtros 2 y 3 son práctica nuestra.</p>
-  </section>
-
-  <section class="block">
-    <h3>El Parking</h3>
-    <div class="card" style="border-color:var(--gold);gap:12px">
+    <p class="small muted">Que los Rocks empujen el 1-Year Plan es Traction; los filtros 2 y 3 son práctica nuestra. Si todavía no hay 1-Year Plan, usad los proyectos que habéis priorizado.</p>
+    <div class="shape def" style="border-color:var(--gold)"><span class="sl">Qué es · Parking</span>
       <p><b>El Parking es nuestra Issues List del V/TO.</b> Es el sitio donde apuntamos lo que va saliendo y no cabe este trimestre, para que no se olvide y se priorice en la siguiente trimestral.</p>
-      <p class="small"><span class="src t">Traction</span> El libro no lo llama Parking. Lo llama Issues List del V/TO y dice que los candidatos a Rock que no entran se pasan al trimestre siguiente apuntándolos ahí. El nombre Parking es nuestro; la herramienta es la de Traction.</p>
+      <p class="small"><span class="src t">Traction</span> El libro lo llama Issues List del V/TO y dice que los candidatos a Rock que no entran se pasan al trimestre siguiente apuntándolos ahí. El nombre Parking es nuestro; la herramienta es la de Traction.</p>
       <div class="grid g3">
         <div><b class="small">Qué entra</b><p class="small muted">Lo de más de 90 días, lo que toca la visión y los candidatos a Rock que no caben ahora. Lo de esta semana va a la Issues List de la L10.</p></div>
         <div><b class="small">Cómo se apunta</b><p class="small muted">Una línea por cosa y quién la trajo, igual que un issue.</p></div>
@@ -476,90 +773,170 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     </div>
   </section>
 
-  <section class="block">
-    <h3>Cómo sacamos los Rocks <span class="src t">Traction</span></h3>
+  <section class="block" id="rk-proceso" data-jump="Proceso">
+    <h3>¿Cómo sacamos los Rocks? <span class="src t">Traction</span></h3>
+    <p class="lead">Primero el qué, después el cómo. El orden importa: si desarrollamos antes de elegir, trabajamos en Rocks que luego no entran.</p>
     <div class="steps">
-      <div class="card"><b>Lluvia de ideas</b><span class="small muted">Todo lo que debería estar hecho en 90 días. Sin filtrar.</span></div>
-      <div class="card"><b>Keep / kill / combine</b><span class="small muted">Nos quedamos con lo importante, tachamos y juntamos.</span></div>
-      <div class="card"><b>3-7 de compañía</b><span class="small muted">Mejor cerca de 3. Lo que sobra va al Parking.</span></div>
-      <div class="card"><b>Un solo owner</b><span class="small muted">Cada Rock de compañía, una persona de dirección.</span></div>
-      <div class="card"><b>Rocks individuales</b><span class="small muted">Dirección: 3-7 en total. Resto del equipo: 1-3.</span></div>
+      <div class="card"><b>Lluvia de ideas</b><span class="small muted">Todos, sobre cada proyecto prioritario: qué debería estar hecho en 90 días. Con nombre al lado de cada idea.</span></div>
+      <div class="card"><b>Keep / kill / combine</b><span class="small muted">Juntar lo parecido, tachar lo que no llega. Lo que no entra, al Parking (a Q1, a 2028…).</span></div>
+      <div class="card"><b>Elegir los de empresa</b><span class="small muted">3-7; al empezar con EOS, 3-4. Solo los títulos, en dirección.</span></div>
+      <div class="card"><b>Un owner por Rock</b><span class="small muted">Una persona de dirección para cada Rock de empresa.</span></div>
+      <div class="card"><b>Escribirlo bien</b><span class="small muted">Cada owner lo pasa por el creador: para qué, qué, hecho cuando, fecha. <span class="src p">Práctica</span></span></div>
+      <div class="card"><b>Departamento e individuales</b><span class="small muted">Cada área fija los suyos en equipo. Después, revisión conjunta para ver que se apoyan.</span></div>
     </div>
   </section>
 
-  <section class="block">
-    <h3>¿Y SMART?</h3>
-    <div class="grid g3">
-      <div class="card"><span class="src t" style="align-self:flex-start">Lo que pide Traction</span><p>Que el Rock sea <b>específico, medible y alcanzable</b> y que tenga un dueño. El plazo lo da el propio trimestre y la relevancia la da el 1-Year Plan.</p></div>
-      <div class="card"><span class="src p" style="align-self:flex-start">SMART como puente</span><p>Si ya conoces SMART, úsalo como comprobación. Las cinco letras se cumplen solas si el Rock pasa el test del sí o no y cuelga de un objetivo anual. SMART no es terminología EOS.</p></div>
-      <div class="card" style="border-color:var(--gold)"><span class="mono" style="color:var(--gold)">EL TEST DEFINITIVO</span><p style="font-family:var(--f-display);font-size:1.25rem;line-height:1.3">"El último día del trimestre, ¿podemos decir SÍ o NO sin discutir?"</p></div>
-    </div>
-  </section>
-
-  <section class="block">
-    <h3>Probador de Rocks</h3>
-    <p class="lead">Escribe tu Rock y marca lo que cumple.</p>
-    <div class="tester">
-      <div class="checks" id="rock-checks">
-        <label><input type="checkbox" id="rc1"> Tiene <b>un solo owner</b>.</label>
-        <label><input type="checkbox" id="rc2"> Está escrito como <b>resultado</b> ("publicada", "firmados"), no como actividad ("trabajar en", "mejorar").</label>
-        <label><input type="checkbox" id="rc3"> Tiene <b>fecha</b>: fin de trimestre o antes.</label>
-        <label><input type="checkbox" id="rc4"> Dice <b>cuándo está hecho</b>: una cifra o una definición clara.</label>
-        <label><input type="checkbox" id="rc5"> El último día se puede decir <b>sí o no sin discutir</b>.</label>
-        <label><input type="checkbox" id="rc6"> Empuja un <b>objetivo del 1-Year Plan</b>.</label>
-        <label><input type="checkbox" id="rc7"> Es <b>alcanzable en 90 días</b> con lo que ya tiene el owner encima.</label>
-      </div>
-      <div class="verdict">
-        <label for="rock-text" class="mono muted">TU ROCK</label>
-        <input id="rock-text" type="text" placeholder="Ej.: Oliver: [X] proveedores alternativos homologados antes del 31/03">
-        <div class="meter"><i id="rock-meter"></i></div>
-        <div class="vt" id="rock-vt">Todavía es un proyecto</div>
-        <p class="small muted" id="rock-vd">Marca lo que cumple tu Rock.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="block">
-    <h3>Mal formulado → bien formulado</h3>
+  <section class="block" id="rk-ejemplos" data-jump="Ejemplos">
+    <h3>¿Cómo se ve bien escrito? Mal → bien</h3>
     <div class="tw"><table>
       <thead><tr><th>Así no</th><th>Así sí</th><th>Por qué</th></tr></thead>
       <tbody>
+        <tr><td class="bad">Tener definidas y planificadas dos nuevas vías de captación</td><td class="good">Dos nuevas vías de captación [cuáles] funcionando y con [X] leads cualificados antes del fin de trimestre</td><td>"Definir y planificar" es el primer paso. El Rock es que funcionen.</td></tr>
+        <tr><td class="bad">Generación de demanda</td><td class="good">Ver fila de arriba</td><td>Es el nombre de un proyecto, no un resultado.</td></tr>
         <tr><td class="bad">Mejorar el marketing</td><td class="good">Campaña de temporada alta lanzada en [canales] y con ≥[X] leads cualificados antes del 31/03</td><td>"Mejorar" no se puede comprobar.</td></tr>
         <tr><td class="bad">Trabajar en la nueva web</td><td class="good">Nueva web publicada con reserva online funcionando antes del 31/03</td><td>Describe una actividad; el Rock es el resultado.</td></tr>
-        <tr><td class="bad">Reducir cancelaciones</td><td class="good">Nueva política de cancelación aprobada, publicada y aplicada a todas las reservas desde [fecha]</td><td>La tasa de cancelación es objetivo anual o número del Scorecard; el Rock es lo que haces este trimestre para moverla.</td></tr>
-        <tr><td class="bad">Oliver y Sara: acuerdos con proveedores</td><td class="good">Oliver: [X] proveedores locales alternativos homologados en [destinos] antes del 31/03</td><td>Dos owners es ningún owner. Sara aparece en "necesita de".</td></tr>
-        <tr><td class="bad">Formar a los líderes</td><td class="good">Formación de líderes impartida a [X] líderes y superada por todos antes del inicio de temporada</td><td>Sin cifra ni fecha no hay "hecho".</td></tr>
+        <tr><td class="bad">Reducir cancelaciones</td><td class="good">Nueva política de cancelación aprobada, publicada y aplicada a todas las reservas desde [fecha]</td><td>La tasa es objetivo anual o número del Scorecard; el Rock es lo que haces este trimestre para moverla.</td></tr>
+        <tr><td class="bad">Oliver y Rubén: acuerdos con proveedores</td><td class="good">Oliver: [X] proveedores locales alternativos homologados en [destinos] antes del 31/03</td><td>Dos owners es ningún owner. Rubén aparece en "necesita de".</td></tr>
         <tr><td class="bad">Contratar líderes</td><td class="good">[X] líderes de expedición contratados y con onboarding completado antes del [fecha]</td><td>"Contratar" nunca termina. ¿Cuántos y para cuándo?</td></tr>
-        <tr><td class="bad">Revisar todos los procesos</td><td class="good">Proceso de preparación de expedición documentado y seguido por todo Operaciones antes del 31/03</td><td>Demasiado grande para 90 días. Uno y bien.</td></tr>
-        <tr><td class="bad">Estar más presentes en redes</td><td class="good">Plan de contenidos de Q1 ejecutado: [X] publicaciones y leads atribuidos medidos en el Scorecard</td><td>"Más presentes" es una sensación, no un resultado.</td></tr>
         <tr><td class="bad">Controlar la caja</td><td class="good">Previsión de tesorería a 13 semanas actualizada cada lunes y en el Scorecard desde [fecha]</td><td>"Controlar" es el trabajo del asiento; el Rock es montar la herramienta.</td></tr>
-        <tr><td class="bad">Llamar a los 20 clientes de la última expedición</td><td class="good">Es un to-do (o varios), no un Rock</td><td>Si se hace en una semana, no es una prioridad de 90 días.</td></tr>
+        <tr><td class="bad">Llamar a los 20 clientes de la última expedición</td><td class="good">Es un to-do, no un Rock</td><td>Si se hace en una semana, no es una prioridad de 90 días.</td></tr>
       </tbody>
     </table></div>
   </section>
 
-  <section class="block">
-    <h3>Plantilla de Rock</h3>
-    <div class="tpl">
-      <div>Owner</div><div>Una sola persona</div>
-      <div>Rock</div><div>El resultado, en una frase: "[Algo] [hecho/publicado/firmado] antes del [fecha]"</div>
-      <div>Hecho cuando…</div><div>Lo que tiene que ser verdad el último día</div>
-      <div>Métrica</div><div>La cifra, si la hay: [X]</div>
-      <div>Fecha</div><div>Fin de trimestre o antes</div>
-      <div>Necesita de</div><div>Quién tiene que aportar qué, acordado al inicio</div>
-      <div>Hitos mensuales <span class="src p">Práctica</span></div><div>Mes 1: … · Mes 2: … · Mes 3: hecho</div>
+  <section class="block" id="rk-errores" data-jump="Errores">
+    <h3>Errores típicos</h3>
+    <div class="grid g3">
+      <div class="shape err"><span class="sl">Error típico</span><b>Una roca por cada idea</b><span class="small">De 12 ideas no salen 12 Rocks. Salen 1-2 de empresa y, si hace falta, algunos del equipo.</span></div>
+      <div class="shape err"><span class="sl">Error típico</span><b>"3-7 Rocks por departamento"</b><span class="small">Traction dice 3-7 por persona de dirección, en total, y 1-3 para el resto. Mejor cerca de 3.</span></div>
+      <div class="shape err"><span class="sl">Error típico</span><b>La Integradora con más Rocks que nadie</b><span class="small">Señal de que absorbe lo que es de otros asientos. Nadie con más de 3 de empresa. <span class="src p">Práctica</span></span></div>
+      <div class="shape err"><span class="sl">Error típico</span><b>Explicar el Rock desviado en la L10</b><span class="small">Solo "desviado". El owner lo pasa a la Issues List y se hace IDS. <span class="src t">Traction</span></span></div>
+      <div class="shape err"><span class="sl">Error típico</span><b>Añadir Rocks a mitad</b><span class="small">Van al Parking y se deciden en la trimestral. Si no puede esperar, IDS y se decide qué sale. <span class="src p">Práctica</span></span></div>
+      <div class="shape err"><span class="sl">Error típico</span><b>Dar por hecho un Rock al 90%</b><span class="small">Hecho o no hecho. Meta: 80% de los Rocks completados. <span class="src t">Traction</span></span></div>
     </div>
   </section>
 
-  <div class="grid g3">
-    <div class="card"><h4>Test de carga <span class="src p">Práctica</span></h4>
-      <p class="small">Nadie de dirección con más de 3 Rocks de compañía. Si la Integradora acaba con más Rocks que nadie, es señal de que está absorbiendo lo que debería repartirse: pregunta a quién le corresponde por asiento.</p>
-      <p class="small muted">Traction: 3-7 Rocks en total por persona de dirección, mejor cerca de 3.</p></div>
-    <div class="card"><h4>Si un Rock se desvía <span class="src t">Traction</span></h4>
-      <p class="small">En la L10 solo dices "desviado". El owner lo pasa a la Issues List y se hace IDS con él. Opciones: pedir ayuda, cambiar el plan o reconocer que no llegará.</p>
-      <p class="small muted">Meta: completar el 80% de los Rocks o más. Un Rock al 90% no está hecho.</p></div>
-    <div class="card"><h4>A mitad de trimestre</h4>
-      <p class="small">Los Rocks nuevos no se añaden sobre la marcha: van al Parking y se deciden en la trimestral. Si algo es tan urgente que no puede esperar, se hace IDS y se decide qué sale para que entre. <span class="src p">Práctica</span></p></div>
+  <section class="block" id="rk-detalle" data-jump="Plantilla y SMART">
+    <details class="more"><summary>Plantilla de Rock</summary><div class="in">
+      <div class="tpl">
+        <div>Para qué</div><div>El objetivo del 1-Year Plan o el proyecto que empuja</div>
+        <div>Qué (el Rock)</div><div>El resultado, en una frase: "[Algo] [publicado/firmado/funcionando] antes del [fecha]"</div>
+        <div>Owner</div><div>Una sola persona</div>
+        <div>Hecho cuando…</div><div>Lo que tiene que ser verdad el último día</div>
+        <div>Cifra</div><div>Si la hay: [X]</div>
+        <div>Fecha</div><div>Fin de trimestre o antes</div>
+        <div>Necesita de</div><div>Quién tiene que aportar qué, acordado al inicio</div>
+        <div>Hitos mensuales <span class="src p">Práctica</span></div><div>Mes 1: … · Mes 2: … · Mes 3: hecho</div>
+      </div>
+    </div></details>
+    <details class="more"><summary>¿Y SMART?</summary><div class="in">
+      <p><span class="src t">Traction</span> pide que el Rock sea específico, medible y alcanzable y que tenga un dueño. El plazo lo da el trimestre y la relevancia, el 1-Year Plan.</p>
+      <p><span class="src p">Práctica</span> Si ya conoces SMART, úsalo como comprobación. Las cinco letras se cumplen solas si el Rock pasa el test del sí o no y cuelga de un objetivo anual.</p>
+      <p style="font-family:var(--f-display);font-size:1.2rem">El test definitivo: "El último día del trimestre, ¿podemos decir SÍ o NO sin discutir?"</p>
+    </div></details>
+  </section>
+</div>
+
+<!-- ============ CREADOR ============ -->
+<div class="panel" id="p-creador" data-tab="creador" data-label="Crear un Rock" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Rellena los pasos en orden. A la derecha verás, mientras escribes, qué tipo de Rock es, qué está bien y qué falta. Al final tienes la ficha lista para copiar en la Rock Sheet.</p>
+  </div>
+
+  <div class="loadrow">
+    <span class="mono muted">CARGAR UN EJEMPLO:</span>
+    <button class="chip" data-ex="0">Captación, 1.ª versión</button>
+    <button class="chip" data-ex="1">Captación, mejorada</button>
+    <button class="chip" data-ex="2">Publicar la temporada</button>
+    <button class="chip" data-ex="clear">Empezar de cero</button>
+  </div>
+  <p class="small muted" id="cr-exnote"></p>
+
+  <div class="creator">
+    <div class="crsteps">
+      <section class="crs" id="crs1">
+        <div class="crh"><span class="num">1</span><h3>¿De dónde sale?</h3></div>
+        <p class="small muted">Un Rock empuja algo más grande. Si no empuja nada, probablemente no es un Rock.</p>
+        <div class="fld"><label for="cr-origen">Empuja…</label>
+          <select id="cr-origen">
+            <option value="">Elige una opción</option>
+            <option value="1y">Un objetivo del 1-Year Plan</option>
+            <option value="proy">Un proyecto prioritario del trimestre</option>
+            <option value="rock">Un Rock de empresa (es de departamento o individual)</option>
+            <option value="area">La prioridad de mi área</option>
+            <option value="none">Nada en concreto</option>
+          </select></div>
+        <div class="fld"><label for="cr-paraque">¿Cuál? (el para qué)</label><input id="cr-paraque" type="text" placeholder="Ej.: Generación de demanda"></div>
+      </section>
+
+      <section class="crs" id="crs2">
+        <div class="crh"><span class="num">2</span><h3>¿Es un Rock?</h3></div>
+        <p class="small muted">¿Cuánto trabajo es?</p>
+        <div class="radios" role="radiogroup" aria-label="Duración">
+          <label><input type="radio" name="cr-dur" id="cr-dur-90" value="90"> Cabe en 90 días y tiene un final claro</label>
+          <label><input type="radio" name="cr-dur" id="cr-dur-mas" value="mas"> Lleva más de 90 días</label>
+          <label><input type="radio" name="cr-dur" id="cr-dur-sem" value="sem"> Se hace en una semana o menos</label>
+          <label><input type="radio" name="cr-dur" id="cr-dur-sie" value="sie"> Es lo que hago siempre, cada semana o cada mes</label>
+        </div>
+        <div class="crmsg" id="cr-durmsg" hidden></div>
+      </section>
+
+      <section class="crs" id="crs3">
+        <div class="crh"><span class="num">3</span><h3>¿Qué tipo de Rock es?</h3></div>
+        <div class="lvtree" id="cr-tree"></div>
+        <div class="lvpick"><span class="small muted">O elígelo directamente:</span>
+          <button class="chip" data-lv="e"><span class="lv e">■ Empresa</span></button>
+          <button class="chip" data-lv="d"><span class="lv d">◆ Departamento</span></button>
+          <button class="chip" data-lv="i"><span class="lv i">○ Individual</span></button>
+        </div>
+      </section>
+
+      <section class="crs" id="crs4">
+        <div class="crh"><span class="num">4</span><h3>Escríbelo</h3></div>
+        <div class="fld"><label for="cr-owner">Owner (una sola persona)</label>
+          <div class="two"><select id="cr-owner"><option value="">Elige</option><option>Antonio</option><option>Lara</option><option>Oliver</option><option>Rubén</option><option value="otra">Otra persona…</option></select>
+          <input id="cr-owner-otro" type="text" placeholder="Nombre" hidden></div></div>
+        <div class="fld"><label for="cr-titulo">Qué: el resultado</label><textarea id="cr-titulo" rows="2" placeholder="[Algo] [publicado / firmado / funcionando] antes del [fecha]"></textarea><span class="hint2">Escribe cómo está el mundo el último día, no lo que vas a hacer.</span></div>
+        <div class="fld"><label for="cr-hecho">Hecho cuando…</label><textarea id="cr-hecho" rows="2" placeholder="Lo que tiene que ser verdad el último día para decir SÍ"></textarea></div>
+        <div class="two">
+          <div class="fld"><label for="cr-cifra">Cifra, si la hay</label><input id="cr-cifra" type="text" placeholder="Ej.: [X] leads cualificados"></div>
+          <div class="fld"><label for="cr-trim">Trimestre</label><select id="cr-trim"></select></div>
+        </div>
+        <div class="fld"><label for="cr-fecha">Fecha límite</label><input id="cr-fecha" type="date"></div>
+        <div class="fld"><label for="cr-necesita">Necesita de</label><input id="cr-necesita" type="text" placeholder="Quién tiene que aportar qué"></div>
+        <div class="fld"><label>Hitos por mes <span class="src p">Práctica</span></label>
+          <div class="three"><input id="cr-h1" type="text" placeholder="Mes 1" aria-label="Hito mes 1"><input id="cr-h2" type="text" placeholder="Mes 2" aria-label="Hito mes 2"><input id="cr-h3" type="text" placeholder="Mes 3: hecho" aria-label="Hito mes 3"></div></div>
+      </section>
+    </div>
+
+    <aside class="review" aria-live="polite">
+      <div class="rvhead"><span class="sl mono">5 · REVISIÓN</span><span id="cr-lvbadge"></span></div>
+      <div class="status empty" id="cr-status"></div>
+      <details class="more rvhelp"><summary>¿Cómo se lee la revisión?</summary><div class="in small">
+        <div class="lg"><span class="ic bad">✕</span><span><b>Por corregir.</b> Sin arreglarlo, el Rock no está bien hecho.</span></div>
+        <div class="lg"><span class="ic warn">!</span><span><b>Conviene revisar.</b> Puede estar bien, pero merece una mirada. Si decides dejarlo, vale.</span></div>
+        <div class="lg"><span class="ic ok">✓</span><span><b>Está bien.</b> Ya cumple.</span></div>
+        <p>Cuando no queda nada en rojo, el Rock se puede usar. Si tampoco hay avisos, está completo.</p>
+        <p class="muted">La revisión comprueba lo que se ve con reglas: campos vacíos, palabras, fechas. No sabe si el Rock es el adecuado para DZ; eso lo decide el equipo.</p>
+        <p class="muted">Se hace en tu navegador mientras escribes y no envía nada.</p>
+      </div></details>
+      <div id="cr-list"></div>
+      <div class="shape ej" id="cr-sug" hidden><span class="sl">Forma propuesta</span><span id="cr-sugtxt"></span></div>
+      <div class="aibox" id="cr-aibox" hidden>
+        <button class="btn" id="cr-ai">Revisar con Claude</button>
+        <div class="shape def" style="padding:10px 12px;gap:6px"><span class="sl">Opcional · cómo funciona</span>
+          <span class="small">La revisión automática de arriba ya te sirve: funciona en tu navegador y no envía nada a ningún sitio. Puedes quedarte solo con ella.</span>
+          <span class="small">Si quieres una segunda opinión, este botón envía <b>solo este Rock</b> a Claude. Lo compara con Traction, te dice si el nivel encaja y te propone una versión reescrita.</span>
+          <span class="small"><b>Gasta uso de la cuenta de Claude con la que tienes abierta esta página</b>, no de quien la publicó. La primera vez te pide permiso; si dices que no, todo lo demás sigue funcionando igual. La guía sigue siendo privada.</span>
+        </div>
+        <div id="cr-aiout" class="aiout" hidden></div>
+      </div>
+      <details class="more" id="cr-fichabox"><summary>Ficha para la Rock Sheet</summary><div class="in">
+        <pre class="ficha" id="cr-ficha"></pre>
+        <div class="dlrow"><button class="btn pri" id="cr-copy">Copiar ficha</button><span class="small muted" id="cr-copied"></span></div>
+      </div></details>
+    </aside>
   </div>
 </div>
 
@@ -569,9 +946,10 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <span class="lab">Idea clave</span>
     <p>El problema que traemos casi nunca es el problema real. IDS (Identify, Discuss, Solve) sirve para bajar del incendio de esta semana a lo que hay que cambiar para que no vuelva a pasar. Si una solución no sale con owner y fecha, no está resuelta.</p>
   </div>
+  <nav class="jumps" aria-label="Saltos rápidos"></nav>
 
-  <section class="block">
-    <h3>Nuestro problema: nos quedamos arriba</h3>
+  <section class="block" data-jump="Nuestro problema">
+    <h3>¿Por qué nos quedamos en el incendio?</h3>
     <div class="depth">
       <div class="lvl in-b"><span class="mono" style="color:var(--bad)">In the business · síntoma</span><b>El incendio de esta semana</b><span class="small">"El transporte en [destino] llegó tarde y el grupo perdió la actividad."</span><span class="small muted">Si solo lo apagamos, vuelve.</span></div>
       <div class="arr" aria-hidden="true">→</div>
@@ -579,19 +957,19 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     </div>
   </section>
 
-  <section class="block">
-    <h3>Cómo escribir un issue</h3>
+  <section class="block" data-jump="Escribir un issue">
+    <h3>¿Cómo escribo un issue?</h3>
     <p class="lead">Una línea, quién lo trae y de qué tipo es. Si no cabe en una línea, todavía no sabes cuál es el issue.</p>
     <div class="types">
       <div class="card"><span class="pill" style="align-self:flex-start">Problema</span><b>Hay que resolverlo</b><span class="small muted">"Oliver · problema · 3.ª cancelación de transporte en [destino] esta temporada"</span></div>
       <div class="card"><span class="pill" style="align-self:flex-start">Información</span><b>Todos lo tienen que saber y aceptar</b><span class="small muted">"Rubén · info · el banco pide el cierre de 2026 antes del [fecha]"</span></div>
-      <div class="card"><span class="pill" style="align-self:flex-start">Idea</span><b>Necesita feedback o luz verde</b><span class="small muted">"Sara · idea · probar un descuento por reserva anticipada en [expedición]"</span></div>
+      <div class="card"><span class="pill" style="align-self:flex-start">Idea</span><b>Necesita feedback o luz verde</b><span class="small muted">"Rubén · idea · probar un descuento por reserva anticipada en [expedición]"</span></div>
     </div>
     <p class="small muted">Los tres tipos (resolver, informar, idea) son <span class="src t">Traction</span>; el formato de una línea con quién y tipo es <span class="src p">Práctica</span>.</p>
   </section>
 
-  <section class="block">
-    <h3>Identify: la escalera <span class="src p">Práctica</span></h3>
+  <section class="block" data-jump="Escalera">
+    <h3>¿Cómo llego al issue real? La escalera <span class="src p">Práctica</span></h3>
     <p class="lead">Traction dice que el problema que se plantea rara vez es el real y que hay que ir pelando capas. Esta escalera es nuestra forma de hacerlo. Sube peldaño a peldaño hasta que quien trajo el issue diga "sí, eso es".</p>
     <div class="card ladder">
       <div class="rung"><span class="num">1</span><div><div class="q">¿Qué ha pasado exactamente?</div><div class="w">Hechos, no opiniones. Quién, qué, cuándo, cuánto.</div></div></div>
@@ -601,10 +979,11 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
       <div class="rung"><span class="num">5</span><div><div class="q">¿Qué tendría que ser verdad para que no volviera a pasar?</div><div class="w">Aquí aparece el issue real.</div></div></div>
       <div class="rung"><span class="num">6</span><div><div class="q">Escríbelo en una línea. ¿Quien lo trajo está de acuerdo?</div><div class="w">Si dice que sí, pasáis al Discuss. Si no, volved al peldaño 3.</div></div></div>
     </div>
+    <button class="btn pri" data-go="creaids" style="align-self:flex-start">Hacerlo paso a paso con el creador de IDS →</button>
   </section>
 
-  <section class="block">
-    <h3>Mapa de causas raíz <span class="src p">Práctica</span></h3>
+  <section class="block" data-jump="Causas raíz">
+    <h3>¿De dónde viene el problema? Mapa de causas raíz <span class="src p">Práctica</span></h3>
     <div class="tw"><table>
       <thead><tr><th>Componente</th><th>Causa típica</th><th>La señal que la delata</th><th>Pregunta para confirmarla</th></tr></thead>
       <tbody>
@@ -618,14 +997,14 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     </table></div>
   </section>
 
-  <section class="block">
-    <h3>6 recorridos completos de DZ</h3>
+  <section class="block" data-jump="Ejemplos DZ">
+    <h3>¿Cómo se ve un IDS completo? 6 recorridos de DZ</h3>
     <p class="lead">Del incendio al to-do. Abre uno para ver el camino.</p>
     <div id="ids-cases" class="grid g3" style="align-items:start"></div>
   </section>
 
-  <section class="block">
-    <h3>Discuss: todos hablan, una vez <span class="src t">Traction</span></h3>
+  <section class="block" data-jump="Discuss">
+    <h3>¿Cómo discutimos? Todos hablan, una vez <span class="src t">Traction</span></h3>
     <div class="grid g3">
       <div class="card"><b>Di lo que piensas una vez</b><span class="small">Repetir el mismo argumento con otras palabras no es discutir, es alargar.</span></div>
       <div class="card"><b>"¡Alerta tangente!"</b><span class="small">Cualquiera puede decirlo cuando la conversación se va a otro tema. Si la tangente es un issue de verdad, se apunta en la lista y se sigue.</span></div>
@@ -633,8 +1012,8 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     </div>
   </section>
 
-  <section class="block">
-    <h3>Solve: los tres cierres <span class="src t">Traction</span></h3>
+  <section class="block" data-jump="Solve">
+    <h3>¿Cómo cerramos un issue? Los tres cierres <span class="src t">Traction</span></h3>
     <div class="closes">
       <div class="card"><span class="pill" style="align-self:flex-start">Acción</span><b>Alguien tiene que hacer algo</b><span class="small">Sale un to-do con owner y fecha. Ej.: "Oliver añade la confirmación a 48 h al checklist antes del viernes".</span></div>
       <div class="card"><span class="pill" style="align-self:flex-start">Acuerdo</span><b>Basta con que todos lo sepamos y lo aceptemos</b><span class="small">Se dice en voz alta y se tacha. Ej.: "Acordamos que no aceptamos grupos de menos de [X] personas".</span></div>
@@ -643,7 +1022,7 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <p class="small">Al cerrar, alguien dice la solución en voz alta: "Queda así: …". Si alguien dice "eso no es lo que he entendido", se vuelve a hablar. Es normal.</p>
   </section>
 
-  <section class="block">
+  <section class="block" data-jump="Mandamientos">
     <h3>Los 10 mandamientos, en nuestras palabras <span class="src t">Traction</span></h3>
     <ol class="cmd">
       <li>No decidimos por consenso. Hablan todos; si no hay acuerdo, decide la Integradora.</li>
@@ -659,8 +1038,8 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     </ol>
   </section>
 
-  <section class="block">
-    <h3>Qué NO llevamos a la L10 de dirección, y dónde va</h3>
+  <section class="block" data-jump="Qué no va">
+    <h3>¿Esto va a la L10 de dirección?</h3>
     <div class="tw"><table>
       <thead><tr><th>Si es…</th><th>Va a…</th><th></th></tr></thead>
       <tbody>
@@ -674,8 +1053,8 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <p class="small"><b>Ojo:</b> los issues de personas clave sí van a la L10 de dirección cuando la pregunta es si alguien encaja en su asiento (People Analyzer, GWC). Lo que sale fuera es el feedback individual y los roces personales. <span class="src t">Traction</span></p>
   </section>
 
-  <section class="block">
-    <h3>Cómo priorizar <span class="src t">Traction</span></h3>
+  <section class="block" data-jump="Priorizar">
+    <h3>¿Por cuál empezamos? <span class="src t">Traction</span></h3>
     <div class="grid g3">
       <div class="card"><b>1 · Lee la lista rápido</b><span class="small">Sin discutir nada. Tacha lo que ya no aplica.</span></div>
       <div class="card"><b>2 · Elige los 3 más importantes</b><span class="small">No en orden de lista ni por quién los trajo primero.</span></div>
@@ -684,15 +1063,139 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
   </section>
 </div>
 
+<!-- ============ CREAR IDS ============ -->
+<div class="panel" id="p-creaids" data-tab="creaids" data-label="Crear un IDS" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Rellena los pasos en orden antes o durante la L10. Las preguntas te bajan del incendio de esta semana a lo que hay que cambiar para que no vuelva a pasar. A la derecha verás si ya has llegado al issue real y qué falta para cerrarlo con owner y fecha.</p>
+  </div>
+
+  <div class="loadrow">
+    <span class="mono muted">CARGAR UN EJEMPLO:</span>
+    <button class="chip" data-ixe="0">Transporte, a medias</button>
+    <button class="chip" data-ixe="1">Transporte, completo</button>
+    <button class="chip" data-ixe="2">Pocas reservas, completo</button>
+    <button class="chip" data-ixe="clear">Empezar de cero</button>
+  </div>
+  <p class="small muted" id="ci-exnote"></p>
+
+  <div class="creator">
+    <div class="crsteps">
+      <section class="crs" id="cis1">
+        <div class="crh"><span class="num">1</span><h3>Escribe el issue tal como llega</h3></div>
+        <div class="fld"><label for="ci-inicial">El issue, en una línea</label><input id="ci-inicial" type="text" placeholder="Ej.: El transporte en [destino] llegó 3 h tarde"></div>
+        <div class="two">
+          <div class="fld"><label for="ci-quien">Quién lo trae</label><select id="ci-quien"><option value="">Elige</option><option>Antonio</option><option>Lara</option><option>Oliver</option><option>Rubén</option><option value="otra">Otra persona</option></select></div>
+          <div class="fld"><label>Tipo</label>
+            <div class="radios compact" role="radiogroup" aria-label="Tipo de issue">
+              <label><input type="radio" name="ci-tipo" value="problema"> Problema a resolver</label>
+              <label><input type="radio" name="ci-tipo" value="info"> Información</label>
+              <label><input type="radio" name="ci-tipo" value="idea"> Idea</label>
+            </div></div>
+        </div>
+        <label class="chk"><input type="checkbox" id="ci-segunda"> Me lo han contado; no lo he visto yo</label>
+        <div class="crmsg" id="ci-tipomsg" hidden></div>
+      </section>
+
+      <section class="crs" id="cis2">
+        <div class="crh"><span class="num">2</span><h3>¿Qué ha pasado exactamente?</h3></div>
+        <p class="small muted">Hechos, no opiniones: quién, qué, cuándo, cuánto.</p>
+        <div class="fld"><label for="ci-hechos" class="sr">Hechos</label><textarea id="ci-hechos" rows="2" placeholder="Ej.: El traslado del aeropuerto llegó a las 12:00 en vez de a las 9:00. El grupo de [X] personas perdió la actividad de la mañana."></textarea></div>
+      </section>
+
+      <section class="crs" id="cis3">
+        <div class="crh"><span class="num">3</span><h3>¿Es la primera vez?</h3></div>
+        <div class="radios" role="radiogroup" aria-label="¿Es la primera vez?">
+          <label><input type="radio" name="ci-rep" value="primera"> Sí, es la primera vez</label>
+          <label><input type="radio" name="ci-rep" value="repite"> No, ya ha pasado antes</label>
+          <label><input type="radio" name="ci-rep" value="nose"> No lo sé</label>
+        </div>
+        <div class="crmsg" id="ci-repmsg" hidden></div>
+      </section>
+
+      <section class="crs" id="cis4">
+        <div class="crh"><span class="num">4</span><h3>¿Por qué pasó? ¿Y por qué pasó eso?</h3></div>
+        <p class="small muted">Repite hasta llegar a algo que depende de nosotros. Si la respuesta es un proveedor, un cliente o una persona concreta, pregunta por qué nuestro sistema lo permitió.</p>
+        <div id="ci-whys" class="whys"></div>
+        <button class="btn" type="button" id="ci-addwhy">+ ¿Y por qué pasó eso?</button>
+        <label class="chk"><input type="checkbox" id="ci-depende"> La última respuesta depende de nosotros, no del proveedor, del cliente ni del azar</label>
+      </section>
+
+      <section class="crs" id="cis5">
+        <div class="crh"><span class="num">5</span><h3>¿De qué componente es?</h3></div>
+        <p class="small muted">Elige uno, o dos como mucho. La señal te ayuda a reconocerlo.</p>
+        <div class="comps" id="ci-comps"></div>
+      </section>
+
+      <section class="crs" id="cis6">
+        <div class="crh"><span class="num">6</span><h3>¿Qué tendría que ser verdad para que no volviera a pasar?</h3></div>
+        <div class="fld"><label for="ci-verdad" class="sr">Qué tendría que ser verdad</label><textarea id="ci-verdad" rows="2" placeholder="Ej.: Que cada transporte se confirme 48 h antes y que haya un proveedor alternativo en cada destino."></textarea></div>
+      </section>
+
+      <section class="crs" id="cis7">
+        <div class="crh"><span class="num">7</span><h3>El issue real, en una línea</h3></div>
+        <div class="fld"><label for="ci-real" class="sr">Issue real</label><input id="ci-real" type="text" placeholder="Ej.: No confirmamos los transportes 48 h antes ni tenemos proveedor alternativo en ningún destino"><span class="hint2">Suele empezar por "No tenemos…", "Nadie es owner de…", "Nuestro proceso de… no…".</span></div>
+        <label class="chk"><input type="checkbox" id="ci-acuerdo"> Quien trajo el issue dice: "sí, eso es"</label>
+      </section>
+
+      <section class="crs" id="cis8">
+        <div class="crh"><span class="num">8</span><h3>Solve: ¿cómo lo cerramos?</h3></div>
+        <div class="radios" role="radiogroup" aria-label="Tipo de cierre">
+          <label><input type="radio" name="ci-cierre" value="accion"> Acción: alguien tiene que hacer algo</label>
+          <label><input type="radio" name="ci-cierre" value="acuerdo"> Acuerdo: basta con que todos lo sepamos y lo aceptemos</label>
+          <label><input type="radio" name="ci-cierre" value="info"> Falta información: no podemos decidir todavía</label>
+        </div>
+        <div class="fld" id="ci-solbox"><label for="ci-sol">La solución, en voz alta: "Queda así…"</label><textarea id="ci-sol" rows="2" placeholder="Ej.: Añadimos la confirmación a 48 h al checklist de pre-expedición y buscamos un proveedor alternativo por destino."></textarea></div>
+        <div id="ci-todobox">
+          <div class="fld"><label for="ci-todo">To-do</label><input id="ci-todo" type="text" placeholder="Ej.: Añadir 'confirmar transporte 48 h antes' al checklist"></div>
+          <div class="two">
+            <div class="fld"><label for="ci-towner">Owner (una persona)</label><input id="ci-towner" type="text" placeholder="Nombre"></div>
+            <div class="fld"><label for="ci-tfecha">Fecha</label><input id="ci-tfecha" type="date"></div>
+          </div>
+        </div>
+        <label class="chk"><input type="checkbox" id="ci-largo"> Resolverlo del todo lleva más de 90 días</label>
+      </section>
+    </div>
+
+    <aside class="review" aria-live="polite">
+      <div class="rvhead"><span class="sl mono">9 · REVISIÓN</span><span id="ci-badge"></span></div>
+      <div class="status empty" id="ci-status"></div>
+      <details class="more rvhelp"><summary>¿Cómo se lee la revisión?</summary><div class="in small">
+        <div class="lg"><span class="ic bad">✕</span><span><b>Por corregir.</b> Sin arreglarlo, el IDS no está resuelto.</span></div>
+        <div class="lg"><span class="ic warn">!</span><span><b>Conviene revisar.</b> Puede estar bien, pero merece una mirada. Si decides dejarlo, vale.</span></div>
+        <div class="lg"><span class="ic ok">✓</span><span><b>Está bien.</b> Ya cumple.</span></div>
+        <p>Cuando no queda nada en rojo, el IDS está cerrado. Si tampoco hay avisos, está completo.</p>
+        <p class="muted">La revisión comprueba lo que se ve con reglas: campos vacíos, palabras, fechas. No sabe si has encontrado la causa de verdad; eso lo decide el equipo.</p>
+        <p class="muted">Se hace en tu navegador mientras escribes y no envía nada.</p>
+      </div></details>
+      <div id="ci-list"></div>
+      <div class="aibox" id="ci-aibox" hidden>
+        <button class="btn" id="ci-ai" type="button">Revisar con Claude</button>
+        <div class="shape def" style="padding:10px 12px;gap:6px"><span class="sl">Opcional · cómo funciona</span>
+          <span class="small">La revisión automática de arriba ya te sirve: funciona en tu navegador y no envía nada a ningún sitio. Puedes quedarte solo con ella.</span>
+          <span class="small">Si quieres una segunda opinión, este botón envía <b>solo este IDS</b> a Claude. Te dice si has llegado a la causa, qué preguntas faltan y te propone un issue real y una solución.</span>
+          <span class="small"><b>Gasta uso de la cuenta de Claude con la que tienes abierta esta página</b>, no de quien la publicó. La primera vez te pide permiso; si dices que no, todo lo demás sigue funcionando igual. La guía sigue siendo privada.</span>
+        </div>
+        <div id="ci-aiout" class="aiout" hidden></div>
+      </div>
+      <details class="more"><summary>Ficha para la Issues List</summary><div class="in">
+        <pre class="ficha" id="ci-ficha"></pre>
+        <div class="dlrow"><button class="btn pri" id="ci-copy" type="button">Copiar ficha</button><span class="small muted" id="ci-copied"></span></div>
+      </div></details>
+    </aside>
+  </div>
+</div>
+
 <!-- ============ L10 ============ -->
 <div class="panel" id="p-l10" data-tab="l10" data-label="L10" hidden>
   <div class="key">
     <span class="lab">Idea clave</span>
     <p>La L10 son 90 minutos a la semana con la misma agenda. Los primeros 30 son para reportar rápido, sin debatir. Los 60 del final son para resolver issues. Si reportar se come el IDS, la reunión no genera tracción.</p>
   </div>
+  <nav class="jumps" aria-label="Saltos rápidos"></nav>
 
-  <section class="block">
-    <h3>Los 90 minutos <span class="src t">Traction</span></h3>
+  <section class="block" id="l10-agenda-s" data-jump="Agenda">
+    <h3>¿Qué toca en cada bloque? <span class="src t">Traction</span></h3>
     <p class="lead">Toca un bloque para ir a él.</p>
     <div>
       <div class="tl" id="l10-tl"></div>
@@ -701,15 +1204,64 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <div class="agenda" id="l10-agenda"></div>
   </section>
 
-  <section class="block">
-    <h3>Dos roles <span class="src t">Traction</span></h3>
+  <section class="block" id="l10-bn" data-jump="Buenas noticias o titular">
+    <h3>¿Esto es una buena noticia o un titular?</h3>
+    <p class="lead">Son dos bloques distintos. Las buenas noticias abren la reunión; los titulares cuentan qué pasa con clientes y equipo, sea bueno o malo.</p>
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Buenas noticias</th><th>Titulares de clientes y equipo</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Cuándo</th><td>Bloque 1 · minutos 0-5</td><td>Bloque 4 · minutos 15-20</td></tr>
+        <tr><th scope="row">Para qué</th><td>Entrar en la reunión y conectar</td><td>Que todos sepamos lo que pasa con clientes y equipo</td></tr>
+        <tr><th scope="row">De qué</th><td>Una personal y una profesional</td><td>Noticias de clientes o de personas del equipo</td></tr>
+        <tr><th scope="row">Buenas o malas</th><td>Solo buenas</td><td>Buenas o malas</td></tr>
+        <tr><th scope="row">Quién habla</th><td>Todos</td><td>Quien tenga un titular</td></tr>
+        <tr><th scope="row">Formato</th><td>Una frase cada una</td><td>Una frase por titular</td></tr>
+        <tr><th scope="row">Si necesita hablarse</th><td>No aplica</td><td>Se apunta en la Issues List y se sigue. Se habla en el IDS</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted"><span class="src t">Traction</span> Los titulares son noticias breves de clientes o empleados, buenas o malas. Lo malo, las preocupaciones y los problemas bajan al IDS.</p>
+  </section>
+
+  <section class="block" id="l10-va" data-jump="¿Va en titulares?">
+    <h3>¿Esto lo digo en titulares?</h3>
+    <div class="vagrid">
+      <div class="va si"><span class="vl">Va</span><div><b>"Cliente · el grupo de [destino] valoró la expedición con 9/10."</b><span class="small muted">Buena noticia de cliente.</span></div></div>
+      <div class="va si"><span class="vl">Va</span><div><b>"Cliente · un cliente dice que no se le informó de la penalización por cancelar. Lo paso a issues."</b><span class="small muted">Malo: se dice en una frase y baja al IDS.</span></div></div>
+      <div class="va si"><span class="vl">Va</span><div><b>"Equipo · [persona] se incorpora a Comercial el lunes."</b><span class="small muted">Noticia de equipo.</span></div></div>
+      <div class="va si"><span class="vl">Va</span><div><b>"Equipo · [líder] se volcó con un viajero lesionado en [destino]."</b><span class="small muted">Reconocimiento a alguien del equipo.</span></div></div>
+      <div class="va si"><span class="vl">Va</span><div><b>"Cliente · roce entre dos viajeros en el grupo de [destino]; está controlado."</b><span class="small muted">Si hace falta decidir algo, "lo paso a issues".</span></div></div>
+      <div class="va si"><span class="vl">Va</span><div><b>"Equipo · [persona] estará de baja [X] semanas."</b><span class="small muted">Información que todos deben saber.</span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"Hemos cerrado [X] reservas esta semana."</b><span class="small muted">→ Scorecard. Los números ya tienen su bloque.</span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"Me han dicho que en [destino] hay clientes descontentos."</b><span class="small muted">→ Confírmalo primero con la fuente. Nada de segunda mano.</span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"El proveedor de transporte de [destino] ha vuelto a fallar."</b><span class="small muted">→ Issues List, o L10 de Operaciones. No es cliente ni equipo. <span class="src p">Práctica</span></span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"¿Se puede ver en Stripe si el cliente marcó el check de condiciones?"</b><span class="small muted">→ Es una pregunta operativa: se pregunta fuera de la reunión o es un to-do.</span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"Ya he terminado mi parte del Rock de la web."</b><span class="small muted">→ Bloque de Rocks ("en marcha") o de to-dos.</span></div></div>
+      <div class="va no"><span class="vl">No va</span><div><b>"El finde subí a [montaña] con mis hijos."</b><span class="small muted">→ Buenas noticias, al principio de la reunión.</span></div></div>
+    </div>
+  </section>
+
+  <section class="block" id="l10-formula" data-jump="Cómo decir un titular">
+    <h3>¿Cómo digo un titular?</h3>
+    <div class="grid g3">
+      <div class="shape test"><span class="sl">Regla</span><b style="font-family:var(--f-display);font-size:1.2rem">Cliente o Equipo · quién · qué ha pasado.</b><span class="small">Una frase, unos 20 segundos. Si es malo, termina con "lo paso a issues".</span></div>
+      <div class="shape ej"><span class="sl">Ejemplo DZ</span><span class="small"><b>Titular malo:</b> "Cliente · un cliente reclama que no se le informó de la penalización por cancelar. Lo paso a issues."</span><span class="small"><b>En el IDS:</b> ¿podemos demostrar que aceptó las condiciones al pagar? ¿El cliente recibe las condiciones por escrito antes de pagar?</span></div>
+      <div class="shape def"><span class="sl">Qué es · feedback formal</span><span class="small">Traction dice que este es el bloque para el sistema de feedback de clientes o equipo, si lo hay. Con encuestas post-expedición: una frase con lo destacable de la semana; la cifra vive en el Scorecard. Nuestro sistema: [pendiente].</span></div>
+    </div>
+    <div class="agenda">
+      <div class="ag"><div class="when"><b>Titular malo</b><span class="mono muted">se dice y se sigue</span></div><div><div class="say"><div class="no"><span class="mono">No decir</span>"Un cliente se queja de la penalización… y claro, es que en el carrito, no sé si en Stripe se ve, habría que…"</div><div class="yes"><span class="mono">Decir</span>"Cliente · reclama que no se le informó de la penalización por cancelar. Lo paso a issues."</div></div></div></div>
+      <div class="ag"><div class="when"><b>Titular vago</b><span class="mono muted">sin hecho</span></div><div><div class="say"><div class="no"><span class="mono">No decir</span>"Los clientes están un poco raros últimamente."</div><div class="yes"><span class="mono">Decir</span>"Cliente · dos grupos de [destino] han valorado el alojamiento con menos de [X]. Lo paso a issues."</div></div></div></div>
+    </div>
+  </section>
+
+  <section class="block" id="l10-roles" data-jump="Roles">
+    <h3>¿Quién dirige y quién lleva la agenda? <span class="src t">Traction</span></h3>
     <div class="grid g3">
       <div class="card"><b>Quien dirige</b><span class="small">Lleva al equipo por la agenda, controla los tiempos y corta tangentes. En DZ: [pendiente]; en la Guía A proponemos a Lara.</span></div>
       <div class="card"><b>Quien lleva la agenda</b><span class="small">Se asegura de que agenda, Scorecard y Rocks estén actualizados y delante de todos. Actualiza to-dos e issues cada semana. En DZ: [pendiente].</span></div>
     </div>
   </section>
 
-  <section class="block">
+  <section class="block" id="l10-reglas" data-jump="Reglas">
     <h3>Las 5 reglas <span class="src t">Traction</span></h3>
     <div class="rules">
       <div class="card"><span class="n">1</span><b>Mismo día</b></div>
@@ -740,11 +1292,12 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
       <div class="hline"></div>
       <div class="row" style="margin-top:0">
         <button class="seat" data-seat="o" aria-pressed="false"><span class="sn">Operaciones</span><span class="sp">Oliver · líderes de expedición</span></button>
-        <button class="seat" data-seat="f" aria-pressed="false"><span class="sn">Finanzas</span><span class="sp">Rubén</span></button>
-        <button class="seat" data-seat="c" aria-pressed="false"><span class="sn">Comercial</span><span class="sp">Sara</span></button>
+        <button class="seat" data-seat="f" aria-pressed="false"><span class="sn">Administración y finanzas</span><span class="sp">Rubén</span></button>
+        <button class="seat" data-seat="c" aria-pressed="false"><span class="sn">Marketing y ventas</span><span class="sp">Rubén</span></button>
       </div>
     </div>
     <div class="seatinfo" id="seatinfo" aria-live="polite"></div>
+    <div class="shape test"><span class="sl">Una persona, dos asientos <span class="src t">Traction</span></span><span class="small">Rubén ocupa dos asientos: Administración y finanzas, y Marketing y ventas. En EOS es normal mientras la empresa crece. Cada asiento sigue teniendo sus cinco roles, su Scorecard y sus Rocks. Cuando una persona pasa del 100% de su capacidad, toca delegar y elevar: sacar a otra persona uno de los asientos o parte de sus roles.</span></div>
   </section>
 
   <section class="block">
@@ -814,7 +1367,7 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
     <p>Diez situaciones de DZ para clasificar y tres issues para bajar con la escalera. Elige una respuesta y verás la solución y el porqué.</p>
   </div>
   <section class="block">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3>¿Qué es cada cosa?</h3><span class="score" id="quiz-score">0 / 10 respondidas</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3>¿Qué es cada cosa?</h3><span class="score" id="quiz-score">0 respondidas</span></div>
     <div class="quiz" id="quiz"></div>
   </section>
   <section class="block">
@@ -868,7 +1421,8 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
         <li>Empuja un objetivo del 1-Year Plan</li>
         <li>Alcanzable en 90 días con la carga actual</li>
       </ul>
-      <p class="small">Compañía: 3-7 · Dirección: 3-7 en total · Resto: 1-3. En la L10: "en marcha" o "desviado". Desviado → Issues List.</p>
+      <p class="small"><b>¿De qué nivel?</b> Prioridad de toda DZ, decidida en dirección → <b>■ Empresa</b> (3-7). Prioridad de un área, con su equipo → <b>◆ Departamento</b>. Una sola persona → <b>○ Individual</b> (dirección 3-7 en total; resto 1-3).</p>
+      <p class="small">En la L10: "en marcha" o "desviado". Desviado → Issues List.</p>
       <p class="foot">Meta: 80% de Rocks completados. Al 90% no está hecho.</p>
     </div>
     <div class="sheet">
@@ -877,11 +1431,12 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-si
         <li><b class="mono">05'</b> Buenas noticias: una personal, una profesional</li>
         <li><b class="mono">05'</b> Scorecard: en objetivo / fuera → issue</li>
         <li><b class="mono">05'</b> Rocks: en marcha / desviado → issue</li>
-        <li><b class="mono">05'</b> Titulares de clientes y equipo</li>
+        <li><b class="mono">05'</b> Titulares de clientes y equipo: buenos o malos, una frase. Malo → "lo paso a issues"</li>
         <li><b class="mono">05'</b> To-dos: hecho / no hecho</li>
         <li><b class="mono">60'</b> IDS: los 3 más importantes, uno a uno</li>
         <li><b class="mono">05'</b> Conclusión: repaso de to-dos, qué comunicamos, nota 1-10</li>
       </ul>
+      <p class="small">No van en titulares: números (Scorecard), rumores, proveedores (Issues List), avances de Rocks.</p>
       <p class="foot">Mismo día · misma hora · misma agenda · empieza en punto · acaba en punto.</p>
     </div>
   </div>
@@ -926,15 +1481,16 @@ const D=[
  {n:'10-Year Target',g:'Visión',h:'10 años',s:T,one:'Un gran objetivo a 10 años o más que da dirección a todo lo demás.',test:'¿Cabe en una frase y nos da energía?',ej:'[pendiente]',err:'Tener varios o ponerlo tan fácil que no motive.'},
  {n:'3-Year Picture',g:'Visión',h:'3 años',s:T,one:'Cómo se ve DZ dentro de 3 años: ingresos, beneficio, medibles y cómo es la empresa.',test:'¿Cada persona de dirección puede "verlo" y describirlo igual?',ej:'"[X] expediciones al año, [X] líderes propios, [X] € de facturación".',err:'Confundirlo con un plan de acción.'},
  {n:'Objetivo del 1-Year Plan',g:'Visión',h:'1 año',s:T,one:'De 3 a 7 objetivos medibles para este año, que acercan la 3-Year Picture.',test:'¿A 31 de diciembre sabremos sin discutir si se ha cumplido?',ej:'Tasa de cancelación por debajo de [X]% en 2027.',err:'Llamarlos "Rocks anuales". En EOS los Rocks son de 90 días.'},
- {n:'Rock de compañía',g:'Tracción',h:'90 días',s:T,one:'Una de las 3-7 prioridades de la empresa para el trimestre, con un owner de dirección.',test:'¿El último día podemos decir sí o no sin discutir?',ej:'Proceso de onboarding de líderes documentado y aplicado a los [X] líderes de temporada alta antes del 31/03.',err:'Meter un proyecto sin final: "mejorar el marketing".'},
- {n:'Rock individual',g:'Tracción',h:'90 días',s:T,one:'La prioridad de una persona para el trimestre. Dirección: 3-7 en total. Resto: 1-3.',test:'El mismo del Rock de compañía, con un solo nombre.',ej:'Sara: [X] acuerdos con agencias firmados antes del 31/03.',err:'Convertir el trabajo normal del asiento en Rock.'},
+ {n:'■ Rock de empresa',g:'Tracción',h:'90 días',s:T,one:'Una de las 3-7 prioridades de toda la empresa para el trimestre. La decide dirección y la lleva alguien de dirección.',test:'¿Es prioridad de toda DZ, decidida en dirección y seguida en la L10 de dirección?',ej:'Todas las expediciones de la próxima temporada publicadas y reservables antes del [fecha].',err:'Poner el nombre de un proyecto ("Generación de demanda") o una idea del brainstorming por Rock.'},
+ {n:'◆ Rock de departamento',g:'Tracción',h:'90 días',s:P,one:'La prioridad de un área para el trimestre. La fija el área en equipo y se sigue en su L10.',test:'¿Es la prioridad de un área y necesita a varias personas de esa área?',ej:'Operaciones: nuevo contrato de viaje en uso en todas las reservas antes del [fecha].',err:'Pensar que si no está entre los de empresa no es prioridad, o subirlo a empresa sin que lo sea.'},
+ {n:'○ Rock individual',g:'Tracción',h:'90 días',s:T,one:'La prioridad de una persona para el trimestre. Dirección: 3-7 en total, contando los de empresa que lleva. Resto: 1-3.',test:'¿La saca adelante una sola persona que responde ante su responsable?',ej:'[Persona de Marketing]: [X] acuerdos de afiliación firmados antes del [fecha].',err:'Convertir el trabajo normal del asiento en Rock.'},
  {n:'Proyecto / iniciativa',g:'Tracción',h:'Variable',s:P,one:'Un conjunto de trabajo para conseguir algo. Es un medio, no un resultado.',test:'¿Tiene un final de sí o no en 90 días? Si no, es proyecto: saca el Rock de él.',ej:'"Nueva web" (proyecto) → "Nueva web publicada con reserva online" (Rock).',err:'Meter el proyecto entero como Rock y que nunca se cierre.'},
  {n:'To-do',g:'Tracción',h:'7 días',s:T,one:'Un compromiso de 7 días con owner, que normalmente sale de la L10.',test:'¿Se hace en una semana y se puede decir hecho o no hecho?',ej:'Oliver llama al proveedor de transporte de [destino] antes del jueves.',err:'To-dos de tres semanas, o sin owner.'},
  {n:'Issue',g:'Issues',h:'Hasta resolverse',s:T,one:'Cualquier cosa abierta: un problema, una idea, una oportunidad o algo que todos deben saber.',test:'¿Hace falta que el equipo lo trabaje o lo sepa?',ej:'Tercera cancelación de un proveedor local esta temporada.',err:'Guardárselo por no molestar, o traer una queja sin decir cuál es el issue.'},
  {n:'Issues List',g:'Issues',h:'Según nivel',s:T,one:'La lista de issues. Hay tres: la del V/TO (en DZ, el Parking), la de dirección y la de cada área.',test:'¿Quién tiene que resolverlo y en qué plazo? Eso te dice en qué lista va.',ej:'"Abrir destinos en [continente]" va al Parking; "leads repartidos a mano" va a la de Comercial.',err:'Una sola lista de 80 cosas que nadie mira.'},
  {n:'Parking',g:'Issues',h:'Hasta la trimestral',s:'<span class="src p">Nombre DZ</span>',one:'Nuestra Issues List del V/TO: donde apuntamos lo que no cabe este trimestre para que no se olvide. En Traction se llama Issues List del V/TO.',test:'¿Tarda más de 90 días, toca la visión o es un candidato a Rock que no entra ahora? Entonces va al Parking.',ej:'"Abrir destinos en [continente]", la nueva web si no entra en Q1, los candidatos a Rock que se quedaron fuera.',err:'Tenerlo como una lista aparte de la Issues List del V/TO, o apuntar ahí lo de esta semana.'},
  {n:'Scorecard',g:'Datos',h:'7 días',s:T,one:'De 5 a 15 números semanales con owner y objetivo, que muestran las últimas 13 semanas.',test:'¿En 5 minutos sabemos si la semana va bien?',ej:'Leads nuevos, reservas cerradas, caja disponible, incidencias en expedición.',err:'Meter 40 números o ponerse a debatirlos en el bloque del Scorecard.'},
- {n:'Medible',g:'Datos',h:'7 días',s:T,one:'Un número que cada persona controla o influye. En EOS, todo el mundo tiene un número.',test:'¿Es semanal y depende de esa persona?',ej:'Sara: propuestas enviadas por semana.',err:'Medir lo fácil de medir, no lo que predice el resultado.'},
+ {n:'Medible',g:'Datos',h:'7 días',s:T,one:'Un número que cada persona controla o influye. En EOS, todo el mundo tiene un número.',test:'¿Es semanal y depende de esa persona?',ej:'[Persona de Ventas]: propuestas enviadas por semana.',err:'Medir lo fácil de medir, no lo que predice el resultado.'},
  {n:'Procesos core',g:'Procesos',h:'Siempre',s:T,one:'Las pocas formas clave de hacer las cosas en DZ, escritas en lo esencial y seguidas por todos.',test:'¿Dos personas harían esto igual siguiendo lo que está escrito?',ej:'Preparación de una expedición, de la reserva al regreso del grupo.',err:'Escribir manuales de 50 páginas. Basta el 20% que da el 80% del resultado.'},
  {n:'L10',g:'Reuniones',h:'7 días',s:T,one:'La reunión semanal de 90 minutos, siempre con la misma agenda. El nombre viene de querer puntuarla con un 10.',test:'¿Se dedican 60 minutos a IDS?',ej:'La L10 de dirección de DZ; cada área puede tener la suya.',err:'Convertirla en una ronda de informes.'},
  {n:'IDS',g:'Issues',h:'En la L10',s:T,one:'Identify, Discuss, Solve: identificar el issue real, hablarlo y resolverlo.',test:'¿Salió con owner y fecha, o con un acuerdo claro?',ej:'Ver los 6 recorridos de la pestaña IDS.',err:'Saltarse el Identify y discutir el síntoma.'},
@@ -956,7 +1512,7 @@ function setFilter(g){cur=g;$$('.chip',fbox).forEach(c=>c.setAttribute('aria-pre
 function renderDict(){
   const q=$('#dict-search').value.trim().toLowerCase();
   const list=D.filter(d=>(cur==='Todos'||d.g===cur)&&(!q||(d.n+' '+d.one+' '+d.ej).toLowerCase().includes(q)));
-  $('#dict-list').innerHTML=list.map(d=>`<details class="term"><summary><span class="head"><span class="name">${esc(d.n)}</span><span class="one">${esc(d.one)}</span></span></summary><div class="in"><dl><dt>Plazo</dt><dd>${esc(d.h)} · <span class="pill">${esc(d.g)}</span> ${d.s}</dd><dt>Test</dt><dd>${esc(d.test)}</dd><dt>Ejemplo DZ</dt><dd>${esc(d.ej)}</dd><dt>Error típico</dt><dd>${esc(d.err)}</dd></dl></div></details>`).join('')||'<p class="muted">Nada con ese nombre. Prueba con otra palabra.</p>';
+  $('#dict-list').innerHTML=list.map(d=>`<details class="term" data-key="${esc(d.n)}"><summary><span class="head"><span class="name">${esc(d.n)}</span><span class="one">${esc(d.one)}</span></span></summary><div class="in"><dl><dt>Plazo</dt><dd>${esc(d.h)} · <span class="pill">${esc(d.g)}</span> ${d.s}</dd><dt>Test</dt><dd>${esc(d.test)}</dd><dt>Ejemplo DZ</dt><dd>${esc(d.ej)}</dd><dt>Error típico</dt><dd>${esc(d.err)}</dd></dl></div></details>`).join('')||'<p class="muted">Nada con ese nombre. Prueba con otra palabra.</p>';
 }
 $('#dict-search').addEventListener('input',renderDict); renderDict();
 
@@ -1004,38 +1560,24 @@ const CASES=[
  ['Oliver nota que un líder llega tarde a las reuniones previas al viaje.','P1 No → P2 No → P3 Sí','G','Es feedback a una persona. Oliver habla con él. Si se repite y hay dudas de GWC, People Analyzer y, si es asiento clave, a dirección.'],
  ['Antonio quiere abrir expediciones en [nuevo continente].','… → P4 Sí','E','Lleva más de 90 días y toca el Core Focus y la 3-Year Picture. Se trata en la trimestral.'],
  ['Hay que rehacer el onboarding de líderes antes de la temporada alta.','… → P5 Sí','F','Resultado importante, semanas de trabajo, final claro. Candidato a Rock de Oliver.'],
- ['Los leads de Instagram han caído a la mitad en cuatro semanas (Scorecard en rojo).','… → P6 Sí','C','Afecta a comercial, marketing y caja. Issue de dirección que trae Sara.'],
+ ['Los leads de Instagram han caído a la mitad en cuatro semanas (Scorecard en rojo).','… → P6 Sí','C','Afecta a comercial, marketing y caja. Issue de dirección que trae Rubén.'],
  ['La previsión de caja de [mes] queda por debajo del colchón de [X] €.','… → P6 Sí','C','Afecta a toda la empresa. Issue de dirección que trae Rubén, tipo problema.'],
  ['Dos personas de Comercial se pisan leads porque no hay reglas de reparto.','… → P6 No','D','Es un proceso interno de Comercial. Va a su L10 de área. Si fuera una tensión personal entre ellas, conversación individual.'],
  ['Un proveedor local de [destino] ha cancelado por primera vez y ya hay sustituto.','… → P6 No','D','Resuelto el incendio, queda revisar el proveedor: L10 de Operaciones. Si se repite en otros destinos, sube a dirección.'],
  ['Te cuentan que un cliente se ha quejado de un líder en redes sociales.','Antes del árbol: confirmar','C','Es información de segunda mano. Primero míralo tú o habla con quien lo vio. Si se confirma y hay patrón, issue de dirección con Oliver presente.']
 ];
-$('#cases').innerHTML=CASES.map(c=>`<details><summary>${esc(c[0])}</summary><div class="in"><span class="mono muted">${esc(c[1])}</span><div><span class="pill">${c[2]}</span> <b>${DEST[c[2]].n}</b></div><span class="small">${esc(c[3])}</span></div></details>`).join('');
-
-/* ---------- Probador de Rocks ---------- */
-const rcs=$$('#rock-checks input'); const meter=$('#rock-meter');
-function rockEval(){
-  const n=rcs.filter(c=>c.checked).length, pct=Math.round(n/7*100);
-  meter.style.width=pct+'%';
-  let vt,vd,col;
-  if(n===7){vt='Es un Rock';vd='Pasa todo. Súbelo a la Rock Sheet con su owner.';col='var(--ok)'}
-  else if(n>=5){vt='Casi';vd='Revisa lo que falta: '+rcs.filter(c=>!c.checked).map(c=>c.parentElement.querySelector('b').textContent).join(', ')+'.';col='var(--warn)'}
-  else {vt='Todavía es un proyecto';vd=n?'Le faltan piezas clave. Mira la tabla de "mal → bien" para reescribirlo.':'Marca lo que cumple tu Rock.';col='var(--bad)'}
-  if(!rcs[0].checked && n>0){vd='Sin un solo owner no hay Rock. '+vd}
-  meter.style.background=col; $('#rock-vt').textContent=vt; $('#rock-vd').textContent=vd;
-}
-rcs.forEach(c=>c.addEventListener('change',rockEval)); rockEval();
+$('#cases').innerHTML=CASES.map(c=>`<details data-key="${esc(c[0])}"><summary>${esc(c[0])}</summary><div class="in"><span class="mono muted">${esc(c[1])}</span><div><span class="pill">${c[2]}</span> <b>${DEST[c[2]].n}</b></div><span class="small">${esc(c[3])}</span></div></details>`).join('');
 
 /* ---------- IDS casos ---------- */
 const IDSC=[
  {t:'Operativo',s:'El transporte en [destino] llegó 3 h tarde y el grupo perdió la actividad.',q:['¿Primera vez? No: tercera esta temporada, en dos destinos distintos.','¿Por qué? El proveedor se confundió de hora. ¿Por qué no lo vimos? Nadie confirma el día antes.','¿Por qué no había plan B? No tenemos proveedores alternativos en ningún destino.'],c:'Procesos',r:'No confirmamos transportes 48 h antes ni tenemos proveedor alternativo por destino.',sol:'Acción + candidato a Rock',todo:'Oliver añade "confirmar transporte 48 h antes" al checklist de pre-expedición antes del [fecha]. Homologar alternativos → candidato a Rock de Q1.'},
- {t:'Comercial',s:'Este mes hemos cerrado pocas reservas.',q:['¿Qué ha pasado exactamente? Los leads están en su nivel; lo que cae es la conversión.','¿Por qué? Tardamos [X] días en responder en temporada alta.','¿Por qué? Solo una persona responde leads y ha estado en ferias. Y no medimos el tiempo de respuesta.'],c:'Personas + Datos',r:'Nadie cubre la respuesta a leads cuando la persona asignada no está, y no medimos el tiempo de respuesta.',sol:'Acción',todo:'Sara define la persona de respaldo antes del viernes. Quien lleva la agenda añade "tiempo medio de respuesta a leads" al Scorecard con owner Sara.'},
+ {t:'Comercial',s:'Este mes hemos cerrado pocas reservas.',q:['¿Qué ha pasado exactamente? Los leads están en su nivel; lo que cae es la conversión.','¿Por qué? Tardamos [X] días en responder en temporada alta.','¿Por qué? Solo una persona responde leads y ha estado en ferias. Y no medimos el tiempo de respuesta.'],c:'Personas + Datos',r:'Nadie cubre la respuesta a leads cuando la persona asignada no está, y no medimos el tiempo de respuesta.',sol:'Acción',todo:'Rubén define la persona de respaldo antes del viernes. Quien lleva la agenda añade "tiempo medio de respuesta a leads" al Scorecard con owner Rubén.'},
  {t:'Personas',s:'Otra queja de un cliente sobre el mismo líder de expedición.',q:['¿Primera vez? No: tercera en la temporada.','¿GWC? Lo entiende y lo quiere; le falta capacidad para gestionar conflictos en grupo.','¿Por qué llegó al puesto sin eso? La selección de líderes no evalúa gestión de grupo.'],c:'Personas',r:'Nuestra selección de líderes no evalúa la gestión de grupos, y no pasamos el People Analyzer a los líderes.',sol:'Acción',todo:'Oliver pasa el People Analyzer al líder y habla con él esta semana (conversación individual). Oliver añade una prueba de gestión de grupo a la selección antes del [fecha].'},
  {t:'Caja',s:'Este mes vamos justos para pagar los anticipos a proveedores.',q:['¿Primera vez? No: pasa cada año antes de la temporada alta.','¿Por qué? Pagamos anticipos antes de cobrar los depósitos de los clientes.','¿Por qué? La política de depósitos es anterior al crecimiento y nadie la ha revisado.'],c:'Procesos + Datos',r:'La política de depósitos no cubre los anticipos que pagamos a proveedores, y no hay previsión de caja semanal.',sol:'Falta información',todo:'Rubén trae a la próxima L10 el calendario de anticipos frente a cobros de 2026 y una propuesta de política. El issue vuelve como prioridad.'},
- {t:'Cancelaciones',s:'Tres clientes han cancelado a última hora.',q:['¿Qué tienen en común? Los tres, de la misma expedición exigente.','¿Por qué cancelaron? Vieron que el nivel físico era más alto de lo que esperaban.','¿Por qué no lo sabían? La ficha no deja claro el nivel y en la venta no se pregunta.'],c:'Procesos',r:'Vendemos expediciones exigentes sin dejar claro el nivel físico ni comprobar el del cliente.',sol:'Acción',todo:'Sara revisa las fichas de las [X] expediciones exigentes y añade la pregunta de nivel al guion de venta antes del [fecha].'},
+ {t:'Cancelaciones',s:'Tres clientes han cancelado a última hora.',q:['¿Qué tienen en común? Los tres, de la misma expedición exigente.','¿Por qué cancelaron? Vieron que el nivel físico era más alto de lo que esperaban.','¿Por qué no lo sabían? La ficha no deja claro el nivel y en la venta no se pregunta.'],c:'Procesos',r:'Vendemos expediciones exigentes sin dejar claro el nivel físico ni comprobar el del cliente.',sol:'Acción',todo:'[Persona de Ventas] revisa las fichas de las [X] expediciones exigentes y añade la pregunta de nivel al guion de venta antes del [fecha].'},
  {t:'Visión',s:'Una empresa nos pide organizar un evento corporativo y no sabemos si aceptarlo.',q:['¿Primera vez? No: llegan cada vez más peticiones así.','¿Por qué dudamos? Unos lo ven como negocio y otros como distracción.','¿Qué falta? Un criterio claro de qué entra en lo que hacemos.'],c:'Visión',r:'No tenemos claro si los eventos corporativos entran en nuestro Core Focus.',sol:'Acuerdo + V/TO',todo:'Acordamos respuesta a este cliente: [pendiente]. El tema del Core Focus va al Parking para la trimestral. Owner: Lara.'}
 ];
-$('#ids-cases').innerHTML=IDSC.map(c=>`<details><summary><span><span class="pill">${c.t}</span><br><span style="font-weight:500">${esc(c.s)}</span></span></summary><div class="in"><div class="path">
+$('#ids-cases').innerHTML=IDSC.map(c=>`<details data-key="${esc(c.s)}"><summary><span><span class="pill">${c.t}</span><br><span style="font-weight:500">${esc(c.s)}</span></span></summary><div class="in"><div class="path">
 <div class="p s"><span class="l">Issue inicial · in the business</span>${esc(c.s)}</div>
 ${c.q.map(x=>`<div class="p"><span class="l">Pregunta</span>${esc(x)}</div>`).join('')}
 <div class="p r"><span class="l">Issue real · ${esc(c.c)}</span><b>${esc(c.r)}</b></div>
@@ -1065,8 +1607,8 @@ const SEATS={
  v:{n:'Visionario · Antonio',src:T,roles:['Ideas nuevas y desarrollo de producto','Resolver problemas grandes y creativos','Grandes relaciones: clientes, proveedores clave, banco','Cultura','Vender'],no:['Dirigir el día a día de las áreas','Dar instrucciones directas saltándose a la Integradora '+P,'Lanzar ideas al equipo sin pasar por la Issues List '+P],dec:'Aporta la visión y las ideas. Sus ideas entran como issue tipo "idea" y se deciden en IDS o en la trimestral. Se alinea con Lara en la Same Page mensual.'},
  i:{n:'Integradora · Lara',src:T,roles:['Liderar, gestionar y pedir cuentas al equipo directivo (LMA)','Responder del P&L y del plan de negocio','Quitar obstáculos para que las áreas ejecuten','Integrar las tensiones entre áreas','Proyectos especiales'],no:['Hacer el trabajo de las áreas','Acumular Rocks que corresponden a otros asientos '+P],dec:'Cierra la decisión cuando dirección no llega a un acuerdo en IDS. Vigila que el sistema se use: V/TO, Scorecard, Rocks, L10.'},
  o:{n:'Operaciones · Oliver',src:T,roles:['Ejemplo típico (Traction): servicio al cliente, gestión de procesos, prestar el servicio, calidad, logística','En DZ: [ver Accountability Chart]'],no:['Decidir por su cuenta cosas que afectan a Comercial o Finanzas'],dec:'Decide la operativa de su área y hace LMA con los líderes de expedición. Dirige la L10 de Operaciones. Documenta el proceso core de preparación de expediciones.'},
- f:{n:'Finanzas · Rubén',src:T,roles:['Ejemplo típico (Traction): cobros y pagos, presupuestos, reporting, RR. HH., sistemas, administración','En DZ: [ver Accountability Chart]'],no:['Aprobar solo un gasto fuera de presupuesto por encima de [X] € '+P],dec:'Decide lo financiero de su asiento. Trae los números al Scorecard y los issues de caja a dirección con datos.'},
- c:{n:'Comercial · Sara',src:T,roles:['Ejemplo típico (Traction): marketing, venta, proceso comercial, objetivos de venta','En DZ: [ver Accountability Chart]'],no:['Prometer a un cliente algo que Operaciones no ha validado '+P],dec:'Decide lo comercial de su área. Trae leads, conversión y titulares de clientes. Dirige la L10 de Comercial.'}
+ f:{n:'Administración y finanzas · Rubén',src:T,roles:['Ejemplo típico (Traction): cobros y pagos, presupuestos, reporting, RR. HH., sistemas, administración','En DZ: [ver Accountability Chart]'],no:['Aprobar solo un gasto fuera de presupuesto por encima de [X] € '+P],dec:'Decide lo financiero y administrativo de su asiento. Trae los números al Scorecard y los issues de caja a dirección con datos.'},
+ c:{n:'Marketing y ventas · Rubén',src:T,roles:['Ejemplo típico (Traction): marketing, venta, proceso comercial, objetivos de venta','En DZ: [ver Accountability Chart]'],no:['Prometer a un cliente algo que Operaciones no ha validado '+P],dec:'Decide lo comercial y de marketing de su asiento, con su equipo. Trae leads, conversión y titulares de clientes. Dirige la L10 de Marketing y ventas.'}
 };
 function showSeat(k){
   $$('.seat').forEach(s=>s.setAttribute('aria-pressed',s.dataset.seat===k));
@@ -1080,7 +1622,12 @@ const FAQ=[
  ['¿Puede haber un to-do de tres semanas?','No. Un to-do es de 7 días. Divídelo en pasos semanales; si es más grande, es un Rock o parte de un proyecto. Y ninguno debe seguir en la lista más de dos semanas.',T],
  ['¿Qué pasa si mi Rock depende de otra persona?','Sigue siendo tuyo. Pon en "necesita de" quién y qué, y acuérdalo al empezar el trimestre. Si esa persona no llega, es un issue para la L10.',P],
  ['Si lo hacemos entre dos, ¿quién es el owner?','Una sola persona. La otra aparece en "necesita de". Dos owners es ningún owner.',T],
- ['¿Puedo añadir un Rock a mitad de trimestre?','Por norma, no: va al Parking y se decide en la trimestral. Si es urgente de verdad, se hace IDS y se decide qué Rock sale para hacerle sitio.',P],
+ ['¿Puedo añadir un Rock a mitad de trimestre?','Por norma, no: va al Parking y se decide en la trimestral. Si es urgente de verdad, se hace IDS y se decide qué Rock sale para hacerle sitio. Más en la pestaña Rocks, en Errores.',P],
+ ['¿Cada idea del brainstorming es un Rock?','No. Las ideas se juntan, se descartan o se aparcan (keep / kill / combine). Quedan uno o dos Rocks de empresa; el resto son tácticas dentro del Rock, Rocks del equipo o Parking.',T],
+ ['Solo llevo un Rock de empresa. ¿Dónde van mis otras prioridades?','En tus Rocks de departamento o individuales. En dirección, cuenta todos: los de empresa que llevas más los tuyos, entre 3 y 7 en total.',T],
+ ['¿Todo Rock de empresa tiene que repartirse en Rocks del equipo?','No. A veces varios Rocks individuales ayudan a uno de empresa; a veces el owner lo saca con to-dos; y a veces alguien del equipo tiene un Rock que va por libre.',P],
+ ['¿Primero elegimos los títulos o primero los desarrollamos?','Primero el qué: dirección elige los Rocks y su owner. Después cada owner los escribe bien con el creador de Rocks y se revisan juntos. Lo que no entra, al Parking.',P],
+ ['Algo que durará todo el año, ¿es un Rock?','No. Es un objetivo del 1-Year Plan o un proyecto. El Rock es lo que tiene que estar hecho en estos 90 días.',T],
  ['¿Qué hago si un IDS se alarga?','Si los argumentos se repiten, quien dirige pide una propuesta concreta. Si no sale, decide la Integradora o se cierra como "falta información" con un to-do para traer datos.',P],
  ['¿Cuándo un issue se convierte en Rock?','Cuando resolverlo pide semanas de trabajo y tiene un resultado claro. Se apunta en el Parking como candidato y se decide en la trimestral.',P],
  ['¿Qué diferencia hay entre un número del Scorecard y un objetivo anual?','El Scorecard mide la actividad de cada semana que predice el resultado (propuestas enviadas). El objetivo anual es el resultado a 12 meses (facturación 2027).',T],
@@ -1096,7 +1643,7 @@ const FAQ=[
 ];
 function renderFaq(){
   const q=$('#faq-search').value.trim().toLowerCase();
-  $('#faq-list').innerHTML=FAQ.filter(f=>!q||(f[0]+f[1]).toLowerCase().includes(q)).map(f=>`<details><summary>${esc(f[0])}</summary><div class="in"><p>${esc(f[1])}</p><div>${f[2]}</div></div></details>`).join('')||'<p class="muted">No hay ninguna pregunta con eso. Llévala a la L10 como issue de tipo información.</p>';
+  $('#faq-list').innerHTML=FAQ.filter(f=>!q||(f[0]+f[1]).toLowerCase().includes(q)).map(f=>`<details data-key="${esc(f[0])}"><summary>${esc(f[0])}</summary><div class="in"><p>${esc(f[1])}</p><div>${f[2]}</div></div></details>`).join('')||'<p class="muted">No hay ninguna pregunta con eso. Llévala a la L10 como issue de tipo información.</p>';
 }
 $('#faq-search').addEventListener('input',renderFaq); renderFaq();
 
@@ -1110,8 +1657,15 @@ const QZ=[
  ['Dos personas de Operaciones preparan el material de forma distinta y hay errores.',['Issue de área (proceso)','Issue de dirección','Rock de compañía','Conversación individual'],0,'Es un proceso interno de Operaciones: L10 de Operaciones.'],
  ['Quieres decirle a un compañero que sus mensajes en el grupo suenan bruscos.',['Issue de dirección','Conversación individual','To-do','Parking'],1,'Es feedback a una persona: fuera de la L10.'],
  ['Un cliente pide la factura de su reserva.',['To-do de la L10','Hazlo y ya','Issue de área','Rock'],1,'Es trabajo normal del asiento. No necesita reunión.'],
- ['Te cuentan que Rubén ha dicho que no hay presupuesto para ferias.',['Issue de dirección tal cual','Confirmarlo con Rubén primero','Rock','To-do de Sara'],1,'Es información de segunda mano. Pregunta a Rubén; si sigue siendo un tema, se trata con él delante.'],
- ['"Mejorar la experiencia del cliente."',['Rock','To-do','Todavía nada: hay que concretarlo','Número del Scorecard'],2,'Es un deseo. Hay que convertirlo en un objetivo anual medible o en un Rock con sí o no. Llévalo como issue de tipo idea.']
+ ['Te cuentan que Rubén ha dicho que no hay presupuesto para ferias.',['Issue de dirección tal cual','Confirmarlo con Rubén primero','Rock','To-do de Oliver'],1,'Es información de segunda mano. Pregunta a Rubén; si sigue siendo un tema, se trata con él delante.'],
+ ['"Mejorar la experiencia del cliente."',['Rock','To-do','Todavía nada: hay que concretarlo','Número del Scorecard'],2,'Es un deseo. Hay que convertirlo en un objetivo anual medible o en un Rock con sí o no. Llévalo como issue de tipo idea.'],
+ ['"Generación de demanda."',['Rock de empresa','Proyecto','Rock de departamento','To-do'],1,'Es un proyecto: un medio. De él sale el Rock, por ejemplo "dos nuevas vías de captación funcionando antes del fin de trimestre".'],
+ ['Todas las expediciones de la próxima temporada publicadas antes del [fecha]. Owner: Oliver.',['Rock de empresa','Proyecto','Rock individual','To-do'],0,'Si lo elige dirección como prioridad de toda DZ, es de empresa: lo lleva alguien de dirección y trabajan varias áreas.'],
+ ['Operaciones: nuevo contrato de viaje en uso en todas las reservas.',['Rock de empresa','Rock de departamento','To-do','Parking'],1,'Es la prioridad de Operaciones, no de toda la empresa. Se sigue en la L10 de Operaciones.'],
+ ['[Persona de Marketing]: campaña en [canal nuevo] lanzada y con leads medidos antes del [fecha].',['Rock de empresa','Rock de departamento','Rock individual','Proyecto'],2,'La saca adelante una persona que responde ante su responsable. Puede ayudar a un Rock de empresa o ir por libre.'],
+ ['En la L10: "Un cliente dice que no se le informó de la penalización por cancelar."',['Se discute en titulares','Titular: se dice y pasa al IDS','No se dice','Buena noticia'],1,'Es un titular de cliente, malo. Se dice en una frase, "lo paso a issues", y se habla en el IDS.'],
+ ['En titulares: "Esta semana hemos cerrado [X] reservas."',['Va en titulares','Va en el Scorecard','Es un issue','Va en buenas noticias'],1,'Los números tienen su bloque: el Scorecard.'],
+ ['En titulares: "El proveedor de transporte de [destino] vuelve a fallar."',['Titular de cliente','Issues List','Buena noticia','To-do'],1,'Un proveedor no es cliente ni equipo. Va a la Issues List (o a la L10 de Operaciones).']
 ];
 let answered=0,right=0;
 $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="qz" data-i="${i}"><div class="qh"><span class="mono">${String(i+1).padStart(2,'0')}</span><b>${esc(q[0])}</b></div><div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${esc(o)}</button>`).join('')}</div><div class="why" hidden></div></div>`).join('');
@@ -1123,7 +1677,7 @@ $$('.qz').forEach(box=>{
     if(!ok) b.classList.add('wrong');
     const w=$('.why',box); w.hidden=false; w.innerHTML=`<b>${ok?'Correcto.':'La respuesta es: '+esc(q[1][q[2]])+'.'}</b> ${esc(q[3])}`;
     answered++; if(ok) right++;
-    $('#quiz-score').textContent=`${right} de ${answered} bien · ${answered} / 10 respondidas`;
+    $('#quiz-score').textContent=`${right} de ${answered} bien · ${answered} / ${QZ.length} respondidas`;
   });
 });
 const LX=[
@@ -1132,6 +1686,538 @@ const LX=[
  ['Siempre cerramos el mes tarde.',['¿Qué pasa exactamente? Finanzas espera los gastos de Operaciones.','¿Por qué llegan tarde? Los líderes entregan tickets al volver, sin fecha límite.','¿Por qué no hay fecha? Nadie la fijó ni la mide.'],'Procesos + Tracción','No hay fecha límite ni owner para entregar los gastos de expedición.','Acción: Oliver y Rubén acuerdan una fecha límite; Oliver la comunica a los líderes antes del viernes. "Gastos entregados a tiempo" pasa al Scorecard.']
 ];
 $('#ladder-ex').innerHTML=LX.map((x,i)=>`<details><summary><span><span class="mono" style="color:var(--gold)">ISSUE ${i+1}</span><br><span style="font-weight:500">${esc(x[0])}</span></span></summary><div class="in"><div class="path"><div class="p s"><span class="l">Issue inicial</span>${esc(x[0])}</div>${x[1].map(q=>`<div class="p"><span class="l">Pregunta</span>${esc(q)}</div>`).join('')}<div class="p r"><span class="l">Issue real · ${esc(x[2])}</span><b>${esc(x[3])}</b></div><div class="p d"><span class="l">Solve</span>${esc(x[4])}</div></div></div></details>`).join('');
+
+/* ---------- v3: altura de la barra, saltos rápidos ---------- */
+const navEl=$('nav.tabs');
+function setNavH(){document.documentElement.style.setProperty('--navh',navEl.offsetHeight+'px')}
+setNavH(); window.addEventListener('resize',setNavH);
+function goTo(el){
+  if(!el) return;
+  const p=el.closest('.panel'); if(p&&p.hidden) show(p.dataset.tab,true);
+  requestAnimationFrame(()=>{ el.scrollIntoView({behavior:'smooth',block:'start'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
+}
+$$('nav.jumps').forEach(j=>{
+  const panel=j.closest('.panel');
+  $$('section[data-jump]',panel).forEach(s=>{const b=document.createElement('button');b.type='button';b.textContent=s.dataset.jump;b.onclick=()=>goTo(s);j.appendChild(b)});
+});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-jumpto]'); if(b){e.preventDefault(); goTo(document.getElementById(b.dataset.jumpto));}});
+
+/* ---------- v3: buscador global ---------- */
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function openDict(name){
+  setFilter('Todos'); $('#dict-search').value=''; renderDict(); show('diccionario',true);
+  const el=$$('#dict-list details').find(d=>d.dataset.key===name); if(el){el.open=true; goTo(el);}
+}
+function openKey(tab,key){
+  if(tab==='faq'){ $('#faq-search').value=''; renderFaq(); }
+  show(tab,true);
+  const el=$$('#p-'+tab+' details[data-key]').find(d=>d.dataset.key===key); if(el){el.open=true; goTo(el);}
+}
+const IDX=[];
+$$('.panel section.block').forEach(s=>{
+  const h=$('h3',s); const p=s.closest('.panel'); if(!h&&!s.dataset.jump) return;
+  const t=h?h.textContent.replace(/\s*(Traction|Práctica)\s*$/,''):s.dataset.jump;
+  IDX.push({t,m:'Sección · '+p.dataset.label,tk:norm(t+' '+(s.dataset.jump||'')),k:norm(s.textContent),go:()=>goTo(s)});
+});
+IDX.push({t:'Crear un Rock paso a paso',m:'Herramienta',tk:norm('crear rock creador revisar rock plantilla'),k:'',go:()=>show('creador',true)});
+D.forEach(d=>IDX.push({t:d.n,m:'Diccionario',tk:norm(d.n),k:norm(d.one+' '+d.ej),go:()=>openDict(d.n)}));
+FAQ.forEach(f=>IDX.push({t:f[0],m:'FAQ',tk:norm(f[0]),k:norm(f[1]),go:()=>openKey('faq',f[0])}));
+CASES.forEach(c=>IDX.push({t:c[0],m:'¿Dónde va? · caso',tk:norm(c[0]),k:norm(DEST[c[2]].n+' '+c[3]),go:()=>openKey('donde',c[0])}));
+IDSC.forEach(c=>IDX.push({t:c.s,m:'IDS · recorrido '+c.t,tk:norm(c.s),k:norm(c.r+' '+c.todo),go:()=>openKey('ids',c.s)}));
+const gq=$('#gq'), gres=$('#gres'); let ghits=[];
+function gsearch(){
+  const q=norm(gq.value.trim()); if(q.length<2){gres.hidden=true;return}
+  const words=q.split(/\s+/);
+  ghits=IDX.map(it=>{let sc=0; for(const w of words){ if(it.tk.includes(w)) sc+=3; else if(it.k.includes(w)) sc+=1; else return null } return {it,sc}}).filter(Boolean).sort((a,b)=>b.sc-a.sc).slice(0,8);
+  gres.innerHTML=ghits.length?ghits.map((h,i)=>`<button type="button" data-gi="${i}"><span class="gm">${esc(h.it.m)}</span><span class="gt">${esc(h.it.t)}</span></button>`).join(''):'<div class="none">Nada con eso. Prueba otra palabra, o llévalo a la L10 como issue.</div>';
+  gres.hidden=false;
+}
+function gpick(i){const h=ghits[i]; if(!h) return; gres.hidden=true; gq.value=''; gq.blur(); h.it.go();}
+gq.addEventListener('input',gsearch);
+gq.addEventListener('focus',gsearch);
+gq.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault(); gpick(0)} if(e.key==='Escape'){gres.hidden=true; gq.blur()} if(e.key==='ArrowDown'){const b=$('#gres button'); if(b){e.preventDefault(); b.focus()}} });
+gres.addEventListener('click',e=>{const b=e.target.closest('[data-gi]'); if(b) gpick(+b.dataset.gi)});
+gres.addEventListener('keydown',e=>{const b=e.target.closest('button'); if(!b) return; if(e.key==='ArrowDown'){e.preventDefault(); (b.nextElementSibling||b).focus()} if(e.key==='ArrowUp'){e.preventDefault(); (b.previousElementSibling||gq).focus()} if(e.key==='Escape'){gres.hidden=true; gq.focus()}});
+document.addEventListener('click',e=>{ if(!e.target.closest('.gsearch')) gres.hidden=true });
+
+
+/* ---------- v5: panel de revisión común ---------- */
+function renderRv(pre,L,o){
+  const bad=L.filter(x=>x.s==='bad'), warn=L.filter(x=>x.s==='warn'), ok=L.filter(x=>x.s==='ok');
+  const st=document.getElementById(pre+'-status'), list=document.getElementById(pre+'-list');
+  const pl=(n,a,b)=>n===1?a:b;
+  let cls,ic,title,sub;
+  if(o.empty){cls='empty';ic='·';title='Todavía no hay nada que revisar';sub='Empieza por el paso 1. La revisión se actualiza sola mientras escribes.'}
+  else if(o.no){cls='bad';ic='✕';title=o.labelNo;sub=o.subNo}
+  else if(bad.length){cls='bad';ic='✕';title='Todavía no está bien';sub=`Corrige ${bad.length} ${pl(bad.length,'punto','puntos')} en rojo.`+(warn.length?` Después, mira ${warn.length} ${pl(warn.length,'aviso','avisos')}.`:'')}
+  else if(warn.length){cls='warn';ic='!';title='Casi: ya se puede usar';sub=`No hay nada que corregir. Revisa ${warn.length} ${pl(warn.length,'aviso','avisos')}; si decides dejarlo así, vale.`}
+  else {cls='ok';ic='✓';title=o.labelOk;sub='Todo lo que se puede comprobar está bien.'}
+  st.className='status '+cls;
+  st.innerHTML=`<span class="sic">${ic}</span><div class="stx"><b>${title}</b><span>${sub}</span>${o.empty?'':`<span class="counts"><span class="c bad">✕ ${bad.length} por corregir</span><span class="c warn">! ${warn.length} ${pl(warn.length,'aviso','avisos')}</span><span class="c ok">✓ ${ok.length} bien</span></span>`}</div>`;
+  const item=x=>`<li class="${x.s}"><span class="ic">${x.s==='ok'?'✓':x.s==='warn'?'!':'✕'}</span><span>${esc(x.t.replace(/ \(paso \d\)/,''))}${x.fix?`<span class="fix">${esc(x.fix)}</span>`:''}</span>${x.st?`<button type="button" class="stepgo" data-pre="${pre}" data-st="${x.st}" title="Ir al paso ${x.st}">Paso ${x.st}</button>`:''}</li>`;
+  const grp=(arr,c,label)=>arr.length?`<div class="rvg"><div class="rvgh ${c}">${label} · ${arr.length}</div><ul class="rvlist">${arr.map(item).join('')}</ul></div>`:'';
+  list.innerHTML=o.empty?'':grp(bad,'bad','Por corregir')+grp(warn,'warn','Conviene revisar')+(ok.length?`<details class="rvg"><summary class="rvgh ok">Está bien · ${ok.length}</summary><ul class="rvlist">${ok.map(item).join('')}</ul></details>`:'');
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.stepgo'); if(!b) return; const el=document.getElementById((b.dataset.pre==='cr'?'crs':'cis')+b.dataset.st); if(el){ goTo(el); const f=el.querySelector('input:not([type=radio]):not([type=checkbox]),textarea,select'); if(f) setTimeout(()=>f.focus({preventScroll:true}),400);} });
+/* ---------- v3: creador de Rocks ---------- */
+const $c=id=>document.getElementById(id);
+const DIR=['Antonio','Lara','Oliver','Rubén'];
+const LVINFO={
+  e:{n:'■ Empresa',cls:'e',t:'Owner: alguien de dirección. Se decide en la trimestral y se sigue en la L10 de dirección. 3-7 en toda la empresa; este Q4, 3-4.'},
+  d:{n:'◆ Departamento',cls:'d',t:'Owner: el responsable del área u otra persona del área. Lo fija el área en equipo y se sigue en la L10 del área.'},
+  i:{n:'○ Individual',cls:'i',t:'Owner: la propia persona. Lo acuerda con su responsable y se sigue en la L10 del área. Fuera de dirección, 1-3 por persona.'},
+  x:{n:'No es un Rock',cls:'',t:'Probablemente es un to-do, el trabajo normal del asiento o una idea para el Parking.'}
+};
+const LQ=[
+  {q:'¿Es una de las pocas prioridades de toda DZ, decidida en dirección y seguida en la L10 de dirección?',y:'e'},
+  {q:'¿Es la prioridad de un área, necesita a varias personas del área y se sigue en la L10 del área?',y:'d'},
+  {q:'¿La saca adelante una sola persona que responde ante su responsable?',y:'i',n:'x'}
+];
+const CR={lv:null,step:0};
+(function(){
+  const now=new Date(); let y=now.getFullYear(), q=Math.floor(now.getMonth()/3)+1;
+  const end=new Date(y,q*3,0); if((end-now)/864e5<10){q++; if(q>4){q=1;y++}}
+  const sel=$c('cr-trim');
+  for(let i=0;i<4;i++){const o=document.createElement('option');o.value=y+'-'+q;o.textContent='Q'+q+' '+y;sel.appendChild(o);q++;if(q>4){q=1;y++}}
+})();
+function qRange(v){const [y,q]=v.split('-').map(Number);return {start:new Date(y,(q-1)*3,1),end:new Date(y,q*3,0,23,59)}}
+function fmtDate(v){ if(!v) return ''; const [y,m,d]=v.split('-'); return `${+d}/${+m}/${y}` }
+function renderLvTree(){
+  const box=$c('cr-tree');
+  $$('.lvpick .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.lv===CR.lv));
+  if(CR.lv){
+    const L=LVINFO[CR.lv];
+    box.innerHTML=`<div class="lvres">${L.cls?`<span><span class="lv ${L.cls}">${L.n}</span></span>`:`<b>${L.n}</b>`}<span>${L.t}</span><button class="linkbtn" id="cr-tree-reset" type="button">Volver a las preguntas</button></div>`;
+    $c('cr-tree-reset').onclick=()=>{CR.lv=null;CR.step=0;renderLvTree();review()};
+  } else {
+    const c=LQ[CR.step];
+    box.innerHTML=`<div class="lvq"><span class="mono muted">PREGUNTA ${CR.step+1} DE 3</span><b>${c.q}</b><div class="yn"><button class="btn pri" type="button" id="lq-y">Sí</button><button class="btn" type="button" id="lq-n">No</button></div></div>`;
+    $c('lq-y').onclick=()=>{CR.lv=c.y;renderLvTree();review()};
+    $c('lq-n').onclick=()=>{ if(c.n){CR.lv=c.n} else {CR.step++} renderLvTree();review()};
+  }
+}
+$$('.lvpick .chip').forEach(c=>c.onclick=()=>{CR.lv=c.dataset.lv;renderLvTree();review()});
+const F=()=>({
+  origen:$c('cr-origen').value, paraque:$c('cr-paraque').value.trim(),
+  dur:($('input[name="cr-dur"]:checked')||{}).value||'',
+  owner:$c('cr-owner').value==='otra'?$c('cr-owner-otro').value.trim():$c('cr-owner').value,
+  ownerOtra:$c('cr-owner').value==='otra',
+  titulo:$c('cr-titulo').value.trim(), hecho:$c('cr-hecho').value.trim(), cifra:$c('cr-cifra').value.trim(),
+  trim:$c('cr-trim').value, fecha:$c('cr-fecha').value, necesita:$c('cr-necesita').value.trim(),
+  hitos:[$c('cr-h1').value.trim(),$c('cr-h2').value.trim(),$c('cr-h3').value.trim()]
+});
+const RX={
+  act:/\b(mejorar|trabajar|trabajando|impulsar|potenciar|optimizar|avanzar|seguir|continuar|ayudar|apoyar|intentar|fomentar|reforzar|gestionar|controlar|colaborar|revisar|investigar|estudiar|analizar|explorar|diversificar)\b/,
+  soft:/\b(aumentar|incrementar|reducir|desarrollar|crecer|hacer)\b/,
+  plan:/\b(definir|definid[ao]s?|planificar|planificad[ao]s?|preparar|preparad[ao]s?|disenar|empezar|iniciar|arrancar|tener)\b/,
+  res:/(publicad|lanzad|firmad|funcionando|implantad|aprobad|cerrad|contratad|entregad|activ[ao]s?\b|completad|documentad|en marcha|operativ|en uso|homologad|presentad|decidid|medid|instalad|migrad|abiert|conseguid|captad|vendid|generando|aplicad)/,
+  vague:/\b(mas|mejor|bien|adecuad[ao]s?|suficientes?|etc|bla)\b/,
+  routine:/\b(cada semana|semanal(es)?|diari[ao]s?|cada dia|cada mes|mensualmente|responder|atender)\b/,
+  multi:/(\s(y|e)\s|,|\/|&|\+)/
+};
+function review(){
+  const f=F(), L=[]; let ST=1; const add=(s,t,fix)=>L.push({s,t,fix,st:ST});
+  const nt=norm(f.titulo), nh=norm(f.hecho);
+  // 1 origen
+  ST=1;
+  if(!f.origen) add('warn','Falta de dónde sale (paso 1).');
+  else if(f.origen==='none') add('bad','No empuja nada en concreto.','Si no mueve un objetivo o un proyecto prioritario, apúntalo en el Parking.');
+  else if(!f.paraque) add('warn','Di qué objetivo o proyecto empuja.','Escribe el "para qué" en el paso 1.');
+  else add('ok','Empuja: '+f.paraque+'.');
+  if(CR.lv==='e'&&f.origen==='rock') add('warn','Un Rock de empresa no cuelga de otro Rock de empresa.','Si ayuda a un Rock de empresa, es de departamento o individual.');
+  if(CR.lv==='e'&&f.origen==='area') add('warn','Si es la prioridad de tu área, es de departamento, no de empresa.');
+  // 2 duración
+  ST=2;
+  if(!f.dur) add('warn','Marca cuánto trabajo es (paso 2).');
+  else if(f.dur==='mas') add('bad','Más de 90 días: es un objetivo anual o un proyecto.','Saca lo que tiene que estar hecho el último día de este trimestre.');
+  else if(f.dur==='sem') add('bad','Se hace en una semana: es un to-do.','Apúntalo como to-do con owner y fecha a 7 días.');
+  else if(f.dur==='sie') add('bad','Es trabajo del asiento, no un Rock.','Si quieres vigilarlo, que sea un número del Scorecard.');
+  else add('ok','Cabe en 90 días.');
+  // 3 nivel
+  ST=3;
+  if(!CR.lv) add('warn','Falta el tipo de Rock (paso 3).');
+  else if(CR.lv==='x') add('bad','Según el paso 3, no es un Rock.','Es un to-do, trabajo del asiento o una idea para el Parking.');
+  else add('ok','Tipo: '+LVINFO[CR.lv].n.slice(2)+'.');
+  // 4 owner
+  ST=4;
+  if(!f.owner) add('bad','Falta el owner.','Una sola persona, aunque no lo haga todo ella.');
+  else if(f.ownerOtra&&RX.multi.test(' '+f.owner+' ')) add('bad','Hay más de un owner.','Deja uno. Los demás van en "necesita de".');
+  else if(CR.lv==='e'&&!DIR.includes(f.owner)) add('bad','Un Rock de empresa lo lleva alguien de dirección.','Si lo lleva otra persona, probablemente es de departamento o individual.');
+  else add('ok','Owner: '+f.owner+'.');
+  // 5 título
+  let tituloMal=false;
+  if(!f.titulo){ add('bad','Falta el resultado (el qué).'); tituloMal=true; }
+  else {
+    const all_=(rx)=>[...new Set([...nt.matchAll(new RegExp(rx.source,'g'))].map(m=>m[1]))];
+    const aAct=all_(RX.act), aPlan=all_(RX.plan), mSoft=nt.match(RX.soft), hasRes=RX.res.test(nt);
+    const mAct=aAct.length?aAct:null, mPlan=aPlan.length?aPlan:null;
+    if(mAct){ add('bad',`"${mAct.join('", "')}" describe${mAct.length>1?'n':''} una actividad, no un resultado.`,'Escribe cómo está el mundo el último día: publicado, firmado, funcionando…'); tituloMal=true; }
+    if(mPlan){ add('warn',`"${mPlan.join('", "')}" suele${mPlan.length>1?'n':''} ser el primer paso, no el resultado.`,'¿Qué tiene que estar funcionando el último día del trimestre?'); tituloMal=true; }
+    if(mSoft&&!/\d|\[x\]/.test(nt)) add('warn',`"${mSoft[1]}" sin cifra no se puede comprobar.`,'¿De cuánto a cuánto?');
+    if(!mAct&&!mPlan&&hasRes) add('ok','Está escrito como resultado.');
+    if(!mAct&&!mPlan&&!hasRes){ add('warn','No queda claro cuál es el resultado.','Usa un participio: publicado, firmado, lanzado, funcionando…'); tituloMal=true; }
+    const mv=nt.match(RX.vague); if(mv) add('warn',`"${mv[1]}" es vago.`,'Cámbialo por una cifra o un hecho comprobable.');
+    if((CR.lv==='i'||CR.lv==='d')&&RX.routine.test(nt)) add('warn','Suena a trabajo del día a día.','Un Rock es algo nuevo que queda hecho, no una tarea que se repite.');
+    if(f.titulo.length>180) add('warn','Es muy largo. ¿Son dos Rocks?','Si tiene dos resultados distintos, sepáralos o elige uno.');
+  }
+  // 6 hecho cuando
+  if(!f.hecho) add('bad','Falta el "hecho cuando".','Lo que tiene que ser verdad el último día para decir SÍ sin discutir.');
+  else { const mv=nh.match(RX.vague); if(mv) add('warn',`El "hecho cuando" usa "${mv[1]}".`,'Que sea un sí o no claro.'); else add('ok','Tiene definición de hecho.'); }
+  // 7 cifra
+  const all=nt+' '+nh+' '+norm(f.cifra);
+  const hasNum=/\d/.test(all.replace(/\b\d{1,2}\/\d{1,2}(\/\d{2,4})?\b/g,'').replace(/\bq[1-4]\b/g,'')), hasPh=/\[[^\]]+\]/.test(f.titulo+f.hecho+f.cifra);
+  if(hasPh) add('warn','Hay datos entre corchetes sin concretar.','Pon la cifra o el dato real antes de cerrarlo.');
+  else if(!hasNum) add('warn','No tiene cifra.','Si se puede contar, pon cuánto. Si no, que el "hecho cuando" sea un sí o no claro.');
+  else add('ok','Tiene cifra.');
+  // 8 fecha
+  if(!f.fecha) add('bad','Falta la fecha.','Como tarde, el último día del trimestre.');
+  else { const r=qRange(f.trim), d=new Date(f.fecha+'T12:00');
+    if(d>r.end) add('bad','La fecha cae fuera del trimestre.','Un Rock acaba como tarde el último día del trimestre.');
+    else if(d<r.start) add('warn','La fecha es anterior al trimestre elegido.');
+    else add('ok','Fecha dentro del trimestre: '+fmtDate(f.fecha)+'.'); }
+  // 9 necesita / hitos
+  if(f.necesita) add('ok','Dependencias apuntadas.');
+  else if(CR.lv==='e') add('warn','¿Necesita a alguien?','Apunta quién tiene que aportar qué y acuérdalo ahora.');
+  if(f.hitos.some(Boolean)) add('ok','Tiene hitos.'); else add('warn','Sin hitos por mes.','Ayudan a ver pronto si se desvía. (Práctica)');
+
+  const notRock=['mas','sem','sie'].includes(f.dur)||CR.lv==='x'||f.origen==='none';
+  const empty=!f.origen&&!f.dur&&!CR.lv&&!f.titulo&&!f.owner;
+  renderRv('cr',L,{empty,no:notRock,labelNo:'Esto no es un Rock',subNo:'Mira los puntos en rojo: te dicen qué es y adónde va.',labelOk:'Correcto: listo para la Rock Sheet'});
+  $c('cr-lvbadge').innerHTML=CR.lv&&CR.lv!=='x'?`<span class="lv ${LVINFO[CR.lv].cls}">${LVINFO[CR.lv].n}</span>`:'';
+  // forma propuesta
+  if(f.titulo&&tituloMal){
+    $c('cr-sug').hidden=false;
+    $c('cr-sugtxt').innerHTML=`<span class="small">Estructura: <b>[Owner]: [algo] [publicado / firmado / funcionando] [cifra] antes del [fecha]</b>.</span><span class="small">Pregúntate: el último día del trimestre, ¿qué se puede ver, contar o enseñar que demuestre que "${esc(f.titulo)}" está hecho? Eso es el Rock.</span>`;
+  } else $c('cr-sug').hidden=true;
+  // pasos hechos
+  $c('crs1').classList.toggle('done',!!(f.origen&&f.origen!=='none'&&f.paraque));
+  $c('crs2').classList.toggle('done',f.dur==='90');
+  $c('crs3').classList.toggle('done',['e','d','i'].includes(CR.lv));
+  $c('crs4').classList.toggle('done',!!(f.owner&&f.titulo&&f.hecho&&f.fecha));
+  // mensaje duración
+  const dm=$c('cr-durmsg'); const DM={mas:['bad','Más de 90 días es un objetivo anual o un proyecto. Saca de ahí lo que tiene que estar hecho este trimestre y sigue con eso.'],sem:['bad','Si se hace en una semana, es un to-do. Apúntalo en la L10 con owner y fecha.'],sie:['bad','Lo que haces siempre es el trabajo de tu asiento. Si quieres vigilarlo, que sea un número del Scorecard.'],'90':['ok','Bien: puede ser un Rock. Sigue al paso 3.']};
+  if(DM[f.dur]){dm.hidden=false; dm.className='crmsg '+DM[f.dur][0]; dm.textContent=DM[f.dur][1]} else dm.hidden=true;
+  // ficha
+  const tq=$c('cr-trim').selectedOptions[0]?.textContent||'';
+  $c('cr-ficha').textContent=[
+    (CR.lv&&CR.lv!=='x'?LVINFO[CR.lv].n.toUpperCase().replace('■ ','■ ROCK DE ').replace('◆ ','◆ ROCK DE ').replace('○ ','○ ROCK ')+' · ':'')+tq,
+    'Owner: '+(f.owner||'—'),
+    'Rock: '+(f.titulo||'—'),
+    'Para qué: '+(f.paraque||'—'),
+    'Hecho cuando: '+(f.hecho||'—'),
+    'Cifra: '+(f.cifra||'—'),
+    'Fecha: '+(fmtDate(f.fecha)||'—'),
+    'Necesita de: '+(f.necesita||'—'),
+    'Hitos: '+(f.hitos.map((h,i)=>h?('Mes '+(i+1)+': '+h):'').filter(Boolean).join(' · ')||'—')
+  ].join('\n');
+}
+['cr-origen','cr-paraque','cr-owner','cr-owner-otro','cr-titulo','cr-hecho','cr-cifra','cr-trim','cr-fecha','cr-necesita','cr-h1','cr-h2','cr-h3'].forEach(id=>{$c(id).addEventListener('input',review);$c(id).addEventListener('change',review)});
+$$('input[name="cr-dur"]').forEach(r=>r.addEventListener('change',review));
+$c('cr-owner').addEventListener('change',()=>{$c('cr-owner-otro').hidden=$c('cr-owner').value!=='otra'});
+const EX=[
+  {note:'Primera versión de un Rock de captación, escrita como plan. Mira qué marca la revisión.',origen:'proy',paraque:'Generación de demanda',dur:'90',lv:'e',owner:'Rubén',titulo:'Tener definidas y planificadas dos nuevas vías de captación',hecho:'',cifra:'',fecha:'END',necesita:'',h:['','','']},
+  {note:'La misma idea, escrita como resultado. Lo que está entre corchetes lo tiene que concretar su owner.',origen:'proy',paraque:'Generación de demanda',dur:'90',lv:'e',owner:'Rubén',titulo:'Dos nuevas vías de captación [cuáles] funcionando y generando leads antes del fin de trimestre, al menos una que no sea publicidad de pago',hecho:'Las dos vías están activas, sus leads se miden en el Scorecard y entre las dos suman al menos [X] leads cualificados',cifra:'[X] leads cualificados',fecha:'END',necesita:'[Personas de Marketing], con sus Rocks individuales; presupuesto para el canal de pago',h:['Mes 1: elegidas las dos vías','Mes 2: las dos lanzadas','Mes 3: leads medidos']},
+  {note:'Un Rock que ya nace bien planteado.',origen:'proy',paraque:'Lanzamiento de la próxima temporada',dur:'90',lv:'e',owner:'Oliver',titulo:'Todas las expediciones de la próxima temporada publicadas en la web antes del fin de trimestre',hecho:'Las [X] expediciones están publicadas con fechas, precio y ficha completa, y se pueden reservar',cifra:'[X] expediciones',fecha:'END',necesita:'[pendiente]',h:['[pendiente]','[pendiente]','Todas publicadas']}
+];
+function loadEx(k){
+  let e=k==='clear'?{note:'',origen:'',paraque:'',dur:'',lv:null,owner:'',titulo:'',hecho:'',cifra:'',fecha:'',necesita:'',h:['','','']}:EX[k];
+  $c('cr-origen').value=e.origen; $c('cr-paraque').value=e.paraque;
+  $$('input[name="cr-dur"]').forEach(r=>r.checked=r.value===e.dur);
+  CR.lv=e.lv; CR.step=0;
+  $c('cr-owner').value=DIR.includes(e.owner)?e.owner:(e.owner?'otra':''); $c('cr-owner-otro').value=DIR.includes(e.owner)?'':e.owner; $c('cr-owner-otro').hidden=$c('cr-owner').value!=='otra';
+  $c('cr-titulo').value=e.titulo; $c('cr-hecho').value=e.hecho; $c('cr-cifra').value=e.cifra;
+  if(e.fecha==='END'){ e=Object.assign({},e,{fecha:(()=>{const r=qRange($c('cr-trim').options[0].value).end;return r.getFullYear()+'-'+String(r.getMonth()+1).padStart(2,'0')+'-'+String(r.getDate()).padStart(2,'0')})()}) }
+  if(e.fecha){ const opt=[...$c('cr-trim').options].find(o=>{const r=qRange(o.value),d=new Date(e.fecha+'T12:00');return d>=r.start&&d<=r.end}); if(opt) $c('cr-trim').value=opt.value; }
+  $c('cr-fecha').value=e.fecha; $c('cr-necesita').value=e.necesita;
+  [1,2,3].forEach(i=>$c('cr-h'+i).value=e.h[i-1]);
+  $c('cr-exnote').textContent=e.note?('Ejemplo · '+e.note):'';
+  $c('cr-aiout').hidden=true;
+  renderLvTree(); review();
+}
+$$('[data-ex]').forEach(b=>b.onclick=()=>loadEx(b.dataset.ex));
+$c('cr-copy').onclick=()=>{
+  const txt=$c('cr-ficha').textContent, ok=()=>{$c('cr-copied').textContent='Copiada.'};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents($c('cr-ficha'));const s=getSelection();s.removeAllRanges();s.addRange(r);$c('cr-copied').textContent='Seleccionada: pulsa Ctrl+C o Cmd+C.'};
+  try{ navigator.clipboard.writeText(txt).then(ok,fallback) }catch(e){ fallback() }
+};
+loadEx(0);
+
+/* ---------- v3: revisión con Claude (solo en la página publicada) ---------- */
+(async()=>{
+  let sample=null;
+  try{ sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null }catch(e){ sample=null }
+  if(!sample) return;
+  $c('cr-aibox').hidden=false;
+  const out=$c('cr-aiout'), btn=$c('cr-ai');
+  const ERR={not_granted:'No has dado permiso para usar Claude en esta página.',rate_limited:'Demasiadas revisiones seguidas. Espera un minuto y vuelve a probar.',prompt_too_large:'El Rock es demasiado largo para revisarlo. Acórtalo.'};
+  btn.onclick=async()=>{
+    const f=F(); if(!f.titulo){ out.hidden=false; out.textContent='Escribe al menos el resultado (paso 4) antes de pedir la revisión.'; return }
+    btn.disabled=true; out.hidden=false; out.textContent='Pensando…';
+    const lvName=CR.lv?LVINFO[CR.lv].n.slice(2):'sin elegir';
+    const prompt=`Eres un implementador EOS certificado. Revisa este Rock de Desafío Zero (empresa española de expediciones y viajes de aventura) con los criterios de Traction (Gino Wickman):
+- Un Rock es una prioridad de 90 días con un resultado concreto que el último día del trimestre se responde con sí o no sin discutir.
+- Específico, medible y alcanzable, con un solo owner y fecha dentro del trimestre.
+- Escrito como resultado (publicado, firmado, funcionando), no como actividad (mejorar, trabajar en, definir, planificar).
+- Niveles: empresa (3-7 prioridades de toda la empresa; owner de dirección: Antonio (Visionario), Lara (Integradora), Oliver (Operaciones) o Rubén (Administración y finanzas, y Marketing y ventas); se sigue en la L10 de dirección); departamento (prioridad de un área, fijada por el área en equipo, se sigue en su L10); individual (prioridad de una persona; fuera de dirección, 1-3 por persona).
+- Más de 90 días = objetivo anual o proyecto. Menos de una semana = to-do. Trabajo recurrente = trabajo del asiento o número del Scorecard.
+No inventes cifras ni datos de la empresa: usa [X] o [pendiente]. Escribe en español de España, tuteando, con frases cortas.
+
+ROCK
+Nivel elegido: ${lvName}
+Trimestre: ${$c('cr-trim').selectedOptions[0]?.textContent||''}
+Para qué: ${f.paraque||'—'}
+Owner: ${f.owner||'—'}
+Rock: ${f.titulo}
+Hecho cuando: ${f.hecho||'—'}
+Cifra: ${f.cifra||'—'}
+Fecha: ${fmtDate(f.fecha)||'—'}
+Necesita de: ${f.necesita||'—'}
+Hitos: ${f.hitos.filter(Boolean).join(' · ')||'—'}
+
+Devuelve SOLO un objeto JSON con esta forma:
+{"veredicto":"listo"|"casi"|"no_es_rock","nivel_sugerido":"empresa"|"departamento"|"individual"|"no_es_rock","resumen":"una frase","problemas":["frase corta", "..."],"rock_reescrito":"el Rock en una frase","hecho_cuando_reescrito":"una frase"}`;
+    try{
+      const r=await sample.json(prompt,{modelTier:'default'});
+      const V={listo:'Listo',casi:'Casi',no_es_rock:'No es un Rock'}, N={empresa:'■ Empresa',departamento:'◆ Departamento',individual:'○ Individual',no_es_rock:'No es un Rock'};
+      out.innerHTML=`<b>${esc(V[r.veredicto]||r.veredicto||'')}</b>${r.nivel_sugerido?` <span class="small muted">· Nivel sugerido: ${esc(N[r.nivel_sugerido]||r.nivel_sugerido)}</span>`:''}
+        ${r.resumen?`<span>${esc(r.resumen)}</span>`:''}
+        ${Array.isArray(r.problemas)&&r.problemas.length?`<ul>${r.problemas.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}
+        ${r.rock_reescrito?`<div class="shape ej"><span class="sl">Rock reescrito</span><span>${esc(r.rock_reescrito)}</span>${r.hecho_cuando_reescrito?`<span class="small"><b>Hecho cuando:</b> ${esc(r.hecho_cuando_reescrito)}</span>`:''}<button class="linkbtn" type="button" id="cr-ai-use">Usar esta versión</button></div>`:''}`;
+      const u=$c('cr-ai-use'); if(u) u.onclick=()=>{ $c('cr-titulo').value=r.rock_reescrito; if(r.hecho_cuando_reescrito) $c('cr-hecho').value=r.hecho_cuando_reescrito; review(); };
+    }catch(e){
+      const code=e&&e.code;
+      if(['not_declared','sampling_disabled','capability_disabled','capability_removed'].includes(code)){ $c('cr-aibox').hidden=true; return }
+      out.textContent=ERR[code]||'No he podido revisarlo ahora. Prueba otra vez en un rato.';
+    }finally{ btn.disabled=false }
+  };
+})();
+
+
+/* ---------- v4: creador de IDS ---------- */
+const $i=id=>document.getElementById(id);
+const COMPS=[
+  {k:'Visión',s:'Discutimos si hacer algo o no cada vez que aparece.'},
+  {k:'Personas',s:'Sale siempre el mismo nombre, o hay tareas que caen entre sillas.'},
+  {k:'Datos',s:'Nos enteramos tarde: cuando el cliente se queja o la caja ya está baja.'},
+  {k:'Issues',s:'El mismo problema vuelve cada pocas semanas.'},
+  {k:'Procesos',s:'El error depende de quién hiciera la tarea.'},
+  {k:'Tracción',s:'Se decidió y no se hizo: to-dos que caducan, Rocks desviados.'}
+];
+const CI={comps:[]};
+$i('ci-comps').innerHTML=COMPS.map(c=>`<button type="button" class="compbtn" data-comp="${c.k}" aria-pressed="false"><b>${c.k}</b><span class="small muted">${c.s}</span></button>`).join('');
+$$('#ci-comps .compbtn').forEach(b=>b.onclick=()=>{
+  const k=b.dataset.comp, i=CI.comps.indexOf(k);
+  if(i>=0) CI.comps.splice(i,1); else { if(CI.comps.length>=2) CI.comps.shift(); CI.comps.push(k); }
+  syncComps(); ids_review();
+});
+function syncComps(){ $$('#ci-comps .compbtn').forEach(b=>b.setAttribute('aria-pressed',CI.comps.includes(b.dataset.comp))) }
+function addWhy(val){
+  const box=$i('ci-whys'), n=box.children.length;
+  if(n>=6) return;
+  const d=document.createElement('div'); d.className='why1';
+  const id='ci-why-'+n;
+  d.innerHTML=`<label for="${id}">${n===0?'¿Por qué pasó?':'¿Y por qué pasó eso?'}</label><input id="${id}" type="text" placeholder="${n===0?'Ej.: El proveedor se confundió de hora':'Ej.: Nadie confirma el transporte el día antes'}">`;
+  box.appendChild(d); const inp=$('input',d); inp.value=val||''; inp.addEventListener('input',ids_review);
+  $i('ci-addwhy').hidden=box.children.length>=6;
+}
+$i('ci-addwhy').onclick=()=>{addWhy('');const all=$$('#ci-whys input');all[all.length-1].focus();ids_review()};
+const IF=()=>({
+  inicial:$i('ci-inicial').value.trim(), quien:$i('ci-quien').value, tipo:($('input[name="ci-tipo"]:checked')||{}).value||'',
+  segunda:$i('ci-segunda').checked, hechos:$i('ci-hechos').value.trim(), rep:($('input[name="ci-rep"]:checked')||{}).value||'',
+  whys:$$('#ci-whys input').map(x=>x.value.trim()).filter(Boolean), depende:$i('ci-depende').checked,
+  verdad:$i('ci-verdad').value.trim(), real:$i('ci-real').value.trim(), acuerdo:$i('ci-acuerdo').checked,
+  cierre:($('input[name="ci-cierre"]:checked')||{}).value||'', sol:$i('ci-sol').value.trim(),
+  todo:$i('ci-todo').value.trim(), towner:$i('ci-towner').value.trim(), tfecha:$i('ci-tfecha').value, largo:$i('ci-largo').checked
+});
+const IRX={
+  opinion:/\b(siempre|nunca|fatal|desastre|todo el mundo|nadie hace|horrible|un caos|es que)\b/,
+  externo:/\b(proveedor|cliente|clientes|tiempo|clima|lluvia|azar|mala suerte|huelga|aerolinea|vuelo|trafico|banco|plataforma)\b/,
+  puntual:/\b(hoy|ayer|esta semana|este mes|el lunes|el martes|el miercoles|el jueves|el viernes|la semana pasada|anoche)\b/,
+  causa:/\b(no tenemos|no hay|nadie|no existe|falta|faltan|nuestro proceso|no medimos|no confirmamos|no revisamos|no esta claro|sin owner|sin dueno|no sabemos)\b/,
+  personas:/\b(antonio|lara|oliver|ruben|sara)\b/
+};
+function overlap(a,b){ const A=new Set(norm(a).split(/\W+/).filter(w=>w.length>3)), B=new Set(norm(b).split(/\W+/).filter(w=>w.length>3)); if(!A.size||!B.size) return 0; let c=0; A.forEach(w=>{if(B.has(w))c++}); return c/Math.min(A.size,B.size) }
+function ids_review(){
+  const f=IF(), L=[]; let ST=1; const add=(s,t,fix)=>L.push({s,t,fix,st:ST});
+  // 1
+  ST=1;
+  if(!f.inicial) add('warn','Falta el issue inicial (paso 1).');
+  else if(f.inicial.length>140) add('warn','El issue inicial es largo.','Una línea. Si no cabe, todavía no sabes cuál es el issue.');
+  else add('ok','Issue en una línea.');
+  if(!f.quien) add('warn','Falta quién lo trae.');
+  if(!f.tipo) add('warn','Falta el tipo: problema, información o idea.');
+  if(f.segunda) add('bad','Es información de segunda mano.','Confírmalo con la fuente antes de llevarlo. Si implica a alguien, que esté en la reunión.');
+  const tm=$i('ci-tipomsg'); const TM={info:['ok','Si es solo información, basta con decirlo y que todos lo acepten: se cierra como acuerdo. No hace falta la escalera.'],idea:['ok','Si es una idea, pide feedback o luz verde. Usa la escalera solo si la idea responde a un problema.']};
+  if(TM[f.tipo]){tm.hidden=false;tm.className='crmsg '+TM[f.tipo][0];tm.textContent=TM[f.tipo][1]} else tm.hidden=true;
+  const esProblema=f.tipo!=='info'&&f.tipo!=='idea';
+  // 2
+  ST=2;
+  if(esProblema){
+    if(!f.hechos) add('warn','Faltan los hechos (paso 2).','Quién, qué, cuándo, cuánto.');
+    else { const m=norm(f.hechos).match(IRX.opinion); if(m) add('warn',`"${m[1]}" suena a opinión.`,'¿Qué dato lo demuestra?'); else add('ok','Hay hechos.'); }
+    // 3
+    ST=3;
+    const rm=$i('ci-repmsg'); const RM={primera:['ok','Si es la primera vez, quizá baste con un to-do. Si crees que volverá a pasar, sigue bajando.'],repite:['ok','Si se repite, hay una causa de fondo. Sigue bajando.'],nose:['bad','Averígualo. Si no lo sabemos, quizá falta un número en el Scorecard.']};
+    if(RM[f.rep]){rm.hidden=false;rm.className='crmsg '+RM[f.rep][0];rm.textContent=RM[f.rep][1]} else rm.hidden=true;
+    if(!f.rep) add('warn','Marca si es la primera vez (paso 3).');
+    else if(f.rep==='nose') add('warn','No sabes si se ha repetido.','Averígualo: cambia mucho la solución.');
+    else add('ok',f.rep==='repite'?'Se repite: hay causa de fondo.':'Primera vez.');
+    // 4
+    ST=4;
+    if(!f.whys.length) add('bad','Falta el "¿por qué?" (paso 4).');
+    else if(f.whys.length<2&&f.rep!=='primera') add('warn','Solo un "¿por qué?".','Casi nunca basta. Pregunta "¿y por qué pasó eso?" al menos una vez más.');
+    else add('ok',`${f.whys.length} "¿por qué?".`);
+    if(f.whys.length){
+      const last=norm(f.whys[f.whys.length-1]);
+      if(!f.depende&&IRX.externo.test(last)) add('warn','La última respuesta depende de otros.','Pregunta por qué nuestro sistema lo permitió: ¿qué no hicimos, no medimos o no revisamos?');
+      else if(!f.depende) add('warn','¿La última respuesta depende de nosotros?','Si sí, márcalo en el paso 4. Si no, sigue preguntando.');
+      else add('ok','Has llegado a algo que depende de nosotros.');
+      if(IRX.personas.test(last)&&!IRX.causa.test(last)) add('warn','La causa apunta a una persona.','Pregunta por el asiento, el proceso o el dato. Si es feedback a esa persona, va a una conversación individual.');
+    }
+    // 5
+    ST=5;
+    if(!CI.comps.length) add('warn','Falta el componente (paso 5).'); else add('ok','Componente: '+CI.comps.join(' y ')+'.');
+    // 6
+    ST=6;
+    if(!f.verdad) add('warn','Falta qué tendría que ser verdad (paso 6).'); else add('ok','Sabes qué tendría que ser verdad.');
+    // 7
+    ST=7;
+    if(!f.real) add('bad','Falta el issue real (paso 7).');
+    else {
+      if(f.real.length>160) add('warn','El issue real es largo.','Una línea.');
+      const ov=f.inicial?overlap(f.inicial,f.real):0;
+      const nr=norm(f.real);
+      if(ov>=0.7) add('bad','El issue real se parece mucho al inicial: sigue siendo el síntoma.','¿Qué hay que cambiar para que no vuelva a pasar?');
+      const mp=nr.match(IRX.puntual); if(mp) add('warn',`"${mp[1]}" lo ata a un incidente puntual.`,'El issue real tiene que valer también para la próxima vez.');
+      if(IRX.causa.test(nr)) add('ok','Está escrito como causa.');
+      else if(ov<0.7&&!mp) add('warn','No queda claro qué falta o qué no hacemos.','Prueba: "No tenemos…", "Nadie es owner de…", "Nuestro proceso de… no…".');
+      if(!f.acuerdo) add('warn','Falta que quien lo trajo diga "sí, eso es".','Si no está de acuerdo, vuelve al paso 4.');
+    }
+  }
+  // 8
+  ST=8;
+  if(!f.cierre) add('warn','Falta el tipo de cierre (paso 8).');
+  else {
+    if(!f.sol) add('warn','Falta decir la solución en voz alta.','"Queda así: …". Si alguien no lo ha entendido igual, se vuelve a hablar.');
+    if(f.cierre==='accion'||f.cierre==='info'){
+      if(!f.todo) add('bad','Falta el to-do.', f.cierre==='info'?'Quién trae qué dato y para cuándo.':'Sin to-do con owner y fecha, no está resuelto.');
+      if(!f.towner) add('bad','Falta el owner del to-do.');
+      else if(RX.multi.test(' '+f.towner+' ')) add('bad','El to-do tiene más de un owner.','Uno solo.');
+      if(!f.tfecha) add('bad','Falta la fecha del to-do.');
+      else { const d=(new Date(f.tfecha+'T12:00')-new Date())/864e5; if(d>8) add('warn','El to-do dura más de 7 días.','Pártelo en pasos semanales. Si es grande, puede ser un Rock.'); else if(d<-1) add('warn','La fecha del to-do ya ha pasado.'); else add('ok','To-do con owner y fecha.'); }
+      if(f.cierre==='info') add('ok','El issue vuelve a la lista la semana que viene como prioridad.');
+    } else add('ok','Cierre por acuerdo: se tacha de la lista.');
+  }
+  if(f.largo){ if(/parking|rock/.test(norm(f.sol))) add('ok','Lo de más de 90 días va al Parking o como candidato a Rock.'); else add('warn','Resolverlo lleva más de 90 días.','Dilo en la solución: va al Parking o como candidato a Rock. El to-do de hoy es solo el primer paso.'); }
+
+  const nb=L.filter(x=>x.s==='bad').length;
+  const empty=!f.inicial&&!f.hechos&&!f.whys.length&&!f.real;
+  renderRv('ci',L,{empty,no:esProblema&&!f.real&&!!f.inicial&&nb>0,labelNo:'Todavía en el síntoma',subNo:'Aún no has escrito el issue real. Sigue los pasos 4 a 7.',labelOk:'Correcto: issue real y cierre claros'});
+  { const causa=f.real&&(!f.inicial||overlap(f.inicial,f.real)<0.7); $i('ci-badge').innerHTML=causa?'<span class="pill ok" title="Has escrito una causa distinta del síntoma">Causa encontrada</span>':(f.inicial?'<span class="pill" title="Todavía estás en lo que ha pasado, no en por qué pasa">Aún en el síntoma</span>':''); }
+  $i('ci-todobox').hidden=f.cierre==='acuerdo';
+  ['cis1','cis2','cis3','cis4','cis5','cis6','cis7','cis8'].forEach(id=>$i(id).classList.remove('done'));
+  if(f.inicial&&f.quien&&f.tipo) $i('cis1').classList.add('done');
+  if(f.hechos) $i('cis2').classList.add('done');
+  if(f.rep&&f.rep!=='nose') $i('cis3').classList.add('done');
+  if(f.whys.length&&f.depende) $i('cis4').classList.add('done');
+  if(CI.comps.length) $i('cis5').classList.add('done');
+  if(f.verdad) $i('cis6').classList.add('done');
+  if(f.real&&f.acuerdo) $i('cis7').classList.add('done');
+  if(f.cierre&&f.sol&&(f.cierre==='acuerdo'||(f.todo&&f.towner&&f.tfecha))) $i('cis8').classList.add('done');
+  const CN={accion:'Acción',acuerdo:'Acuerdo',info:'Falta información'};
+  $i('ci-ficha').textContent=[
+    'ISSUE · '+(f.tipo||'—')+' · trae: '+(f.quien==='otra'?'otra persona':(f.quien||'—')),
+    'Inicial: '+(f.inicial||'—'),
+    'Hechos: '+(f.hechos||'—'),
+    '¿Se repite?: '+({primera:'primera vez',repite:'sí',nose:'no se sabe'}[f.rep]||'—'),
+    'Por qué: '+(f.whys.map((w,i)=>(i+1)+') '+w).join('  ')||'—'),
+    'Componente: '+(CI.comps.join(', ')||'—'),
+    'Tendría que ser verdad: '+(f.verdad||'—'),
+    'ISSUE REAL: '+(f.real||'—'),
+    'Cierre: '+(CN[f.cierre]||'—')+(f.sol?' · Queda así: '+f.sol:''),
+    (f.cierre&&f.cierre!=='acuerdo')?('To-do: '+(f.todo||'—')+' · '+(f.towner||'—')+' · '+(fmtDate(f.tfecha)||'—')):'',
+    f.largo?'Más de 90 días → Parking o candidato a Rock':''
+  ].filter(Boolean).join('\n');
+}
+['ci-inicial','ci-quien','ci-segunda','ci-hechos','ci-depende','ci-verdad','ci-real','ci-acuerdo','ci-sol','ci-todo','ci-towner','ci-tfecha','ci-largo'].forEach(id=>{$i(id).addEventListener('input',ids_review);$i(id).addEventListener('change',ids_review)});
+$$('input[name="ci-tipo"],input[name="ci-rep"],input[name="ci-cierre"]').forEach(r=>r.addEventListener('change',ids_review));
+function inDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+const IXE=[
+  {note:'Un IDS que se quedó a medias: solo un "¿por qué?" y el issue real repite el síntoma. Mira qué marca la revisión.',inicial:'El transporte en [destino] llegó 3 h tarde',quien:'Oliver',tipo:'problema',segunda:false,hechos:'El traslado llegó a las 12:00 en vez de a las 9:00 y el grupo perdió la actividad de la mañana.',rep:'repite',whys:['El proveedor se confundió de hora'],depende:false,comps:[],verdad:'',real:'El transporte en [destino] llega tarde',acuerdo:false,cierre:'accion',sol:'',todo:'Llamar al proveedor para quejarnos',towner:'Oliver',tfecha:inDays(3),largo:false},
+  {note:'El mismo issue, bajado hasta la causa y cerrado con to-do.',inicial:'El transporte en [destino] llegó 3 h tarde',quien:'Oliver',tipo:'problema',segunda:false,hechos:'El traslado llegó a las 12:00 en vez de a las 9:00 y el grupo de [X] personas perdió la actividad de la mañana. Es la tercera vez esta temporada, en dos destinos.',rep:'repite',whys:['El proveedor se confundió de hora','Nadie confirma el transporte el día antes','La confirmación no está en el checklist de pre-expedición y no tenemos proveedor alternativo en ningún destino'],depende:true,comps:['Procesos'],verdad:'Que cada transporte se confirme 48 h antes y que haya un proveedor alternativo en cada destino.',real:'No confirmamos los transportes 48 h antes ni tenemos proveedor alternativo en ningún destino',acuerdo:true,cierre:'accion',sol:'Añadimos la confirmación a 48 h al checklist de pre-expedición. Homologar alternativos va al Parking como candidato a Rock.',todo:'Añadir "confirmar transporte 48 h antes" al checklist de pre-expedición',towner:'Oliver',tfecha:inDays(5),largo:true},
+  {note:'Un issue comercial bajado hasta la causa.',inicial:'Este mes hemos cerrado pocas reservas',quien:'Rubén',tipo:'problema',segunda:false,hechos:'Los leads están en su nivel habitual ([X]), pero la conversión ha bajado de [X]% a [X]%.',rep:'repite',whys:['Tardamos [X] días en responder a los leads en temporada alta','Solo una persona responde los leads y ha estado en ferias','No hay persona de respaldo ni medimos el tiempo de respuesta'],depende:true,comps:['Personas','Datos'],verdad:'Que siempre haya alguien respondiendo leads y que veamos cada semana cuánto tardamos.',real:'Nadie cubre la respuesta a leads cuando la persona asignada no está, y no medimos el tiempo de respuesta',acuerdo:true,cierre:'accion',sol:'Rubén define una persona de respaldo y el tiempo de respuesta entra en el Scorecard.',todo:'Definir la persona de respaldo para responder leads',towner:'Rubén',tfecha:inDays(4),largo:false}
+];
+function loadIxe(k){
+  const e=k==='clear'?{note:'',inicial:'',quien:'',tipo:'',segunda:false,hechos:'',rep:'',whys:[],depende:false,comps:[],verdad:'',real:'',acuerdo:false,cierre:'',sol:'',todo:'',towner:'',tfecha:'',largo:false}:IXE[k];
+  $i('ci-inicial').value=e.inicial; $i('ci-quien').value=e.quien;
+  $$('input[name="ci-tipo"]').forEach(r=>r.checked=r.value===e.tipo);
+  $i('ci-segunda').checked=e.segunda; $i('ci-hechos').value=e.hechos;
+  $$('input[name="ci-rep"]').forEach(r=>r.checked=r.value===e.rep);
+  $i('ci-whys').innerHTML=''; (e.whys.length?e.whys:['']).forEach(w=>addWhy(w)); if(e.whys.length) addWhy('');
+  $i('ci-depende').checked=e.depende; CI.comps=e.comps.slice(); syncComps();
+  $i('ci-verdad').value=e.verdad; $i('ci-real').value=e.real; $i('ci-acuerdo').checked=e.acuerdo;
+  $$('input[name="ci-cierre"]').forEach(r=>r.checked=r.value===e.cierre);
+  $i('ci-sol').value=e.sol; $i('ci-todo').value=e.todo; $i('ci-towner').value=e.towner; $i('ci-tfecha').value=e.tfecha; $i('ci-largo').checked=e.largo;
+  $i('ci-exnote').textContent=e.note?('Ejemplo · '+e.note):''; $i('ci-aiout').hidden=true;
+  ids_review();
+}
+$$('[data-ixe]').forEach(b=>b.onclick=()=>loadIxe(b.dataset.ixe));
+$i('ci-copy').onclick=()=>{
+  const txt=$i('ci-ficha').textContent, ok=()=>{$i('ci-copied').textContent='Copiada.'};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents($i('ci-ficha'));const s=getSelection();s.removeAllRanges();s.addRange(r);$i('ci-copied').textContent='Seleccionada: pulsa Ctrl+C o Cmd+C.'};
+  try{ navigator.clipboard.writeText(txt).then(ok,fallback) }catch(e){ fallback() }
+};
+loadIxe(0);
+IDX.push({t:'Crear un IDS paso a paso',m:'Herramienta',tk:norm('crear ids creador escalera issue real causa raiz por que'),k:'',go:()=>show('creaids',true)});
+
+(async()=>{
+  let sample=null;
+  try{ sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null }catch(e){ sample=null }
+  if(!sample) return;
+  $i('ci-aibox').hidden=false;
+  const out=$i('ci-aiout'), btn=$i('ci-ai');
+  const ERR={not_granted:'No has dado permiso para usar Claude en esta página.',rate_limited:'Demasiadas revisiones seguidas. Espera un minuto y vuelve a probar.',prompt_too_large:'El IDS es demasiado largo para revisarlo. Acórtalo.'};
+  btn.onclick=async()=>{
+    const f=IF(); if(!f.inicial){ out.hidden=false; out.textContent='Escribe al menos el issue inicial (paso 1) antes de pedir la revisión.'; return }
+    btn.disabled=true; out.hidden=false; out.textContent='Pensando…';
+    const prompt=`Eres un implementador EOS certificado. Revisa este IDS (Identify, Discuss, Solve) de Desafío Zero, una empresa española de expediciones y viajes de aventura, con los criterios de Traction (Gino Wickman):
+- El issue que se plantea rara vez es el real: hay que bajar del síntoma de esta semana ("in the business") a la causa que hay que cambiar para que no vuelva a pasar ("on the business").
+- La causa tiene que depender de la empresa (sus procesos, asientos, datos, visión o disciplina), no de un proveedor, un cliente o el azar.
+- Componentes EOS: Visión, Personas (persona correcta o asiento correcto), Datos, Issues, Procesos, Tracción.
+- Toda solución sale con owner único y fecha (to-dos de 7 días como máximo), o es un acuerdo, o falta información y alguien la trae.
+- El feedback a una persona concreta o un roce entre dos no se resuelve en la L10: va a una conversación individual.
+No inventes cifras ni datos de la empresa: usa [X] o [pendiente]. Escribe en español de España, tuteando, con frases cortas.
+
+IDS
+Issue inicial: ${f.inicial}
+Tipo: ${f.tipo||'—'}
+De segunda mano: ${f.segunda?'sí':'no'}
+Hechos: ${f.hechos||'—'}
+¿Se repite?: ${f.rep||'—'}
+Por qués: ${f.whys.map((w,i)=>(i+1)+') '+w).join(' ')||'—'}
+Componente: ${CI.comps.join(', ')||'—'}
+Qué tendría que ser verdad: ${f.verdad||'—'}
+Issue real propuesto: ${f.real||'—'}
+Cierre: ${f.cierre||'—'} · Solución: ${f.sol||'—'} · To-do: ${f.todo||'—'} (${f.towner||'—'}, ${fmtDate(f.tfecha)||'—'})
+
+Devuelve SOLO un objeto JSON con esta forma:
+{"veredicto":"superficie"|"casi"|"causa_raiz","resumen":"una frase","preguntas_que_faltan":["pregunta", "..."],"issue_real_sugerido":"una línea","componente":"Visión"|"Personas"|"Datos"|"Issues"|"Procesos"|"Tracción","solucion_sugerida":"una frase","todo_sugerido":"una frase con owner [pendiente] si no lo sabes"}`;
+    try{
+      const r=await sample.json(prompt,{modelTier:'default'});
+      const V={superficie:'Todavía en la superficie',casi:'Casi',causa_raiz:'Has llegado a la causa'};
+      out.innerHTML=`<b>${esc(V[r.veredicto]||r.veredicto||'')}</b>${r.componente?` <span class="small muted">· Componente: ${esc(r.componente)}</span>`:''}
+        ${r.resumen?`<span>${esc(r.resumen)}</span>`:''}
+        ${Array.isArray(r.preguntas_que_faltan)&&r.preguntas_que_faltan.length?`<span class="small"><b>Preguntas que faltan:</b></span><ul>${r.preguntas_que_faltan.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}
+        ${r.issue_real_sugerido?`<div class="shape ej"><span class="sl">Issue real sugerido</span><span>${esc(r.issue_real_sugerido)}</span>${r.solucion_sugerida?`<span class="small"><b>Solución:</b> ${esc(r.solucion_sugerida)}</span>`:''}${r.todo_sugerido?`<span class="small"><b>To-do:</b> ${esc(r.todo_sugerido)}</span>`:''}<button class="linkbtn" type="button" id="ci-ai-use">Usar este issue real</button></div>`:''}`;
+      const u=$i('ci-ai-use'); if(u) u.onclick=()=>{ $i('ci-real').value=r.issue_real_sugerido; ids_review(); };
+    }catch(e){
+      const code=e&&e.code;
+      if(['not_declared','sampling_disabled','capability_disabled','capability_removed'].includes(code)){ $i('ci-aibox').hidden=true; return }
+      out.textContent=ERR[code]||'No he podido revisarlo ahora. Prueba otra vez en un rato.';
+    }finally{ btn.disabled=false }
+  };
+})();
+
 })();
 </script>
 </body>
