@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Guía EOS Desafío Zero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: banda verde de cabecera + barra de pestañas fija; cada pestaña = idea clave arriba, herramienta usable debajo, detalle plegado. */
+:root{
+  --bg:#f3f5f1; --card:#ffffff; --ink:#1b2621; --muted:#58675f; --line:#d9e0d8;
+  --brand:#1d3a2e; --brand-ink:#f1eee4; --gold:#a8823c; --gold-soft:#f3ead7;
+  --tint:#e7eee8; --ok:#2e7a4d; --ok-soft:#e1f0e6; --warn:#a65f14; --warn-soft:#f8ead8; --bad:#a3402e; --bad-soft:#f6e1dc;
+  --f-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#101915; --card:#17231d; --ink:#e6ebe4; --muted:#9daca3; --line:#2a3a32;
+  --brand:#0b1511; --brand-ink:#ece7da; --gold:#d3ad66; --gold-soft:#2c2718;
+  --tint:#1d2c25; --ok:#6cc08d; --ok-soft:#1a3326; --warn:#e3a25a; --warn-soft:#352817; --bad:#e58a77; --bad-soft:#3a211c; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#101915; --card:#17231d; --ink:#e6ebe4; --muted:#9daca3; --line:#2a3a32;
+  --brand:#0b1511; --brand-ink:#ece7da; --gold:#d3ad66; --gold-soft:#2c2718;
+  --tint:#1d2c25; --ok:#6cc08d; --ok-soft:#1a3326; --warn:#e3a25a; --warn-soft:#352817; --bad:#e58a77; --bad-soft:#3a211c; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;margin:0}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:clamp(1.7rem,4vw,2.3rem)}
+h3{font-size:1.3rem}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Cabecera */
+.top{background:var(--brand);color:var(--brand-ink);padding:22px 16px 18px}
+.top-in{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 24px}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.top h1{font-size:clamp(1.8rem,5vw,2.6rem);margin-top:4px}
+.top .sub{opacity:.8;font-size:.95rem;max-width:44ch}
+.legend{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.8rem}
+
+/* Pestañas */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--card);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:1080px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;padding:13px 12px 11px;font-weight:600;font-size:.92rem;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;cursor:pointer}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.tabsel{display:none;width:100%;padding:10px 12px;font:inherit;font-weight:600;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+@media (max-width:640px){ .tabs-in{display:none} .tabs .selwrap{display:block;padding:8px 16px} .tabsel{display:block} }
+.selwrap{display:none}
+
+/* Panel */
+main{max-width:1080px;margin:0 auto;padding:28px 16px 64px}
+.panel{display:flex;flex-direction:column;gap:32px}
+.panel[hidden]{display:none}
+.key{display:grid;gap:10px;border-left:3px solid var(--gold);padding:4px 0 4px 18px}
+.key .lab{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.key p{font-size:1.12rem;max-width:62ch}
+section.block{display:flex;flex-direction:column;gap:14px}
+.block>h3+p,.lead{color:var(--muted);max-width:66ch}
+
+/* Sellos de fuente */
+.src{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:99px;white-space:nowrap;vertical-align:middle}
+.src.t{background:var(--ok-soft);color:var(--ok)}
+.src.p{background:var(--gold-soft);color:var(--gold)}
+.top .src.t{background:rgba(255,255,255,.1);color:#cfe3d5}
+.top .src.p{background:rgba(255,255,255,.1);color:var(--gold)}
+
+/* Rejillas y tarjetas */
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.grid.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card h4{margin:0;font-size:1.02rem}
+.card .meta{font-size:.82rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.04em}
+.pill{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--tint);color:var(--ink)}
+.linkbtn{background:none;border:0;padding:0;color:var(--gold);font-weight:600;cursor:pointer;text-align:left}
+.linkbtn:hover{text-decoration:underline}
+
+/* Tablas */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;background:var(--tint)}
+tr:last-child td{border-bottom:0}
+td.bad{color:var(--bad)} td.good{color:var(--ok);font-weight:500}
+
+/* Detalles */
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+details>summary{cursor:pointer;padding:13px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"+";font-family:var(--f-mono);color:var(--gold);font-size:1.1rem}
+details[open]>summary::after{content:"–"}
+details .in{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+.more{background:transparent;border-style:dashed}
+
+/* Inicio: horizontes */
+.horizon{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.hz{padding:16px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.hz:last-child{border-right:0}
+.hz .t{font-family:var(--f-display);font-size:1.5rem;font-weight:600;color:var(--brand)}
+:root[data-theme="dark"] .hz .t{color:var(--gold)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hz .t{color:var(--gold)} }
+.hz .bar{height:6px;border-radius:3px;background:var(--gold);opacity:.85}
+.hz .tool{font-weight:600;font-size:.92rem}
+.hz .desc{font-size:.82rem;color:var(--muted)}
+@media (max-width:820px){ .horizon{grid-template-columns:1fr 1fr} .hz{border-bottom:1px solid var(--line)} .hz:nth-child(2n){border-right:0} }
+.comp{cursor:pointer;text-align:left;align-items:flex-start}
+.comp:hover{border-color:var(--gold)}
+.comp .n{font-family:var(--f-display);font-size:1.25rem;font-weight:600}
+.route{display:flex;flex-direction:column;justify-content:space-between;gap:10px;align-items:flex-start;text-align:left;cursor:pointer}
+.route:hover{border-color:var(--gold)}
+.route .q{font-weight:600}
+.route .go{font-family:var(--f-mono);font-size:.74rem;color:var(--gold);white-space:nowrap}
+
+/* Diccionario */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 12px;font-size:.85rem;cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.search{flex:1 1 200px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.term summary{align-items:flex-start}
+.term .head{display:flex;flex-direction:column;gap:3px;min-width:0}
+.term .name{font-family:var(--f-display);font-size:1.15rem}
+.term .one{font-weight:400;color:var(--muted);font-size:.9rem}
+.term dl{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;margin:0;font-size:.9rem}
+.term dt{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.term dd{margin:0;min-width:0}
+@media (max-width:480px){ .term dl{grid-template-columns:1fr} .term dt{padding-top:6px} }
+#dict-list{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));align-items:start}
+@media (max-width:400px){ #dict-list{grid-template-columns:1fr} }
+
+/* Árbol */
+.tree{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){ .tree{grid-template-columns:1fr} }
+.stage{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:16px;min-height:260px}
+.stage .qn{font-family:var(--f-mono);font-size:.74rem;color:var(--gold);letter-spacing:.08em}
+.stage .qt{font-family:var(--f-display);font-size:1.45rem;line-height:1.25}
+.stage .hint{color:var(--muted);font-size:.9rem}
+.yn{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:10px 20px;font-weight:600;cursor:pointer}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn:hover{border-color:var(--gold)}
+.trail{display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+.trail .st{display:flex;gap:8px;align-items:baseline}
+.trail .a{font-family:var(--f-mono);font-size:.72rem;padding:1px 6px;border-radius:4px;background:var(--tint)}
+.dest{border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;background:var(--gold-soft);border:1px solid var(--gold)}
+.dest .dn{font-family:var(--f-display);font-size:1.5rem}
+.dests{display:flex;flex-direction:column;gap:6px}
+.dests .d{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);font-size:.88rem}
+.dests .d.on{border-color:var(--gold);background:var(--gold-soft)}
+.dests .k{font-family:var(--f-mono);font-weight:500;color:var(--gold);min-width:1.4em}
+
+/* Rocks */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){ .vs{grid-template-columns:1fr} }
+.vs .card h4{font-family:var(--f-display);font-size:1.3rem;font-weight:600}
+.vs .rock{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:.9rem}
+.kv span:nth-child(odd){color:var(--muted);font-size:.8rem}
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));counter-reset:s}
+.steps .card{position:relative;padding-top:34px}
+.steps .card::before{counter-increment:s;content:counter(s);position:absolute;top:12px;left:16px;font-family:var(--f-mono);font-size:.78rem;color:var(--gold)}
+.funnel{display:flex;flex-direction:column;gap:8px}
+.funnel .f{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.funnel .f .no{margin-left:auto;font-size:.8rem;color:var(--muted);text-align:right}
+.tester{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){ .tester{grid-template-columns:1fr} }
+.checks{display:flex;flex-direction:column;gap:6px}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--card);border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:.93rem}
+.checks input{margin-top:4px;accent-color:var(--brand)}
+.verdict{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px}
+.meter{height:10px;background:var(--tint);border-radius:5px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--bad);transition:width .25s,background .25s}
+.verdict .vt{font-family:var(--f-display);font-size:1.35rem}
+.verdict input{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;width:100%}
+.tpl{display:grid;grid-template-columns:160px 1fr;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card);font-size:.92rem}
+.tpl div{padding:10px 14px;border-bottom:1px solid var(--line)}
+.tpl div:nth-child(odd){background:var(--tint);font-weight:600}
+.tpl div:nth-last-child(-n+2){border-bottom:0}
+@media (max-width:480px){ .tpl{grid-template-columns:1fr} .tpl div:nth-child(odd){border-bottom:0} }
+
+/* IDS */
+.depth{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch}
+@media (max-width:700px){ .depth{grid-template-columns:1fr} .depth .arr{transform:rotate(90deg);justify-self:center} }
+.depth .lvl{border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px}
+.depth .in-b{background:var(--bad-soft);border:1px solid var(--bad)}
+.depth .on-b{background:var(--ok-soft);border:1px solid var(--ok)}
+.depth .arr{align-self:center;font-family:var(--f-mono);color:var(--gold);font-size:1.4rem}
+.depth .lvl .mono{text-transform:uppercase}
+.ladder{display:flex;flex-direction:column;gap:0}
+.rung{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:12px 0;border-bottom:1px dashed var(--line)}
+.rung:last-child{border-bottom:0}
+.rung .num{width:36px;height:36px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-family:var(--f-mono);font-size:.85rem}
+.rung .q{font-weight:600;font-size:1.02rem}
+.rung .w{font-size:.88rem;color:var(--muted)}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.path{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.path .p{position:relative;padding:4px 0 12px 18px;font-size:.92rem}
+.path .p::before{content:"";position:absolute;left:-6px;top:10px;width:10px;height:10px;border-radius:50%;background:var(--line)}
+.path .p.s::before{background:var(--bad)}
+.path .p.r::before{background:var(--gold)}
+.path .p.d::before{background:var(--ok)}
+.path .l{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block}
+.cmd{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;counter-reset:c;padding:0;margin:0;list-style:none}
+.cmd li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px 10px 44px;position:relative;font-size:.93rem}
+.cmd li::before{counter-increment:c;content:counter(c);position:absolute;left:12px;top:10px;font-family:var(--f-display);font-weight:600;font-size:1.15rem;color:var(--gold)}
+.closes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+
+/* L10 */
+.tl{display:flex;height:46px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.tl button{border:0;border-right:1px solid var(--bg);background:var(--tint);cursor:pointer;font-size:.72rem;font-weight:600;padding:0 4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}
+.tl button:last-child{border-right:0}
+.tl button.ids{background:var(--brand);color:var(--brand-ink)}
+.tl button[aria-pressed="true"]{outline:2px solid var(--gold);outline-offset:-2px}
+.tlx{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.7rem;color:var(--muted);margin-top:4px}
+.agenda{display:flex;flex-direction:column;gap:8px}
+.ag{display:grid;grid-template-columns:120px 1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;scroll-margin-top:80px}
+.ag.hl{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.ag .when{display:flex;flex-direction:column;gap:2px}
+.ag .when b{font-family:var(--f-display);font-size:1.15rem}
+.ag .say{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.ag .say div{padding:8px 10px;border-radius:6px;font-size:.88rem}
+.ag .no{background:var(--bad-soft)} .ag .yes{background:var(--ok-soft)}
+.ag .say .mono{display:block;margin-bottom:2px;text-transform:uppercase;font-size:.66rem}
+.ag .no .mono{color:var(--bad)} .ag .yes .mono{color:var(--ok)}
+@media (max-width:620px){ .ag{grid-template-columns:1fr} .ag .say{grid-template-columns:1fr} }
+.rules{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rules .card{align-items:flex-start}
+.rules .n{font-family:var(--f-display);font-size:1.6rem;color:var(--gold);line-height:1}
+@media (max-width:700px){ .rules{grid-template-columns:1fr 1fr} }
+
+/* Roles */
+.org{display:flex;flex-direction:column;align-items:center;gap:0}
+.org .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
+.org .vline{width:2px;height:18px;background:var(--line)}
+.seat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;min-width:0;width:200px;cursor:pointer;text-align:center;display:flex;flex-direction:column;gap:2px}
+.seat .sn{font-family:var(--f-display);font-size:1.15rem;font-weight:600}
+.seat .sp{font-size:.85rem;color:var(--muted)}
+.seat[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);background:var(--gold-soft)}
+.seat.v{border-style:dashed}
+.org .hline{height:2px;background:var(--line);width:min(640px,86%)}
+@media (max-width:640px){ .seat{width:calc(50% - 5px)} .org .hline{display:none} }
+.seatinfo{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:700px){ .seatinfo{grid-template-columns:1fr} }
+.seatinfo ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.93rem}
+.seatinfo h4{margin:0;font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.principles .card b{font-family:var(--f-display);font-size:1.15rem;font-weight:600}
+
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:12px}
+.qz{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.qz .qh{display:flex;gap:10px;align-items:baseline}
+.qz .qh .mono{color:var(--gold)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.9rem;font-weight:500}
+.opt.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.opt:disabled{cursor:default}
+.why{font-size:.9rem;padding:10px 12px;border-radius:8px;background:var(--tint)}
+.score{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+
+/* Chuletas */
+.sheets{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}
+@media (max-width:480px){ .sheets{grid-template-columns:1fr} }
+.sheet{background:var(--card);border:1.5px solid var(--brand);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:10px}
+:root[data-theme="dark"] .sheet{border-color:var(--gold)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .sheet{border-color:var(--gold)} }
+.sheet .sh{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px;gap:10px}
+.sheet .sh h3{font-size:1.35rem}
+.sheet ol,.sheet ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:.92rem}
+.sheet .foot{font-size:.78rem;color:var(--muted);margin-top:auto}
+.dlrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.dlbtn{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:var(--brand-ink);text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:600}
+
+footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
+
+/* Impresión (y generación del PDF de chuletas) */
+@media print{
+  :root{--bg:#fff;--card:#fff;--ink:#111;--muted:#444;--line:#bbb}
+  .top,.tabs,footer,.noprint{display:none!important}
+  main{padding:0}
+  .panel[hidden]{display:none!important}
+  .sheets{display:block}
+  .sheet{break-after:page;border:1.5px solid #1d3a2e;margin:0 0 0;min-height:auto}
+  .sheet:last-child{break-after:auto}
+  .panel>.key{display:none!important}
+  .sheet{padding:32px;gap:18px}
+  .sheet .sh h3{font-size:2.1rem}
+  .sheet ol,.sheet ul{font-size:1.2rem;gap:14px}
+  .sheet p{font-size:1.15rem}
+  .sheet .foot{font-size:1rem}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div>
+      <div class="eyebrow">Desafío Zero · Sistema EOS</div>
+      <h1>Guía EOS para el equipo</h1>
+      <p class="sub">Dudas del lunes, respuestas en dos minutos. Elige la pestaña de tu duda.</p>
+    </div>
+    <div class="legend"><span class="src t">Traction</span> viene del libro <span class="src p">Práctica</span> recomendación nuestra</div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="tabs-in" role="tablist" id="tablist"></div>
+  <div class="selwrap"><label for="tabsel" class="mono muted" style="display:none">Sección</label><select id="tabsel" class="tabsel" aria-label="Sección"></select></div>
+</nav>
+
+<main>
+
+<!-- ============ INICIO ============ -->
+<div class="panel" id="p-inicio" data-tab="inicio" data-label="Inicio">
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>EOS es el sistema operativo de DZ: unas pocas herramientas sencillas para que todos veamos a dónde vamos, cada prioridad tenga un dueño y los problemas se resuelvan de raíz en vez de repetirse cada semana.</p>
+  </div>
+
+  <section class="block">
+    <h3>¿Tienes una duda concreta? Empieza aquí</h3>
+    <div class="grid">
+      <button class="card route" data-go="donde"><span class="q">"¿Esto es un Rock, un to-do o un issue?"</span><span class="go">¿Dónde va? →</span></button>
+      <button class="card route" data-go="ids"><span class="q">"¿Cómo planteo este IDS?"</span><span class="go">IDS →</span></button>
+      <button class="card route" data-go="rocks"><span class="q">"¿Este proyecto es un Rock?"</span><span class="go">Rocks →</span></button>
+      <button class="card route" data-go="l10"><span class="q">"¿Qué digo en cada bloque de la L10?"</span><span class="go">L10 →</span></button>
+      <button class="card route" data-go="roles"><span class="q">"¿Quién decide esto? ¿Quién se encarga?"</span><span class="go">Roles →</span></button>
+      <button class="card route" data-go="diccionario"><span class="q">"¿Qué significa V/TO, GWC, Scorecard…?"</span><span class="go">Diccionario →</span></button>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Los 6 componentes <span class="src t">Traction</span></h3>
+    <p class="lead">Una empresa funciona bien cuando estas seis piezas están fuertes. Cuando algo falla, casi siempre es porque una de ellas cojea.</p>
+    <div class="grid g3">
+      <button class="card comp" data-go="diccionario" data-filter="Visión"><span class="n">Visión</span><span>Todos vemos a dónde va DZ y cómo vamos a llegar.</span><span class="meta">Herramienta: V/TO</span></button>
+      <button class="card comp" data-go="roles"><span class="n">Personas</span><span>Las personas correctas en los asientos correctos.</span><span class="meta">Accountability Chart · People Analyzer · GWC</span></button>
+      <button class="card comp" data-go="diccionario" data-filter="Datos"><span class="n">Datos</span><span>Un puñado de números semanales nos dice cómo vamos sin tener que preguntar.</span><span class="meta">Scorecard · medibles</span></button>
+      <button class="card comp" data-go="ids"><span class="n">Issues</span><span>Sacamos los problemas a la luz y los resolvemos para siempre.</span><span class="meta">Issues List · IDS</span></button>
+      <button class="card comp" data-go="diccionario" data-filter="Procesos"><span class="n">Procesos</span><span>Las pocas formas clave de hacer las cosas, escritas y seguidas por todos.</span><span class="meta">Procesos core documentados</span></button>
+      <button class="card comp" data-go="rocks"><span class="n">Tracción</span><span>Disciplina y rendición de cuentas para convertir la visión en hechos.</span><span class="meta">Rocks · L10 · to-dos</span></button>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Horizontes: qué herramienta vive en cada plazo</h3>
+    <p class="lead">Cada cosa tiene su plazo. Si mezclamos plazos, mezclamos herramientas: un objetivo anual no es un Rock y un Rock no es un to-do.</p>
+    <div class="horizon">
+      <div class="hz"><span class="mono muted">Siempre</span><span class="t">∞</span><div class="bar" style="width:100%"></div><span class="tool">Core Values y Core Focus</span><span class="desc">Quiénes somos y qué hacemos mejor. No caducan.</span></div>
+      <div class="hz"><span class="mono muted">10 años</span><span class="t">10a</span><div class="bar" style="width:90%"></div><span class="tool">10-Year Target</span><span class="desc">Un gran objetivo que nos da dirección.</span></div>
+      <div class="hz"><span class="mono muted">3 años</span><span class="t">3a</span><div class="bar" style="width:70%"></div><span class="tool">3-Year Picture</span><span class="desc">Cómo se ve DZ dentro de 3 años.</span></div>
+      <div class="hz"><span class="mono muted">1 año</span><span class="t">1a</span><div class="bar" style="width:50%"></div><span class="tool">1-Year Plan</span><span class="desc">3-7 objetivos medibles para el año.</span></div>
+      <div class="hz"><span class="mono muted">90 días</span><span class="t">90d</span><div class="bar" style="width:30%"></div><span class="tool">Rocks</span><span class="desc">3-7 prioridades del trimestre, cada una con un dueño.</span></div>
+      <div class="hz"><span class="mono muted">7 días</span><span class="t">7d</span><div class="bar" style="width:12%"></div><span class="tool">L10 · Scorecard · to-dos</span><span class="desc">La semana: números, compromisos y resolver issues.</span></div>
+    </div>
+  </section>
+
+  <details class="more">
+    <summary>Cómo usar esta guía</summary>
+    <div class="in small">
+      <p>No hace falta leerla entera. Cada pestaña empieza con la idea clave en 2-3 líneas; si solo lees eso, ya tienes lo esencial. Debajo hay herramientas para usar: un árbol que te lleva a la respuesta, un probador de Rocks, un quiz.</p>
+      <p>Los sellos dicen de dónde sale cada cosa: <span class="src t">Traction</span> es EOS tal como lo cuenta el libro de Gino Wickman. <span class="src p">Práctica</span> es una recomendación nuestra que encaja con EOS pero no está en el libro. Las cifras entre corchetes, como [X], son ilustrativas. [pendiente] marca datos de DZ que aún tenemos que concretar.</p>
+      <p>Puedes enlazar una pestaña directamente añadiendo su nombre al final del enlace, por ejemplo <span class="mono">#ids</span> o <span class="mono">#l10</span>.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ============ DICCIONARIO ============ -->
+<div class="panel" id="p-diccionario" data-tab="diccionario" data-label="Diccionario" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>EOS tiene su propio vocabulario y cada palabra es una herramienta distinta. Lo que más confunde son cinco: objetivo anual, Rock, proyecto, to-do e issue. Empieza por esa tabla.</p>
+  </div>
+
+  <section class="block">
+    <h3>Los cinco que más confundimos</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Concepto</th><th>Plazo</th><th>Cómo acaba</th><th>Dónde vive</th><th>Ejemplo DZ</th></tr></thead>
+      <tbody>
+        <tr><td><b>Objetivo anual</b></td><td>12 meses</td><td>Número cumplido o no a 31/12</td><td>V/TO · 1-Year Plan</td><td>Tasa de cancelación por debajo de [X]%</td></tr>
+        <tr><td><b>Rock</b></td><td>90 días</td><td>Sí o no el último día del trimestre</td><td>Rock Sheet · L10</td><td>Política de cancelación nueva publicada y aplicada desde [fecha]</td></tr>
+        <tr><td><b>Proyecto</b></td><td>Lo que haga falta</td><td>No tiene un "hecho" claro: es un medio</td><td>Se trocea en Rocks</td><td>"Revisar las cancelaciones"</td></tr>
+        <tr><td><b>To-do</b></td><td>7 días</td><td>Hecho o no hecho en la L10</td><td>To-Do List de la L10</td><td>Rubén envía a Sara el coste de cancelaciones de 2026 antes del jueves</td></tr>
+        <tr><td><b>Issue</b></td><td>Hasta que se resuelve</td><td>IDS: acción, acuerdo o falta información</td><td>Issues List</td><td>Tres cancelaciones de última hora en la misma expedición</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block">
+    <h3>Todos los conceptos</h3>
+    <div class="filters" id="dict-filters"></div>
+    <input class="search" id="dict-search" type="search" placeholder="Buscar: Rock, GWC, Scorecard…" aria-label="Buscar concepto">
+    <div id="dict-list"></div>
+  </section>
+</div>
+
+<!-- ============ DÓNDE VA ============ -->
+<div class="panel" id="p-donde" data-tab="donde" data-label="¿Dónde va?" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Todo lo que te surge tiene un sitio. Contesta sí o no a un máximo de seis preguntas y el árbol te dice si es un to-do, un issue (y de qué L10), un candidato a Rock, algo para el V/TO, una conversación individual o algo que simplemente se hace.</p>
+  </div>
+
+  <section class="block">
+    <div class="tree">
+      <div class="stage" id="tree-stage" aria-live="polite"></div>
+      <div class="dests" id="tree-dests"></div>
+    </div>
+    <p class="small muted">Árbol <span class="src p">Práctica</span> construido con los criterios de Traction: to-dos de 7 días, Rocks de 90 días, Issues List a tres niveles y la sesión personal de resolución de issues.</p>
+  </section>
+
+  <section class="block">
+    <h3>10 casos de DZ resueltos con el árbol</h3>
+    <div class="grid g3" id="cases"></div>
+  </section>
+</div>
+
+<!-- ============ ROCKS ============ -->
+<div class="panel" id="p-rocks" data-tab="rocks" data-label="Rocks" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Un proyecto es un medio; un Rock es un resultado. De cada proyecto que importa este trimestre sacamos lo que tiene que estar hecho el último día, con un solo dueño, de forma que ese día podamos decir sí o no sin discutir.</p>
+  </div>
+
+  <section class="block">
+    <h3>Proyecto frente a Rock</h3>
+    <div class="vs">
+      <div class="card"><h4>Proyecto</h4>
+        <div class="kv"><span>Qué es</span><span>Un conjunto de trabajo para conseguir algo</span><span>Duración</span><span>La que haga falta; a menudo varios trimestres</span><span>Cómo acaba</span><span>Difuso: "estamos con ello"</span><span>Ejemplo</span><span>Nueva web</span></div>
+        <span class="src p" style="align-self:flex-start">"Proyecto" no es término EOS</span>
+      </div>
+      <div class="card rock"><h4>Rock</h4>
+        <div class="kv"><span>Qué es</span><span>Una prioridad con un resultado concreto</span><span>Duración</span><span>90 días</span><span>Cómo acaba</span><span>Sí o no, sin discusión</span><span>Ejemplo</span><span>Nueva web publicada con reserva online funcionando antes del 31/03</span></div>
+        <span class="src t" style="align-self:flex-start">Traction</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>¿Qué proyectos entran este trimestre? <span class="src p">Práctica</span></h3>
+    <p class="lead">Pasa cada proyecto por tres filtros. Si cae en alguno, no se tira: se aparca en el <b>Parking</b> y se revisa en la próxima trimestral.</p>
+    <div class="funnel">
+      <div class="f"><span class="pill">1</span><span><b>¿Empuja un objetivo del 1-Year Plan?</b></span><span class="no">No → Parking</span></div>
+      <div class="f"><span class="pill">2</span><span><b>¿Sin esto el año fracasa o se retrasa de verdad?</b></span><span class="no">No → Parking</span></div>
+      <div class="f"><span class="pill">3</span><span><b>¿Tenemos capacidad y caja para hacerlo ahora?</b></span><span class="no">No → Parking</span></div>
+      <div class="f" style="border-color:var(--gold);background:var(--gold-soft)"><span class="pill">✓</span><span><b>Pasa los tres: candidato a Rock.</b> Sacamos de él el resultado de 90 días.</span></div>
+    </div>
+    <p class="small muted">Que los Rocks empujen el 1-Year Plan es Traction; los filtros 2 y 3 son práctica nuestra.</p>
+  </section>
+
+  <section class="block">
+    <h3>El Parking</h3>
+    <div class="card" style="border-color:var(--gold);gap:12px">
+      <p><b>El Parking es nuestra Issues List del V/TO.</b> Es el sitio donde apuntamos lo que va saliendo y no cabe este trimestre, para que no se olvide y se priorice en la siguiente trimestral.</p>
+      <p class="small"><span class="src t">Traction</span> El libro no lo llama Parking. Lo llama Issues List del V/TO y dice que los candidatos a Rock que no entran se pasan al trimestre siguiente apuntándolos ahí. El nombre Parking es nuestro; la herramienta es la de Traction.</p>
+      <div class="grid g3">
+        <div><b class="small">Qué entra</b><p class="small muted">Lo de más de 90 días, lo que toca la visión y los candidatos a Rock que no caben ahora. Lo de esta semana va a la Issues List de la L10.</p></div>
+        <div><b class="small">Cómo se apunta</b><p class="small muted">Una línea por cosa y quién la trajo, igual que un issue.</p></div>
+        <div><b class="small">Cuándo se revisa</b><p class="small muted">Entero en cada trimestral: lo que pasa a Rock sale, lo que ya no aplica se tacha y lo demás se queda.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Cómo sacamos los Rocks <span class="src t">Traction</span></h3>
+    <div class="steps">
+      <div class="card"><b>Lluvia de ideas</b><span class="small muted">Todo lo que debería estar hecho en 90 días. Sin filtrar.</span></div>
+      <div class="card"><b>Keep / kill / combine</b><span class="small muted">Nos quedamos con lo importante, tachamos y juntamos.</span></div>
+      <div class="card"><b>3-7 de compañía</b><span class="small muted">Mejor cerca de 3. Lo que sobra va al Parking.</span></div>
+      <div class="card"><b>Un solo owner</b><span class="small muted">Cada Rock de compañía, una persona de dirección.</span></div>
+      <div class="card"><b>Rocks individuales</b><span class="small muted">Dirección: 3-7 en total. Resto del equipo: 1-3.</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>¿Y SMART?</h3>
+    <div class="grid g3">
+      <div class="card"><span class="src t" style="align-self:flex-start">Lo que pide Traction</span><p>Que el Rock sea <b>específico, medible y alcanzable</b> y que tenga un dueño. El plazo lo da el propio trimestre y la relevancia la da el 1-Year Plan.</p></div>
+      <div class="card"><span class="src p" style="align-self:flex-start">SMART como puente</span><p>Si ya conoces SMART, úsalo como comprobación. Las cinco letras se cumplen solas si el Rock pasa el test del sí o no y cuelga de un objetivo anual. SMART no es terminología EOS.</p></div>
+      <div class="card" style="border-color:var(--gold)"><span class="mono" style="color:var(--gold)">EL TEST DEFINITIVO</span><p style="font-family:var(--f-display);font-size:1.25rem;line-height:1.3">"El último día del trimestre, ¿podemos decir SÍ o NO sin discutir?"</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Probador de Rocks</h3>
+    <p class="lead">Escribe tu Rock y marca lo que cumple.</p>
+    <div class="tester">
+      <div class="checks" id="rock-checks">
+        <label><input type="checkbox" id="rc1"> Tiene <b>un solo owner</b>.</label>
+        <label><input type="checkbox" id="rc2"> Está escrito como <b>resultado</b> ("publicada", "firmados"), no como actividad ("trabajar en", "mejorar").</label>
+        <label><input type="checkbox" id="rc3"> Tiene <b>fecha</b>: fin de trimestre o antes.</label>
+        <label><input type="checkbox" id="rc4"> Dice <b>cuándo está hecho</b>: una cifra o una definición clara.</label>
+        <label><input type="checkbox" id="rc5"> El último día se puede decir <b>sí o no sin discutir</b>.</label>
+        <label><input type="checkbox" id="rc6"> Empuja un <b>objetivo del 1-Year Plan</b>.</label>
+        <label><input type="checkbox" id="rc7"> Es <b>alcanzable en 90 días</b> con lo que ya tiene el owner encima.</label>
+      </div>
+      <div class="verdict">
+        <label for="rock-text" class="mono muted">TU ROCK</label>
+        <input id="rock-text" type="text" placeholder="Ej.: Oliver: [X] proveedores alternativos homologados antes del 31/03">
+        <div class="meter"><i id="rock-meter"></i></div>
+        <div class="vt" id="rock-vt">Todavía es un proyecto</div>
+        <p class="small muted" id="rock-vd">Marca lo que cumple tu Rock.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Mal formulado → bien formulado</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Así no</th><th>Así sí</th><th>Por qué</th></tr></thead>
+      <tbody>
+        <tr><td class="bad">Mejorar el marketing</td><td class="good">Campaña de temporada alta lanzada en [canales] y con ≥[X] leads cualificados antes del 31/03</td><td>"Mejorar" no se puede comprobar.</td></tr>
+        <tr><td class="bad">Trabajar en la nueva web</td><td class="good">Nueva web publicada con reserva online funcionando antes del 31/03</td><td>Describe una actividad; el Rock es el resultado.</td></tr>
+        <tr><td class="bad">Reducir cancelaciones</td><td class="good">Nueva política de cancelación aprobada, publicada y aplicada a todas las reservas desde [fecha]</td><td>La tasa de cancelación es objetivo anual o número del Scorecard; el Rock es lo que haces este trimestre para moverla.</td></tr>
+        <tr><td class="bad">Oliver y Sara: acuerdos con proveedores</td><td class="good">Oliver: [X] proveedores locales alternativos homologados en [destinos] antes del 31/03</td><td>Dos owners es ningún owner. Sara aparece en "necesita de".</td></tr>
+        <tr><td class="bad">Formar a los líderes</td><td class="good">Formación de líderes impartida a [X] líderes y superada por todos antes del inicio de temporada</td><td>Sin cifra ni fecha no hay "hecho".</td></tr>
+        <tr><td class="bad">Contratar líderes</td><td class="good">[X] líderes de expedición contratados y con onboarding completado antes del [fecha]</td><td>"Contratar" nunca termina. ¿Cuántos y para cuándo?</td></tr>
+        <tr><td class="bad">Revisar todos los procesos</td><td class="good">Proceso de preparación de expedición documentado y seguido por todo Operaciones antes del 31/03</td><td>Demasiado grande para 90 días. Uno y bien.</td></tr>
+        <tr><td class="bad">Estar más presentes en redes</td><td class="good">Plan de contenidos de Q1 ejecutado: [X] publicaciones y leads atribuidos medidos en el Scorecard</td><td>"Más presentes" es una sensación, no un resultado.</td></tr>
+        <tr><td class="bad">Controlar la caja</td><td class="good">Previsión de tesorería a 13 semanas actualizada cada lunes y en el Scorecard desde [fecha]</td><td>"Controlar" es el trabajo del asiento; el Rock es montar la herramienta.</td></tr>
+        <tr><td class="bad">Llamar a los 20 clientes de la última expedición</td><td class="good">Es un to-do (o varios), no un Rock</td><td>Si se hace en una semana, no es una prioridad de 90 días.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block">
+    <h3>Plantilla de Rock</h3>
+    <div class="tpl">
+      <div>Owner</div><div>Una sola persona</div>
+      <div>Rock</div><div>El resultado, en una frase: "[Algo] [hecho/publicado/firmado] antes del [fecha]"</div>
+      <div>Hecho cuando…</div><div>Lo que tiene que ser verdad el último día</div>
+      <div>Métrica</div><div>La cifra, si la hay: [X]</div>
+      <div>Fecha</div><div>Fin de trimestre o antes</div>
+      <div>Necesita de</div><div>Quién tiene que aportar qué, acordado al inicio</div>
+      <div>Hitos mensuales <span class="src p">Práctica</span></div><div>Mes 1: … · Mes 2: … · Mes 3: hecho</div>
+    </div>
+  </section>
+
+  <div class="grid g3">
+    <div class="card"><h4>Test de carga <span class="src p">Práctica</span></h4>
+      <p class="small">Nadie de dirección con más de 3 Rocks de compañía. Si la Integradora acaba con más Rocks que nadie, es señal de que está absorbiendo lo que debería repartirse: pregunta a quién le corresponde por asiento.</p>
+      <p class="small muted">Traction: 3-7 Rocks en total por persona de dirección, mejor cerca de 3.</p></div>
+    <div class="card"><h4>Si un Rock se desvía <span class="src t">Traction</span></h4>
+      <p class="small">En la L10 solo dices "desviado". El owner lo pasa a la Issues List y se hace IDS con él. Opciones: pedir ayuda, cambiar el plan o reconocer que no llegará.</p>
+      <p class="small muted">Meta: completar el 80% de los Rocks o más. Un Rock al 90% no está hecho.</p></div>
+    <div class="card"><h4>A mitad de trimestre</h4>
+      <p class="small">Los Rocks nuevos no se añaden sobre la marcha: van al Parking y se deciden en la trimestral. Si algo es tan urgente que no puede esperar, se hace IDS y se decide qué sale para que entre. <span class="src p">Práctica</span></p></div>
+  </div>
+</div>
+
+<!-- ============ IDS ============ -->
+<div class="panel" id="p-ids" data-tab="ids" data-label="IDS" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>El problema que traemos casi nunca es el problema real. IDS (Identify, Discuss, Solve) sirve para bajar del incendio de esta semana a lo que hay que cambiar para que no vuelva a pasar. Si una solución no sale con owner y fecha, no está resuelta.</p>
+  </div>
+
+  <section class="block">
+    <h3>Nuestro problema: nos quedamos arriba</h3>
+    <div class="depth">
+      <div class="lvl in-b"><span class="mono" style="color:var(--bad)">In the business · síntoma</span><b>El incendio de esta semana</b><span class="small">"El transporte en [destino] llegó tarde y el grupo perdió la actividad."</span><span class="small muted">Si solo lo apagamos, vuelve.</span></div>
+      <div class="arr" aria-hidden="true">→</div>
+      <div class="lvl on-b"><span class="mono" style="color:var(--ok)">On the business · causa</span><b>Lo que hay que cambiar</b><span class="small">"No confirmamos los transportes 48 h antes ni tenemos proveedor alternativo en ningún destino."</span><span class="small muted">Si lo cambiamos, deja de pasar en todos los destinos.</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Cómo escribir un issue</h3>
+    <p class="lead">Una línea, quién lo trae y de qué tipo es. Si no cabe en una línea, todavía no sabes cuál es el issue.</p>
+    <div class="types">
+      <div class="card"><span class="pill" style="align-self:flex-start">Problema</span><b>Hay que resolverlo</b><span class="small muted">"Oliver · problema · 3.ª cancelación de transporte en [destino] esta temporada"</span></div>
+      <div class="card"><span class="pill" style="align-self:flex-start">Información</span><b>Todos lo tienen que saber y aceptar</b><span class="small muted">"Rubén · info · el banco pide el cierre de 2026 antes del [fecha]"</span></div>
+      <div class="card"><span class="pill" style="align-self:flex-start">Idea</span><b>Necesita feedback o luz verde</b><span class="small muted">"Sara · idea · probar un descuento por reserva anticipada en [expedición]"</span></div>
+    </div>
+    <p class="small muted">Los tres tipos (resolver, informar, idea) son <span class="src t">Traction</span>; el formato de una línea con quién y tipo es <span class="src p">Práctica</span>.</p>
+  </section>
+
+  <section class="block">
+    <h3>Identify: la escalera <span class="src p">Práctica</span></h3>
+    <p class="lead">Traction dice que el problema que se plantea rara vez es el real y que hay que ir pelando capas. Esta escalera es nuestra forma de hacerlo. Sube peldaño a peldaño hasta que quien trajo el issue diga "sí, eso es".</p>
+    <div class="card ladder">
+      <div class="rung"><span class="num">1</span><div><div class="q">¿Qué ha pasado exactamente?</div><div class="w">Hechos, no opiniones. Quién, qué, cuándo, cuánto.</div></div></div>
+      <div class="rung"><span class="num">2</span><div><div class="q">¿Es la primera vez?</div><div class="w">Si ya ha pasado antes, hay una causa de fondo. Si es la primera, quizá baste un to-do.</div></div></div>
+      <div class="rung"><span class="num">3</span><div><div class="q">¿Por qué pasó? ¿Y por qué pasó eso?</div><div class="w">Repite hasta llegar a algo que depende de nosotros, no del proveedor, del cliente o del tiempo.</div></div></div>
+      <div class="rung"><span class="num">4</span><div><div class="q">¿De qué componente es?</div><div class="w">Visión · Personas (persona o asiento) · Datos · Issues · Procesos · Tracción. Mira el mapa de abajo.</div></div></div>
+      <div class="rung"><span class="num">5</span><div><div class="q">¿Qué tendría que ser verdad para que no volviera a pasar?</div><div class="w">Aquí aparece el issue real.</div></div></div>
+      <div class="rung"><span class="num">6</span><div><div class="q">Escríbelo en una línea. ¿Quien lo trajo está de acuerdo?</div><div class="w">Si dice que sí, pasáis al Discuss. Si no, volved al peldaño 3.</div></div></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Mapa de causas raíz <span class="src p">Práctica</span></h3>
+    <div class="tw"><table>
+      <thead><tr><th>Componente</th><th>Causa típica</th><th>La señal que la delata</th><th>Pregunta para confirmarla</th></tr></thead>
+      <tbody>
+        <tr><td><b>Visión</b></td><td>No está claro qué somos y qué no hacemos</td><td>Discutimos si aceptar un encargo o un destino cada vez que llega uno</td><td>¿Esto cae dentro de nuestro Core Focus?</td></tr>
+        <tr><td><b>Personas</b></td><td>Persona en el asiento equivocado, o asiento sin dueño</td><td>El mismo nombre sale en muchos issues, o hay tareas que "caen entre sillas"</td><td>¿De quién es este asiento? ¿Tiene GWC?</td></tr>
+        <tr><td><b>Datos</b></td><td>No hay un número que avise a tiempo</td><td>Nos enteramos tarde: cuando el cliente se queja o la caja ya está baja</td><td>¿Qué número nos lo habría dicho hace un mes?</td></tr>
+        <tr><td><b>Issues</b></td><td>Los problemas no se sacan o se aplazan</td><td>El mismo issue vuelve cada pocas semanas</td><td>¿Lo resolvimos o lo apagamos?</td></tr>
+        <tr><td><b>Procesos</b></td><td>Cada uno lo hace a su manera</td><td>El error depende de quién hiciera la tarea</td><td>¿Está escrito cómo se hace? ¿Se sigue?</td></tr>
+        <tr><td><b>Tracción</b></td><td>Se decide y no se ejecuta</td><td>To-dos que caducan, Rocks desviados sin issue</td><td>¿Quién era el owner y qué le impidió hacerlo?</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block">
+    <h3>6 recorridos completos de DZ</h3>
+    <p class="lead">Del incendio al to-do. Abre uno para ver el camino.</p>
+    <div id="ids-cases" class="grid g3" style="align-items:start"></div>
+  </section>
+
+  <section class="block">
+    <h3>Discuss: todos hablan, una vez <span class="src t">Traction</span></h3>
+    <div class="grid g3">
+      <div class="card"><b>Di lo que piensas una vez</b><span class="small">Repetir el mismo argumento con otras palabras no es discutir, es alargar.</span></div>
+      <div class="card"><b>"¡Alerta tangente!"</b><span class="small">Cualquiera puede decirlo cuando la conversación se va a otro tema. Si la tangente es un issue de verdad, se apunta en la lista y se sigue.</span></div>
+      <div class="card"><b>Cuándo cortar</b><span class="small">Cuando empiezan a repetirse los argumentos. Quien dirige pide una propuesta concreta o se pasa a decidir. <span class="src p">Práctica</span></span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Solve: los tres cierres <span class="src t">Traction</span></h3>
+    <div class="closes">
+      <div class="card"><span class="pill" style="align-self:flex-start">Acción</span><b>Alguien tiene que hacer algo</b><span class="small">Sale un to-do con owner y fecha. Ej.: "Oliver añade la confirmación a 48 h al checklist antes del viernes".</span></div>
+      <div class="card"><span class="pill" style="align-self:flex-start">Acuerdo</span><b>Basta con que todos lo sepamos y lo aceptemos</b><span class="small">Se dice en voz alta y se tacha. Ej.: "Acordamos que no aceptamos grupos de menos de [X] personas".</span></div>
+      <div class="card"><span class="pill" style="align-self:flex-start">Falta información</span><b>No podemos decidir todavía</b><span class="small">To-do para traer los datos y el issue vuelve como prioridad la semana siguiente.</span></div>
+    </div>
+    <p class="small">Al cerrar, alguien dice la solución en voz alta: "Queda así: …". Si alguien dice "eso no es lo que he entendido", se vuelve a hablar. Es normal.</p>
+  </section>
+
+  <section class="block">
+    <h3>Los 10 mandamientos, en nuestras palabras <span class="src t">Traction</span></h3>
+    <ol class="cmd">
+      <li>No decidimos por consenso. Hablan todos; si no hay acuerdo, decide la Integradora.</li>
+      <li>No seas blando. La solución suele ser simple; lo difícil es aplicarla.</li>
+      <li>Decide. Mejor una decisión hoy que la perfecta dentro de un mes.</li>
+      <li>Nada de "me han dicho que". Si el issue implica a alguien que no está, se le cita.</li>
+      <li>El bien de DZ va por delante de tu área, tu cargo y tu orgullo.</li>
+      <li>No intentes resolverlos todos. Primero el más importante, luego el siguiente.</li>
+      <li>Vivir con ello, acabar con ello o cambiarlo. No hay cuarta opción.</li>
+      <li>Mejor un dolor corto hoy que un dolor largo todo el año.</li>
+      <li>Entra en el peligro: el issue que más miedo da es el que más urge.</li>
+      <li>Lánzate con una propuesta. Si está mal, el equipo te lo dirá.</li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <h3>Qué NO llevamos a la L10 de dirección, y dónde va</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Si es…</th><th>Va a…</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Un tema que solo afecta a un área</td><td>La L10 de esa área</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Información de segunda mano ("me han dicho que…")</td><td>Confírmalo con la fuente. Si sigue siendo issue, se trata con todos los implicados delante</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Feedback a una persona o un roce entre dos</td><td>Conversación individual o sesión personal de resolución de issues entre los dos</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Algo que tarda más de 90 días, toca la visión o no cabe este trimestre</td><td>Parking, para la trimestral</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Algo que solo hay que hacer</td><td>Se hace, o es un to-do</td><td><span class="src p">Práctica</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="small"><b>Ojo:</b> los issues de personas clave sí van a la L10 de dirección cuando la pregunta es si alguien encaja en su asiento (People Analyzer, GWC). Lo que sale fuera es el feedback individual y los roces personales. <span class="src t">Traction</span></p>
+  </section>
+
+  <section class="block">
+    <h3>Cómo priorizar <span class="src t">Traction</span></h3>
+    <div class="grid g3">
+      <div class="card"><b>1 · Lee la lista rápido</b><span class="small">Sin discutir nada. Tacha lo que ya no aplica.</span></div>
+      <div class="card"><b>2 · Elige los 3 más importantes</b><span class="small">No en orden de lista ni por quién los trajo primero.</span></div>
+      <div class="card"><b>3 · Empieza por el n.º 1</b><span class="small">Resuelto ese, al 2. Si os sobra tiempo, elegid otros 3.</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ L10 ============ -->
+<div class="panel" id="p-l10" data-tab="l10" data-label="L10" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>La L10 son 90 minutos a la semana con la misma agenda. Los primeros 30 son para reportar rápido, sin debatir. Los 60 del final son para resolver issues. Si reportar se come el IDS, la reunión no genera tracción.</p>
+  </div>
+
+  <section class="block">
+    <h3>Los 90 minutos <span class="src t">Traction</span></h3>
+    <p class="lead">Toca un bloque para ir a él.</p>
+    <div>
+      <div class="tl" id="l10-tl"></div>
+      <div class="tlx"><span>0'</span><span>30'</span><span>90'</span></div>
+    </div>
+    <div class="agenda" id="l10-agenda"></div>
+  </section>
+
+  <section class="block">
+    <h3>Dos roles <span class="src t">Traction</span></h3>
+    <div class="grid g3">
+      <div class="card"><b>Quien dirige</b><span class="small">Lleva al equipo por la agenda, controla los tiempos y corta tangentes. En DZ: [pendiente]; en la Guía A proponemos a Lara.</span></div>
+      <div class="card"><b>Quien lleva la agenda</b><span class="small">Se asegura de que agenda, Scorecard y Rocks estén actualizados y delante de todos. Actualiza to-dos e issues cada semana. En DZ: [pendiente].</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h3>Las 5 reglas <span class="src t">Traction</span></h3>
+    <div class="rules">
+      <div class="card"><span class="n">1</span><b>Mismo día</b></div>
+      <div class="card"><span class="n">2</span><b>Misma hora</b></div>
+      <div class="card"><span class="n">3</span><b>Misma agenda</b><span class="small muted">Impresa o en pantalla, igual cada semana</span></div>
+      <div class="card"><span class="n">4</span><b>Empieza en punto</b></div>
+      <div class="card"><span class="n">5</span><b>Acaba en punto</b></div>
+    </div>
+    <p class="small muted">Traction: no se cancela ni se mueve. Si alguien no puede venir, la reunión se hace igual.</p>
+  </section>
+</div>
+
+<!-- ============ ROLES ============ -->
+<div class="panel" id="p-roles" data-tab="roles" data-label="Roles y decisiones" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>En EOS cada cosa tiene un solo dueño: cada asiento, cada Rock, cada número, cada to-do. Si dos personas son responsables, no lo es ninguna. Y para decidir: hablan todos, decide una, y después todos apoyamos la decisión.</p>
+  </div>
+
+  <section class="block">
+    <h3>Quién es quién en dirección</h3>
+    <p class="lead">Toca un asiento para ver qué le toca. Los cinco roles de cada asiento en DZ están en nuestro Accountability Chart; aquí van los que describe Traction.</p>
+    <div class="org" id="org">
+      <div class="row"><button class="seat v" data-seat="v" aria-pressed="false"><span class="sn">Visionario</span><span class="sp">Antonio</span></button></div>
+      <div class="vline"></div>
+      <div class="row"><button class="seat" data-seat="i" aria-pressed="true"><span class="sn">Integradora</span><span class="sp">Lara</span></button></div>
+      <div class="vline"></div>
+      <div class="hline"></div>
+      <div class="row" style="margin-top:0">
+        <button class="seat" data-seat="o" aria-pressed="false"><span class="sn">Operaciones</span><span class="sp">Oliver · líderes de expedición</span></button>
+        <button class="seat" data-seat="f" aria-pressed="false"><span class="sn">Finanzas</span><span class="sp">Rubén</span></button>
+        <button class="seat" data-seat="c" aria-pressed="false"><span class="sn">Comercial</span><span class="sp">Sara</span></button>
+      </div>
+    </div>
+    <div class="seatinfo" id="seatinfo" aria-live="polite"></div>
+  </section>
+
+  <section class="block">
+    <h3>¿Quién decide?</h3>
+    <p class="lead">Busca el tipo de decisión. Si no está, la regla general es: la decide el dueño del asiento al que pertenece; si afecta a varios asientos, se hace IDS en dirección.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Tipo de decisión</th><th>Quién decide</th><th>Dónde</th><th>Si no hay acuerdo</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Día a día dentro de un área</td><td>Responsable del área</td><td>Su trabajo o su L10 de área</td><td>Si afecta a otra área, sube a dirección</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Entre áreas: prioridades, recursos, conflictos</td><td>Equipo directivo</td><td>IDS en la L10 de dirección</td><td>Decide la Integradora</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Rocks del trimestre</td><td>Equipo directivo</td><td>Reunión trimestral</td><td>Decide la Integradora</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Añadir o cambiar un Rock a mitad</td><td>Equipo directivo</td><td>IDS en L10 de dirección</td><td>Por defecto no; espera a la trimestral</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Idea nueva: destino, producto, línea de negocio</td><td>Equipo directivo, con el Core Focus como filtro</td><td>Parking → trimestral</td><td>Antonio defiende la idea; Lara decide el cuándo</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Cambios en el V/TO (valores, Core Focus, metas)</td><td>Equipo directivo</td><td>Trimestral o anual</td><td>Antonio y Lara lo cierran en su Same Page y lo traen</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Persona en asiento de dirección</td><td>Integradora, con el equipo</td><td>People Analyzer + IDS en dirección</td><td>Decide la Integradora</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td>Persona en asiento de un área</td><td>Responsable del área</td><td>People Analyzer con su equipo</td><td>Lo lleva a la Integradora</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td>Gasto fuera de presupuesto</td><td>[pendiente: límite de autorización]</td><td>Rubén lo trae a IDS por encima de [X] €</td><td>Decide la Integradora</td><td><span class="src p">Práctica</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block">
+    <h3>¿Quién se encarga de qué herramienta?</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Herramienta</th><th>Quién la alimenta</th><th>Quién vela por ella</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>V/TO</b></td><td>Todo el equipo directivo, en anual y trimestral</td><td>Lara la mantiene al día y la revisa cada trimestre</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>Accountability Chart</b></td><td>Equipo directivo: primero la estructura, luego los nombres</td><td>Lara</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>Scorecard</b></td><td>Cada número tiene un owner que lo mete antes de la L10</td><td>Quien lleva la agenda comprueba que está completo</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td><b>Issues List de dirección</b></td><td>Cualquiera de dirección añade</td><td>Quien lleva la agenda; nadie borra un issue sin IDS</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>Issues List de área</b></td><td>Todo el equipo del área</td><td>Responsable del área</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>Rocks</b></td><td>Owner único; reporta "en marcha / desviado"</td><td>Quien dirige la L10</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td><b>To-dos</b></td><td>Owner único; 7 días</td><td>Quien lleva la agenda</td><td><span class="src t">Traction</span></td></tr>
+        <tr><td><b>Procesos core</b></td><td>El responsable de cada función documenta el suyo</td><td>Lara vela por que se sigan</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>People Analyzer</b></td><td>Cada responsable con su equipo</td><td>Lara, con el equipo directivo</td><td><span class="src p">Práctica</span></td></tr>
+        <tr><td><b>Same Page Meeting</b></td><td>Antonio y Lara, una vez al mes</td><td>Lara la convoca</td><td><span class="src p">Rocket Fuel</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block">
+    <h3>Cinco reglas para decidir juntos</h3>
+    <div class="principles">
+      <div class="card"><b>Hablan todos, decide una</b><span class="small">Nada de votar ni de esperar a que todos estemos de acuerdo. Si no hay acuerdo, decide la Integradora. <span class="src t">Traction</span></span></div>
+      <div class="card"><b>Decide rápido</b><span class="small">Una decisión a tiempo vale más que la perfecta tarde. Se puede corregir después. <span class="src t">Traction</span></span></div>
+      <div class="card"><b>Frente unido</b><span class="small">Si no estabas de acuerdo, lo dijiste en el Discuss. Una vez decidido, lo apoyas fuera de la sala y no lo reabres en el pasillo. <span class="src t">Traction</span></span></div>
+      <div class="card"><b>Todo tiene un dueño</b><span class="small">Cada decisión acaba en un nombre y una fecha. "Lo vemos" no es una decisión. <span class="src t">Traction</span></span></div>
+      <div class="card"><b>Delegar y elevar</b><span class="small">Si estás por encima del 100%, suelta lo que otro puede hacer y quédate con lo que solo tú haces bien. <span class="src t">Traction</span></span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FAQ ============ -->
+<div class="panel" id="p-faq" data-tab="faq" data-label="FAQ" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Las preguntas que nos vamos a hacer, con respuesta corta. Casi todas se resuelven con tres reglas: un solo dueño, cada cosa en su plazo y todo lo dudoso a la Issues List.</p>
+  </div>
+  <div class="filters"><input class="search" id="faq-search" type="search" placeholder="Buscar pregunta…" aria-label="Buscar pregunta"></div>
+  <div id="faq-list" style="display:flex;flex-direction:column;gap:8px"></div>
+</div>
+
+<!-- ============ PRACTICA ============ -->
+<div class="panel" id="p-practica" data-tab="practica" data-label="Practica" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Diez situaciones de DZ para clasificar y tres issues para bajar con la escalera. Elige una respuesta y verás la solución y el porqué.</p>
+  </div>
+  <section class="block">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3>¿Qué es cada cosa?</h3><span class="score" id="quiz-score">0 / 10 respondidas</span></div>
+    <div class="quiz" id="quiz"></div>
+  </section>
+  <section class="block">
+    <h3>Baja estos issues con la escalera</h3>
+    <p class="lead">Intenta llegar al issue real antes de abrir la solución.</p>
+    <div id="ladder-ex" style="display:flex;flex-direction:column;gap:8px"></div>
+  </section>
+</div>
+
+<!-- ============ CHULETAS ============ -->
+<div class="panel" id="p-chuletas" data-tab="chuletas" data-label="Chuletas" hidden>
+  <div class="key">
+    <span class="lab">Idea clave</span>
+    <p>Cuatro chuletas de una página para tener en la sala de la L10. El PDF tiene una por página, listo para imprimir.</p>
+  </div>
+  <div class="dlrow noprint"><a class="dlbtn" href="chuletas-eos-dz.pdf" target="_blank" rel="noopener">Abrir el PDF para imprimir</a></div>
+  <div class="sheets">
+    <div class="sheet">
+      <div class="sh"><h3>¿Dónde va esto?</h3><span class="mono muted">DZ · EOS · A</span></div>
+      <ol>
+        <li><b>¿Lo resuelves tú, en tu asiento, sin decidir por otros?</b> Sí → hazlo y ya.</li>
+        <li><b>¿Está claro qué hacer y cabe en 7 días?</b> Sí → to-do con owner y fecha.</li>
+        <li><b>¿Es feedback o un roce con una persona concreta?</b> Sí → conversación individual.</li>
+        <li><b>¿Lleva más de 90 días o toca la visión?</b> Sí → Parking.</li>
+        <li><b>¿Es un resultado importante que pide semanas de trabajo?</b> Sí → Parking, como candidato a Rock.</li>
+        <li><b>¿Afecta a varias áreas o necesita a dirección?</b> Sí → issue L10 de dirección. No → issue L10 de área.</li>
+      </ol>
+      <p class="foot">Segunda mano ("me han dicho que") → confirmar primero con la fuente.</p>
+    </div>
+    <div class="sheet">
+      <div class="sh"><h3>Escalera del IDS</h3><span class="mono muted">DZ · EOS · B</span></div>
+      <ol>
+        <li>¿Qué ha pasado exactamente? (hechos)</li>
+        <li>¿Es la primera vez?</li>
+        <li>¿Por qué pasó? ¿Y por qué pasó eso? (hasta algo que depende de nosotros)</li>
+        <li>¿De qué componente es? Visión · Personas · Datos · Issues · Procesos · Tracción</li>
+        <li>¿Qué tendría que ser verdad para que no volviera a pasar?</li>
+        <li>Issue real en una línea. ¿Quien lo trajo está de acuerdo?</li>
+      </ol>
+      <p><b>Discuss:</b> todos hablan, una vez. "¡Alerta tangente!"<br><b>Solve:</b> acción (to-do con owner y fecha) · acuerdo · falta información.</p>
+      <p class="foot">Los 3 más importantes primero. Vivir con ello, acabar con ello o cambiarlo.</p>
+    </div>
+    <div class="sheet">
+      <div class="sh"><h3>Test del Rock</h3><span class="mono muted">DZ · EOS · C</span></div>
+      <p style="font-family:var(--f-display);font-size:1.2rem">"El último día del trimestre, ¿podemos decir SÍ o NO sin discutir?"</p>
+      <ul>
+        <li>Un solo owner</li>
+        <li>Resultado, no actividad ("publicada", no "trabajar en")</li>
+        <li>Fecha: fin de trimestre o antes</li>
+        <li>Definición de hecho o cifra [X]</li>
+        <li>Empuja un objetivo del 1-Year Plan</li>
+        <li>Alcanzable en 90 días con la carga actual</li>
+      </ul>
+      <p class="small">Compañía: 3-7 · Dirección: 3-7 en total · Resto: 1-3. En la L10: "en marcha" o "desviado". Desviado → Issues List.</p>
+      <p class="foot">Meta: 80% de Rocks completados. Al 90% no está hecho.</p>
+    </div>
+    <div class="sheet">
+      <div class="sh"><h3>Agenda L10 · 90'</h3><span class="mono muted">DZ · EOS · D</span></div>
+      <ul style="list-style:none;padding-left:0">
+        <li><b class="mono">05'</b> Buenas noticias: una personal, una profesional</li>
+        <li><b class="mono">05'</b> Scorecard: en objetivo / fuera → issue</li>
+        <li><b class="mono">05'</b> Rocks: en marcha / desviado → issue</li>
+        <li><b class="mono">05'</b> Titulares de clientes y equipo</li>
+        <li><b class="mono">05'</b> To-dos: hecho / no hecho</li>
+        <li><b class="mono">60'</b> IDS: los 3 más importantes, uno a uno</li>
+        <li><b class="mono">05'</b> Conclusión: repaso de to-dos, qué comunicamos, nota 1-10</li>
+      </ul>
+      <p class="foot">Mismo día · misma hora · misma agenda · empieza en punto · acaba en punto.</p>
+    </div>
+  </div>
+</div>
+
+<footer><span>Desafío Zero · Guía EOS para el equipo · Basada en <i>Traction</i> (Gino Wickman)</span><span>Complementa la Guía A · Offsite 2027</span></footer>
+</main>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const T='<span class="src t">Traction</span>', P='<span class="src p">Práctica</span>';
+
+/* ---------- Pestañas ---------- */
+const panels=$$('.panel'); const tablist=$('#tablist'); const sel=$('#tabsel');
+panels.forEach(p=>{
+  const b=document.createElement('button'); b.className='tab'; b.setAttribute('role','tab'); b.textContent=p.dataset.label; b.dataset.go=p.dataset.tab; b.setAttribute('aria-controls',p.id); tablist.appendChild(b);
+  const o=document.createElement('option'); o.value=p.dataset.tab; o.textContent=p.dataset.label; sel.appendChild(o);
+});
+function show(id,push){
+  if(!panels.some(p=>p.dataset.tab===id)) id='inicio';
+  panels.forEach(p=>p.hidden=p.dataset.tab!==id);
+  $$('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.go===id));
+  sel.value=id;
+  if(push){ try{history.replaceState(null,'','#'+id)}catch(e){} window.scrollTo({top:0}); }
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(!g) return;
+  if(g.dataset.filter) setFilter(g.dataset.filter);
+  show(g.dataset.go,true);
+});
+sel.addEventListener('change',()=>show(sel.value,true));
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),false));
+show((location.hash||'#inicio').slice(1),false);
+
+/* ---------- Diccionario ---------- */
+const D=[
+ {n:'V/TO',g:'Visión',h:'Todos',s:T,one:'Vision/Traction Organizer: dos páginas con las respuestas a dónde vamos y cómo llegamos.',test:'¿Cualquiera de dirección puede leerlo y saber a dónde vamos este año y en 3 años?',ej:'El V/TO 2027 que sale del offsite.',err:'Hacerlo una vez y guardarlo. Se revisa cada trimestre.'},
+ {n:'Core Values',g:'Visión',h:'Siempre',s:T,one:'De 3 a 7 reglas de comportamiento que definen quién encaja en DZ.',test:'¿Contratarías, despedirías o premiarías a alguien por esto?',ej:'[pendiente: los del V/TO de DZ]',err:'Poner valores bonitos que nadie vive ("excelencia", "pasión").'},
+ {n:'Core Focus',g:'Visión',h:'Siempre',s:T,one:'Nuestra razón de ser y nuestro nicho: lo que hacemos mejor que nadie.',test:'Ante una oportunidad: ¿cae dentro? Si no, es una distracción.',ej:'Filtro ante "¿organizamos un evento corporativo que no es una expedición?". Nicho de DZ: [pendiente].',err:'Tenerlo como lema y no usarlo para decir que no.'},
+ {n:'10-Year Target',g:'Visión',h:'10 años',s:T,one:'Un gran objetivo a 10 años o más que da dirección a todo lo demás.',test:'¿Cabe en una frase y nos da energía?',ej:'[pendiente]',err:'Tener varios o ponerlo tan fácil que no motive.'},
+ {n:'3-Year Picture',g:'Visión',h:'3 años',s:T,one:'Cómo se ve DZ dentro de 3 años: ingresos, beneficio, medibles y cómo es la empresa.',test:'¿Cada persona de dirección puede "verlo" y describirlo igual?',ej:'"[X] expediciones al año, [X] líderes propios, [X] € de facturación".',err:'Confundirlo con un plan de acción.'},
+ {n:'Objetivo del 1-Year Plan',g:'Visión',h:'1 año',s:T,one:'De 3 a 7 objetivos medibles para este año, que acercan la 3-Year Picture.',test:'¿A 31 de diciembre sabremos sin discutir si se ha cumplido?',ej:'Tasa de cancelación por debajo de [X]% en 2027.',err:'Llamarlos "Rocks anuales". En EOS los Rocks son de 90 días.'},
+ {n:'Rock de compañía',g:'Tracción',h:'90 días',s:T,one:'Una de las 3-7 prioridades de la empresa para el trimestre, con un owner de dirección.',test:'¿El último día podemos decir sí o no sin discutir?',ej:'Proceso de onboarding de líderes documentado y aplicado a los [X] líderes de temporada alta antes del 31/03.',err:'Meter un proyecto sin final: "mejorar el marketing".'},
+ {n:'Rock individual',g:'Tracción',h:'90 días',s:T,one:'La prioridad de una persona para el trimestre. Dirección: 3-7 en total. Resto: 1-3.',test:'El mismo del Rock de compañía, con un solo nombre.',ej:'Sara: [X] acuerdos con agencias firmados antes del 31/03.',err:'Convertir el trabajo normal del asiento en Rock.'},
+ {n:'Proyecto / iniciativa',g:'Tracción',h:'Variable',s:P,one:'Un conjunto de trabajo para conseguir algo. Es un medio, no un resultado.',test:'¿Tiene un final de sí o no en 90 días? Si no, es proyecto: saca el Rock de él.',ej:'"Nueva web" (proyecto) → "Nueva web publicada con reserva online" (Rock).',err:'Meter el proyecto entero como Rock y que nunca se cierre.'},
+ {n:'To-do',g:'Tracción',h:'7 días',s:T,one:'Un compromiso de 7 días con owner, que normalmente sale de la L10.',test:'¿Se hace en una semana y se puede decir hecho o no hecho?',ej:'Oliver llama al proveedor de transporte de [destino] antes del jueves.',err:'To-dos de tres semanas, o sin owner.'},
+ {n:'Issue',g:'Issues',h:'Hasta resolverse',s:T,one:'Cualquier cosa abierta: un problema, una idea, una oportunidad o algo que todos deben saber.',test:'¿Hace falta que el equipo lo trabaje o lo sepa?',ej:'Tercera cancelación de un proveedor local esta temporada.',err:'Guardárselo por no molestar, o traer una queja sin decir cuál es el issue.'},
+ {n:'Issues List',g:'Issues',h:'Según nivel',s:T,one:'La lista de issues. Hay tres: la del V/TO (en DZ, el Parking), la de dirección y la de cada área.',test:'¿Quién tiene que resolverlo y en qué plazo? Eso te dice en qué lista va.',ej:'"Abrir destinos en [continente]" va al Parking; "leads repartidos a mano" va a la de Comercial.',err:'Una sola lista de 80 cosas que nadie mira.'},
+ {n:'Parking',g:'Issues',h:'Hasta la trimestral',s:'<span class="src p">Nombre DZ</span>',one:'Nuestra Issues List del V/TO: donde apuntamos lo que no cabe este trimestre para que no se olvide. En Traction se llama Issues List del V/TO.',test:'¿Tarda más de 90 días, toca la visión o es un candidato a Rock que no entra ahora? Entonces va al Parking.',ej:'"Abrir destinos en [continente]", la nueva web si no entra en Q1, los candidatos a Rock que se quedaron fuera.',err:'Tenerlo como una lista aparte de la Issues List del V/TO, o apuntar ahí lo de esta semana.'},
+ {n:'Scorecard',g:'Datos',h:'7 días',s:T,one:'De 5 a 15 números semanales con owner y objetivo, que muestran las últimas 13 semanas.',test:'¿En 5 minutos sabemos si la semana va bien?',ej:'Leads nuevos, reservas cerradas, caja disponible, incidencias en expedición.',err:'Meter 40 números o ponerse a debatirlos en el bloque del Scorecard.'},
+ {n:'Medible',g:'Datos',h:'7 días',s:T,one:'Un número que cada persona controla o influye. En EOS, todo el mundo tiene un número.',test:'¿Es semanal y depende de esa persona?',ej:'Sara: propuestas enviadas por semana.',err:'Medir lo fácil de medir, no lo que predice el resultado.'},
+ {n:'Procesos core',g:'Procesos',h:'Siempre',s:T,one:'Las pocas formas clave de hacer las cosas en DZ, escritas en lo esencial y seguidas por todos.',test:'¿Dos personas harían esto igual siguiendo lo que está escrito?',ej:'Preparación de una expedición, de la reserva al regreso del grupo.',err:'Escribir manuales de 50 páginas. Basta el 20% que da el 80% del resultado.'},
+ {n:'L10',g:'Reuniones',h:'7 días',s:T,one:'La reunión semanal de 90 minutos, siempre con la misma agenda. El nombre viene de querer puntuarla con un 10.',test:'¿Se dedican 60 minutos a IDS?',ej:'La L10 de dirección de DZ; cada área puede tener la suya.',err:'Convertirla en una ronda de informes.'},
+ {n:'IDS',g:'Issues',h:'En la L10',s:T,one:'Identify, Discuss, Solve: identificar el issue real, hablarlo y resolverlo.',test:'¿Salió con owner y fecha, o con un acuerdo claro?',ej:'Ver los 6 recorridos de la pestaña IDS.',err:'Saltarse el Identify y discutir el síntoma.'},
+ {n:'Accountability Chart',g:'Personas',h:'Siempre',s:T,one:'El organigrama de asientos: funciones, cinco roles por asiento y quién reporta a quién.',test:'¿Cada asiento tiene un solo nombre?',ej:'El asiento de Operaciones (Oliver) con sus cinco roles.',err:'Dibujarlo con nombres desde el principio, o poner dos nombres en un asiento.'},
+ {n:'Visionario',g:'Personas',h:'Siempre',s:T,one:'El asiento de las ideas, las grandes relaciones, la cultura y los problemas grandes. En DZ: Antonio.',test:'¿Esto es mirar lejos o dirigir el día a día?',ej:'Antonio detecta un nuevo tipo de expedición y lo trae como idea.',err:'Que el Visionario acabe dirigiendo el día a día.'},
+ {n:'Integradora',g:'Personas',h:'Siempre',s:T,one:'El asiento que dirige el día a día, integra las áreas y rinde cuentas del P&L. En DZ: Lara.',test:'¿Esto es coordinar áreas, quitar obstáculos o cerrar decisiones?',ej:'Lara decide cuando dirección no llega a un acuerdo en IDS.',err:'Que la Integradora absorba el trabajo de todos.'},
+ {n:'LMA',g:'Personas',h:'Siempre',s:T,one:'Leading, Managing, holding people Accountable: liderar, gestionar y pedir cuentas.',test:'¿Quien tiene gente a su cargo le dedica tiempo a esto?',ej:'Oliver con los líderes de expedición.',err:'Pensar que tener equipo es solo hacer más trabajo tú.'},
+ {n:'GWC',g:'Personas',h:'Siempre',s:T,one:'Get it, Want it, Capacity to do it: entiende el puesto, lo quiere y puede hacerlo.',test:'Tres síes. Un solo no = persona en el asiento equivocado.',ej:'Un líder con mucha experiencia de montaña que no quiere gestionar grupos.',err:'Quedarnos en "le falta un curso" cuando el problema es que no lo quiere.'},
+ {n:'People Analyzer',g:'Personas',h:'Trimestral',s:T,one:'Tabla que cruza a cada persona con los Core Values (+, +/-, -) y con GWC.',test:'¿Está por encima del listón que hemos fijado?',ej:'Oliver lo pasa con cada líder antes de la temporada.',err:'Usarlo como examen sorpresa en vez de como conversación.'},
+ {n:'Same Page Meeting',g:'Reuniones',h:'Mensual',s:'<span class="src p">Rocket Fuel</span>',one:'Reunión mensual entre Visionario e Integradora para estar alineados. Viene del libro Rocket Fuel, no de Traction.',test:'¿Antonio y Lara llegan a la L10 sin desacuerdos pendientes entre ellos?',ej:'Antonio y Lara, una vez al mes.',err:'Saltársela y que sus desacuerdos acaben en la L10.'},
+ {n:'Reunión trimestral',g:'Reuniones',h:'90 días',s:T,one:'Un día cada trimestre: revisar el anterior, repasar el V/TO, fijar Rocks nuevos y hacer IDS.',test:'¿Salimos con Rocks nuevos y el V/TO revisado?',ej:'[pendiente: fechas de las trimestrales 2027]',err:'Convertirla en una L10 larga.'},
+ {n:'Planificación anual',g:'Reuniones',h:'1 año',s:T,one:'Dos días al año: salud del equipo, 3-Year Picture, 1-Year Plan y Rocks del primer trimestre.',test:'¿Salimos con el 1-Year Plan cerrado y los Rocks de Q1?',ej:'El offsite 2027 (Guía A).',err:'Hacer un plan bonito sin números.'}
+];
+const G=['Todos','Visión','Tracción','Issues','Datos','Personas','Procesos','Reuniones'];
+let cur='Todos';
+const fbox=$('#dict-filters');
+G.forEach(g=>{const b=document.createElement('button');b.className='chip';b.textContent=g;b.dataset.g=g;b.setAttribute('aria-pressed',g===cur);b.onclick=()=>setFilter(g);fbox.appendChild(b)});
+function setFilter(g){cur=g;$$('.chip',fbox).forEach(c=>c.setAttribute('aria-pressed',c.dataset.g===g));renderDict()}
+function renderDict(){
+  const q=$('#dict-search').value.trim().toLowerCase();
+  const list=D.filter(d=>(cur==='Todos'||d.g===cur)&&(!q||(d.n+' '+d.one+' '+d.ej).toLowerCase().includes(q)));
+  $('#dict-list').innerHTML=list.map(d=>`<details class="term"><summary><span class="head"><span class="name">${esc(d.n)}</span><span class="one">${esc(d.one)}</span></span></summary><div class="in"><dl><dt>Plazo</dt><dd>${esc(d.h)} · <span class="pill">${esc(d.g)}</span> ${d.s}</dd><dt>Test</dt><dd>${esc(d.test)}</dd><dt>Ejemplo DZ</dt><dd>${esc(d.ej)}</dd><dt>Error típico</dt><dd>${esc(d.err)}</dd></dl></div></details>`).join('')||'<p class="muted">Nada con ese nombre. Prueba con otra palabra.</p>';
+}
+$('#dict-search').addEventListener('input',renderDict); renderDict();
+
+/* ---------- Árbol ---------- */
+const DEST={
+ A:{n:'Hazlo y ya',d:'No hace falta reunión. Si tardas más de una semana, apúntatelo como to-do tuyo.'},
+ B:{n:'To-do',d:'Owner y fecha a 7 días. Si surge fuera de la L10, apúntalo para la próxima.'},
+ G:{n:'Conversación individual',d:'Fuera de la L10: habla con la persona o, si es un roce entre dos, sesión personal de resolución de issues. Si lo que está en duda es si encaja en su asiento, es issue de dirección.'},
+ E:{n:'Parking',d:'Nuestra Issues List del V/TO. Se revisa entera en la trimestral o en la anual. No ocupa la L10 semanal.'},
+ F:{n:'Parking · candidato a Rock',d:'Apúntalo en el Parking marcado como candidato a Rock. Se decide en la próxima trimestral; no se añaden Rocks a mitad.'},
+ C:{n:'Issue L10 de dirección',d:'Una línea, quién lo trae y tipo. Si viene de segunda mano, confírmalo antes con la fuente.'},
+ D:{n:'Issue L10 de área',d:'Va a la L10 del área afectada. Si luego resulta que afecta a otras áreas, sube a dirección.'}
+};
+const Q=[
+ {q:'¿Puedes resolverlo tú, dentro de tu asiento, sin decidir nada que afecte a otros?',h:'Contestar a un cliente, corregir algo que es tuyo, una gestión normal.',y:'A'},
+ {q:'¿Está claro qué hay que hacer y cabe en 7 días?',h:'No hay nada que decidir, solo hacerlo.',y:'B'},
+ {q:'¿Va sobre el comportamiento de una persona concreta o un roce entre dos?',h:'Feedback, tono, puntualidad, una tensión personal.',y:'G'},
+ {q:'¿Resolverlo lleva más de 90 días o toca la visión?',h:'Nuevos destinos o líneas, Core Focus, estructura, la 3-Year Picture.',y:'E'},
+ {q:'¿Es un resultado importante que pide semanas de trabajo?',h:'Algo que habría que tener hecho a final de trimestre.',y:'F'},
+ {q:'¿Afecta a más de un área o necesita a dirección para decidir?',h:'Caja, clientes, varias áreas, prioridades.',y:'C',n:'D'}
+];
+let step=0, trail=[];
+const stage=$('#tree-stage'), dests=$('#tree-dests');
+dests.innerHTML=['A','B','G','E','F','C','D'].map(k=>`<div class="d" data-k="${k}"><span class="k">${k}</span><span><b>${DEST[k].n}</b></span></div>`).join('');
+function renderTree(result){
+  const tr=trail.map((t,i)=>`<div class="st"><span class="a">${t.a}</span><span>${esc(Q[t.i].q)}</span></div>`).join('');
+  $$('.d',dests).forEach(d=>d.classList.toggle('on',d.dataset.k===result));
+  if(result){
+    stage.innerHTML=`<div class="dest"><span class="mono" style="color:var(--gold)">DESTINO</span><span class="dn">${DEST[result].n}</span><span>${DEST[result].d}</span></div>${tr?`<div class="trail">${tr}</div>`:''}<div class="yn"><button class="btn" id="tree-back">← Atrás</button><button class="btn pri" id="tree-reset">Otra cosa</button></div>`;
+  } else {
+    const c=Q[step];
+    stage.innerHTML=`<span class="qn">PREGUNTA ${step+1} DE ${Q.length}</span><span class="qt">${esc(c.q)}</span><span class="hint">${esc(c.h)}</span><div class="yn"><button class="btn pri" id="tree-y">Sí</button><button class="btn" id="tree-n">No</button>${step?'<button class="btn" id="tree-back">← Atrás</button>':''}</div>${tr?`<div class="trail">${tr}</div>`:''}`;
+  }
+  const y=$('#tree-y'),n=$('#tree-n'),b=$('#tree-back'),r=$('#tree-reset');
+  if(y) y.onclick=()=>{trail.push({i:step,a:'Sí'});renderTree(Q[step].y)};
+  if(n) n.onclick=()=>{trail.push({i:step,a:'No'}); if(Q[step].n){renderTree(Q[step].n)} else {step++;renderTree()}};
+  if(b) b.onclick=()=>{const t=trail.pop(); if(t){step=t.i} renderTree()};
+  if(r) r.onclick=()=>{step=0;trail=[];renderTree()};
+}
+renderTree();
+
+const CASES=[
+ ['Un cliente pide cambiar la fecha de su reserva y el cambio está dentro de la política.','P1 Sí','A','Es tu trabajo normal y no decide nada por nadie.'],
+ ['En la L10 se acuerda pedir tres presupuestos de seguro de viaje.','P1 No → P2 Sí','B','Ya está decidido qué hacer y cabe en una semana. Owner: Rubén; fecha: viernes.'],
+ ['Oliver nota que un líder llega tarde a las reuniones previas al viaje.','P1 No → P2 No → P3 Sí','G','Es feedback a una persona. Oliver habla con él. Si se repite y hay dudas de GWC, People Analyzer y, si es asiento clave, a dirección.'],
+ ['Antonio quiere abrir expediciones en [nuevo continente].','… → P4 Sí','E','Lleva más de 90 días y toca el Core Focus y la 3-Year Picture. Se trata en la trimestral.'],
+ ['Hay que rehacer el onboarding de líderes antes de la temporada alta.','… → P5 Sí','F','Resultado importante, semanas de trabajo, final claro. Candidato a Rock de Oliver.'],
+ ['Los leads de Instagram han caído a la mitad en cuatro semanas (Scorecard en rojo).','… → P6 Sí','C','Afecta a comercial, marketing y caja. Issue de dirección que trae Sara.'],
+ ['La previsión de caja de [mes] queda por debajo del colchón de [X] €.','… → P6 Sí','C','Afecta a toda la empresa. Issue de dirección que trae Rubén, tipo problema.'],
+ ['Dos personas de Comercial se pisan leads porque no hay reglas de reparto.','… → P6 No','D','Es un proceso interno de Comercial. Va a su L10 de área. Si fuera una tensión personal entre ellas, conversación individual.'],
+ ['Un proveedor local de [destino] ha cancelado por primera vez y ya hay sustituto.','… → P6 No','D','Resuelto el incendio, queda revisar el proveedor: L10 de Operaciones. Si se repite en otros destinos, sube a dirección.'],
+ ['Te cuentan que un cliente se ha quejado de un líder en redes sociales.','Antes del árbol: confirmar','C','Es información de segunda mano. Primero míralo tú o habla con quien lo vio. Si se confirma y hay patrón, issue de dirección con Oliver presente.']
+];
+$('#cases').innerHTML=CASES.map(c=>`<details><summary>${esc(c[0])}</summary><div class="in"><span class="mono muted">${esc(c[1])}</span><div><span class="pill">${c[2]}</span> <b>${DEST[c[2]].n}</b></div><span class="small">${esc(c[3])}</span></div></details>`).join('');
+
+/* ---------- Probador de Rocks ---------- */
+const rcs=$$('#rock-checks input'); const meter=$('#rock-meter');
+function rockEval(){
+  const n=rcs.filter(c=>c.checked).length, pct=Math.round(n/7*100);
+  meter.style.width=pct+'%';
+  let vt,vd,col;
+  if(n===7){vt='Es un Rock';vd='Pasa todo. Súbelo a la Rock Sheet con su owner.';col='var(--ok)'}
+  else if(n>=5){vt='Casi';vd='Revisa lo que falta: '+rcs.filter(c=>!c.checked).map(c=>c.parentElement.querySelector('b').textContent).join(', ')+'.';col='var(--warn)'}
+  else {vt='Todavía es un proyecto';vd=n?'Le faltan piezas clave. Mira la tabla de "mal → bien" para reescribirlo.':'Marca lo que cumple tu Rock.';col='var(--bad)'}
+  if(!rcs[0].checked && n>0){vd='Sin un solo owner no hay Rock. '+vd}
+  meter.style.background=col; $('#rock-vt').textContent=vt; $('#rock-vd').textContent=vd;
+}
+rcs.forEach(c=>c.addEventListener('change',rockEval)); rockEval();
+
+/* ---------- IDS casos ---------- */
+const IDSC=[
+ {t:'Operativo',s:'El transporte en [destino] llegó 3 h tarde y el grupo perdió la actividad.',q:['¿Primera vez? No: tercera esta temporada, en dos destinos distintos.','¿Por qué? El proveedor se confundió de hora. ¿Por qué no lo vimos? Nadie confirma el día antes.','¿Por qué no había plan B? No tenemos proveedores alternativos en ningún destino.'],c:'Procesos',r:'No confirmamos transportes 48 h antes ni tenemos proveedor alternativo por destino.',sol:'Acción + candidato a Rock',todo:'Oliver añade "confirmar transporte 48 h antes" al checklist de pre-expedición antes del [fecha]. Homologar alternativos → candidato a Rock de Q1.'},
+ {t:'Comercial',s:'Este mes hemos cerrado pocas reservas.',q:['¿Qué ha pasado exactamente? Los leads están en su nivel; lo que cae es la conversión.','¿Por qué? Tardamos [X] días en responder en temporada alta.','¿Por qué? Solo una persona responde leads y ha estado en ferias. Y no medimos el tiempo de respuesta.'],c:'Personas + Datos',r:'Nadie cubre la respuesta a leads cuando la persona asignada no está, y no medimos el tiempo de respuesta.',sol:'Acción',todo:'Sara define la persona de respaldo antes del viernes. Quien lleva la agenda añade "tiempo medio de respuesta a leads" al Scorecard con owner Sara.'},
+ {t:'Personas',s:'Otra queja de un cliente sobre el mismo líder de expedición.',q:['¿Primera vez? No: tercera en la temporada.','¿GWC? Lo entiende y lo quiere; le falta capacidad para gestionar conflictos en grupo.','¿Por qué llegó al puesto sin eso? La selección de líderes no evalúa gestión de grupo.'],c:'Personas',r:'Nuestra selección de líderes no evalúa la gestión de grupos, y no pasamos el People Analyzer a los líderes.',sol:'Acción',todo:'Oliver pasa el People Analyzer al líder y habla con él esta semana (conversación individual). Oliver añade una prueba de gestión de grupo a la selección antes del [fecha].'},
+ {t:'Caja',s:'Este mes vamos justos para pagar los anticipos a proveedores.',q:['¿Primera vez? No: pasa cada año antes de la temporada alta.','¿Por qué? Pagamos anticipos antes de cobrar los depósitos de los clientes.','¿Por qué? La política de depósitos es anterior al crecimiento y nadie la ha revisado.'],c:'Procesos + Datos',r:'La política de depósitos no cubre los anticipos que pagamos a proveedores, y no hay previsión de caja semanal.',sol:'Falta información',todo:'Rubén trae a la próxima L10 el calendario de anticipos frente a cobros de 2026 y una propuesta de política. El issue vuelve como prioridad.'},
+ {t:'Cancelaciones',s:'Tres clientes han cancelado a última hora.',q:['¿Qué tienen en común? Los tres, de la misma expedición exigente.','¿Por qué cancelaron? Vieron que el nivel físico era más alto de lo que esperaban.','¿Por qué no lo sabían? La ficha no deja claro el nivel y en la venta no se pregunta.'],c:'Procesos',r:'Vendemos expediciones exigentes sin dejar claro el nivel físico ni comprobar el del cliente.',sol:'Acción',todo:'Sara revisa las fichas de las [X] expediciones exigentes y añade la pregunta de nivel al guion de venta antes del [fecha].'},
+ {t:'Visión',s:'Una empresa nos pide organizar un evento corporativo y no sabemos si aceptarlo.',q:['¿Primera vez? No: llegan cada vez más peticiones así.','¿Por qué dudamos? Unos lo ven como negocio y otros como distracción.','¿Qué falta? Un criterio claro de qué entra en lo que hacemos.'],c:'Visión',r:'No tenemos claro si los eventos corporativos entran en nuestro Core Focus.',sol:'Acuerdo + V/TO',todo:'Acordamos respuesta a este cliente: [pendiente]. El tema del Core Focus va al Parking para la trimestral. Owner: Lara.'}
+];
+$('#ids-cases').innerHTML=IDSC.map(c=>`<details><summary><span><span class="pill">${c.t}</span><br><span style="font-weight:500">${esc(c.s)}</span></span></summary><div class="in"><div class="path">
+<div class="p s"><span class="l">Issue inicial · in the business</span>${esc(c.s)}</div>
+${c.q.map(x=>`<div class="p"><span class="l">Pregunta</span>${esc(x)}</div>`).join('')}
+<div class="p r"><span class="l">Issue real · ${esc(c.c)}</span><b>${esc(c.r)}</b></div>
+<div class="p d"><span class="l">Solve · ${esc(c.sol)}</span>${esc(c.todo)}</div></div></div></details>`).join('');
+
+/* ---------- L10 ---------- */
+const L10=[
+ {n:'Buenas noticias',m:5,d:'Una buena noticia personal y otra profesional cada uno. Sirve para pasar del día a día a la reunión.',no:'"Nada nuevo, todo bien."',yes:'"Personal: acabé la maratón. Profesional: cerramos el grupo de [destino]."'},
+ {n:'Scorecard',m:5,d:'Cada owner dice su número: en objetivo o fuera. Si está fuera, pasa a la Issues List. Aquí no se discute.',no:'"Las reservas han bajado porque en septiembre siempre…"',yes:'"Reservas: [X], fuera de objetivo. Lo paso a issues."'},
+ {n:'Rocks',m:5,d:'Cada owner dice de cada Rock: en marcha o desviado. Nada más. Desviado pasa a la Issues List.',no:'"Voy más o menos, he tenido lío con el proveedor…"',yes:'"Onboarding de líderes: en marcha. Web: desviado."'},
+ {n:'Titulares',m:5,d:'Noticias de clientes y del equipo en una frase. Si algo necesita conversación, es un issue.',no:'"Y sobre eso, ¿qué pensáis que deberíamos hacer?"',yes:'"Cliente: el grupo de [destino] valoró 9/10. Equipo: [persona] empieza el lunes."'},
+ {n:'To-dos',m:5,d:'Cada to-do de la semana pasada: hecho o no hecho. Meta: el 90% hechos. Ninguno debe seguir en la lista más de dos semanas.',no:'"Casi, me falta una llamada…"',yes:'"No hecho." (Si lleva dos semanas, pasa a issue.)'},
+ {n:'IDS',m:60,d:'Leer la lista rápido, elegir los 3 más importantes y resolverlos uno a uno con la escalera.',no:'"Bueno, y otra cosa que quería comentar…"',yes:'"Mis tres: 1, 2 y 3. Empezamos por el 1." · "¡Alerta tangente!"'},
+ {n:'Conclusión',m:5,d:'Repasar los to-dos nuevos, decidir qué se comunica al resto del equipo y quién lo hace, y puntuar la reunión del 1 al 10. Meta: 8 o más.',no:'Saltárselo porque el IDS se alargó.',yes:'"To-dos: tres nuevos. Comunicamos X a Operaciones, lo hace Oliver. Mi nota: 7, porque el Scorecard se alargó."'}
+];
+let acc=0;
+$('#l10-tl').innerHTML=L10.map((b,i)=>`<button style="flex:${b.m}" class="${b.n==='IDS'?'ids':''}" data-i="${i}" aria-pressed="false" title="${b.n} · ${b.m}'">${b.m>5?b.n+' · 60\'':b.n}</button>`).join('');
+$('#l10-agenda').innerHTML=L10.map((b,i)=>{const s=acc;acc+=b.m;return `<div class="ag" id="ag-${i}"><div class="when"><b>${b.n}</b><span class="mono muted">${s}'–${acc}' · ${b.m} min</span></div><div><p class="small">${b.d}</p><div class="say"><div class="no"><span class="mono">No decir</span>${esc(b.no)}</div><div class="yes"><span class="mono">Decir</span>${esc(b.yes)}</div></div></div></div>`}).join('');
+$$('#l10-tl button').forEach(b=>b.onclick=()=>{
+  $$('#l10-tl button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $$('.ag').forEach(a=>a.classList.remove('hl'));
+  const t=$('#ag-'+b.dataset.i); t.classList.add('hl'); t.scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+/* ---------- Roles ---------- */
+const SEATS={
+ v:{n:'Visionario · Antonio',src:T,roles:['Ideas nuevas y desarrollo de producto','Resolver problemas grandes y creativos','Grandes relaciones: clientes, proveedores clave, banco','Cultura','Vender'],no:['Dirigir el día a día de las áreas','Dar instrucciones directas saltándose a la Integradora '+P,'Lanzar ideas al equipo sin pasar por la Issues List '+P],dec:'Aporta la visión y las ideas. Sus ideas entran como issue tipo "idea" y se deciden en IDS o en la trimestral. Se alinea con Lara en la Same Page mensual.'},
+ i:{n:'Integradora · Lara',src:T,roles:['Liderar, gestionar y pedir cuentas al equipo directivo (LMA)','Responder del P&L y del plan de negocio','Quitar obstáculos para que las áreas ejecuten','Integrar las tensiones entre áreas','Proyectos especiales'],no:['Hacer el trabajo de las áreas','Acumular Rocks que corresponden a otros asientos '+P],dec:'Cierra la decisión cuando dirección no llega a un acuerdo en IDS. Vigila que el sistema se use: V/TO, Scorecard, Rocks, L10.'},
+ o:{n:'Operaciones · Oliver',src:T,roles:['Ejemplo típico (Traction): servicio al cliente, gestión de procesos, prestar el servicio, calidad, logística','En DZ: [ver Accountability Chart]'],no:['Decidir por su cuenta cosas que afectan a Comercial o Finanzas'],dec:'Decide la operativa de su área y hace LMA con los líderes de expedición. Dirige la L10 de Operaciones. Documenta el proceso core de preparación de expediciones.'},
+ f:{n:'Finanzas · Rubén',src:T,roles:['Ejemplo típico (Traction): cobros y pagos, presupuestos, reporting, RR. HH., sistemas, administración','En DZ: [ver Accountability Chart]'],no:['Aprobar solo un gasto fuera de presupuesto por encima de [X] € '+P],dec:'Decide lo financiero de su asiento. Trae los números al Scorecard y los issues de caja a dirección con datos.'},
+ c:{n:'Comercial · Sara',src:T,roles:['Ejemplo típico (Traction): marketing, venta, proceso comercial, objetivos de venta','En DZ: [ver Accountability Chart]'],no:['Prometer a un cliente algo que Operaciones no ha validado '+P],dec:'Decide lo comercial de su área. Trae leads, conversión y titulares de clientes. Dirige la L10 de Comercial.'}
+};
+function showSeat(k){
+  $$('.seat').forEach(s=>s.setAttribute('aria-pressed',s.dataset.seat===k));
+  const s=SEATS[k];
+  $('#seatinfo').innerHTML=`<div><h3 style="margin-bottom:10px">${s.n}</h3><h4>Sus cinco roles ${s.src}</h4><ul>${s.roles.map(r=>`<li>${r}</li>`).join('')}</ul></div><div style="display:flex;flex-direction:column;gap:14px"><div><h4>Qué decide</h4><p class="small" style="margin-top:6px">${s.dec}</p></div><div><h4>Qué no le toca</h4><ul>${s.no.map(r=>`<li>${r}</li>`).join('')}</ul></div></div>`;
+}
+$$('.seat').forEach(s=>s.onclick=()=>showSeat(s.dataset.seat)); showSeat('i');
+
+/* ---------- FAQ ---------- */
+const FAQ=[
+ ['¿Puede haber un to-do de tres semanas?','No. Un to-do es de 7 días. Divídelo en pasos semanales; si es más grande, es un Rock o parte de un proyecto. Y ninguno debe seguir en la lista más de dos semanas.',T],
+ ['¿Qué pasa si mi Rock depende de otra persona?','Sigue siendo tuyo. Pon en "necesita de" quién y qué, y acuérdalo al empezar el trimestre. Si esa persona no llega, es un issue para la L10.',P],
+ ['Si lo hacemos entre dos, ¿quién es el owner?','Una sola persona. La otra aparece en "necesita de". Dos owners es ningún owner.',T],
+ ['¿Puedo añadir un Rock a mitad de trimestre?','Por norma, no: va al Parking y se decide en la trimestral. Si es urgente de verdad, se hace IDS y se decide qué Rock sale para hacerle sitio.',P],
+ ['¿Qué hago si un IDS se alarga?','Si los argumentos se repiten, quien dirige pide una propuesta concreta. Si no sale, decide la Integradora o se cierra como "falta información" con un to-do para traer datos.',P],
+ ['¿Cuándo un issue se convierte en Rock?','Cuando resolverlo pide semanas de trabajo y tiene un resultado claro. Se apunta en el Parking como candidato y se decide en la trimestral.',P],
+ ['¿Qué diferencia hay entre un número del Scorecard y un objetivo anual?','El Scorecard mide la actividad de cada semana que predice el resultado (propuestas enviadas). El objetivo anual es el resultado a 12 meses (facturación 2027).',T],
+ ['¿Qué pasa si no termino mi Rock?','Se dice "no hecho" sin dramas y se aprende en la trimestral. Si sigue importando, se decide si vuelve como Rock nuevo. La meta es completar el 80% o más.',T],
+ ['¿Un Rock al 90% cuenta como hecho?','No. Hecho o no hecho. Por eso hay que definir bien el "hecho cuando…" desde el principio.',T],
+ ['Tengo un issue de otra área, ¿qué hago?','No lo resuelvas en el pasillo. Llévalo a la L10 de esa área o, si afecta a varias, a la de dirección.',P],
+ ['¿Y si el issue implica a alguien que no está en la reunión?','No se resuelve sin esa persona. Se le cita en una reunión con todos los implicados.',T],
+ ['¿Puede Antonio traer ideas nuevas a la L10?','Sí, como issue de tipo "idea". Si es a más de 90 días, va al Parking.',P],
+ ['¿Y si no estoy de acuerdo con la decisión?','Dilo en el Discuss. Una vez decidido, se apoya fuera de la sala. Si dentro de un tiempo hay datos nuevos, se trae como issue nuevo.',T],
+ ['¿Cada cuánto se revisa el V/TO?','Cada trimestre, en la reunión trimestral. Una vez al año se rehace en la planificación anual.',T],
+ ['¿Todo el mundo necesita un número?','Sí. En EOS todo el mundo tiene al menos un número semanal que controla o influye.',T],
+ ['¿Qué hago si un to-do no se hace dos semanas seguidas?','Pasa a la Issues List: algo impide hacerlo y hay que verlo.',P]
+];
+function renderFaq(){
+  const q=$('#faq-search').value.trim().toLowerCase();
+  $('#faq-list').innerHTML=FAQ.filter(f=>!q||(f[0]+f[1]).toLowerCase().includes(q)).map(f=>`<details><summary>${esc(f[0])}</summary><div class="in"><p>${esc(f[1])}</p><div>${f[2]}</div></div></details>`).join('')||'<p class="muted">No hay ninguna pregunta con eso. Llévala a la L10 como issue de tipo información.</p>';
+}
+$('#faq-search').addEventListener('input',renderFaq); renderFaq();
+
+/* ---------- Quiz ---------- */
+const QZ=[
+ ['Enviar el contrato firmado al proveedor de [destino] antes del viernes.',['To-do','Rock','Issue de dirección','Proyecto'],0,'Está claro qué hay que hacer, tiene dueño y cabe en una semana.'],
+ ['Lanzar una línea de expediciones para empresas.',['Rock','Parking','To-do','Issue de área'],1,'Toca el Core Focus y la 3-Year Picture. Lleva más de 90 días: se decide en la trimestral.'],
+ ['Nueva web con reserva online.',['To-do','Rock tal cual','Proyecto: hay que sacar el Rock','Issue de área'],2,'Es un medio. El Rock sería "Nueva web publicada con reserva online funcionando antes del 31/03".'],
+ ['Protocolo de seguridad revisado y firmado por los [X] líderes antes del 31/03.',['Proyecto','Rock','To-do','Objetivo anual'],1,'Un resultado, una fecha dentro del trimestre y un sí o no claro. Le falta nombrar al owner.'],
+ ['El Scorecard lleva tres semanas con los leads por debajo del objetivo.',['Nada, ya se recuperará','Issue de dirección','To-do','Conversación individual'],1,'Número fuera de objetivo varias semanas y afecta a caja y ventas: issue de dirección.'],
+ ['Dos personas de Operaciones preparan el material de forma distinta y hay errores.',['Issue de área (proceso)','Issue de dirección','Rock de compañía','Conversación individual'],0,'Es un proceso interno de Operaciones: L10 de Operaciones.'],
+ ['Quieres decirle a un compañero que sus mensajes en el grupo suenan bruscos.',['Issue de dirección','Conversación individual','To-do','Parking'],1,'Es feedback a una persona: fuera de la L10.'],
+ ['Un cliente pide la factura de su reserva.',['To-do de la L10','Hazlo y ya','Issue de área','Rock'],1,'Es trabajo normal del asiento. No necesita reunión.'],
+ ['Te cuentan que Rubén ha dicho que no hay presupuesto para ferias.',['Issue de dirección tal cual','Confirmarlo con Rubén primero','Rock','To-do de Sara'],1,'Es información de segunda mano. Pregunta a Rubén; si sigue siendo un tema, se trata con él delante.'],
+ ['"Mejorar la experiencia del cliente."',['Rock','To-do','Todavía nada: hay que concretarlo','Número del Scorecard'],2,'Es un deseo. Hay que convertirlo en un objetivo anual medible o en un Rock con sí o no. Llévalo como issue de tipo idea.']
+];
+let answered=0,right=0;
+$('#quiz').innerHTML=QZ.map((q,i)=>`<div class="qz" data-i="${i}"><div class="qh"><span class="mono">${String(i+1).padStart(2,'0')}</span><b>${esc(q[0])}</b></div><div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${esc(o)}</button>`).join('')}</div><div class="why" hidden></div></div>`).join('');
+$$('.qz').forEach(box=>{
+  const q=QZ[box.dataset.i];
+  $$('.opt',box).forEach(b=>b.onclick=()=>{
+    const j=+b.dataset.j, ok=j===q[2];
+    $$('.opt',box).forEach(x=>{x.disabled=true; if(+x.dataset.j===q[2]) x.classList.add('right')});
+    if(!ok) b.classList.add('wrong');
+    const w=$('.why',box); w.hidden=false; w.innerHTML=`<b>${ok?'Correcto.':'La respuesta es: '+esc(q[1][q[2]])+'.'}</b> ${esc(q[3])}`;
+    answered++; if(ok) right++;
+    $('#quiz-score').textContent=`${right} de ${answered} bien · ${answered} / 10 respondidas`;
+  });
+});
+const LX=[
+ ['Las fichas de expedición tienen errores de precio.',['¿Primera vez? No, pasa cada vez que cambian tarifas.','¿Por qué? Cada uno actualiza las fichas cuando se acuerda.','¿Por qué? Nadie es dueño de las fichas y no hay revisión antes de publicar.'],'Personas + Procesos','Las fichas no tienen dueño ni un paso de revisión antes de publicar.','To-do: Lara asigna el dueño de las fichas en la próxima L10. El dueño define un paso de revisión antes del [fecha].'],
+ ['Los líderes nuevos dicen que no saben qué hacer el primer día.',['¿Primera vez? No, lo dicen casi todos.','¿Por qué? Cada uno aprende de quien le toca.','¿Por qué? No hay un onboarding escrito.'],'Procesos','No tenemos un onboarding de líderes documentado.','Candidato a Rock de Oliver para la trimestral: "Onboarding de líderes documentado y aplicado a [X] líderes antes del [fecha]".'],
+ ['Siempre cerramos el mes tarde.',['¿Qué pasa exactamente? Finanzas espera los gastos de Operaciones.','¿Por qué llegan tarde? Los líderes entregan tickets al volver, sin fecha límite.','¿Por qué no hay fecha? Nadie la fijó ni la mide.'],'Procesos + Tracción','No hay fecha límite ni owner para entregar los gastos de expedición.','Acción: Oliver y Rubén acuerdan una fecha límite; Oliver la comunica a los líderes antes del viernes. "Gastos entregados a tiempo" pasa al Scorecard.']
+];
+$('#ladder-ex').innerHTML=LX.map((x,i)=>`<details><summary><span><span class="mono" style="color:var(--gold)">ISSUE ${i+1}</span><br><span style="font-weight:500">${esc(x[0])}</span></span></summary><div class="in"><div class="path"><div class="p s"><span class="l">Issue inicial</span>${esc(x[0])}</div>${x[1].map(q=>`<div class="p"><span class="l">Pregunta</span>${esc(q)}</div>`).join('')}<div class="p r"><span class="l">Issue real · ${esc(x[2])}</span><b>${esc(x[3])}</b></div><div class="p d"><span class="l">Solve</span>${esc(x[4])}</div></div></div></details>`).join('');
+})();
+</script>
+</body>
+</html>
